@@ -29,6 +29,14 @@ export default function SearchPage() {
   const [departureDateOpen, setDepartureDateOpen] = useState(false)
   const [returnDateOpen, setReturnDateOpen] = useState(false)
   
+  // Add validation state
+  const [errors, setErrors] = useState<{
+    departure?: string;
+    destination?: string;
+    date?: string;
+    returnDate?: string;
+  }>({})
+  
   // Add state to track all form field changes
   const [formChanges, setFormChanges] = useState<Array<{
     type: string;
@@ -66,6 +74,8 @@ export default function SearchPage() {
     }
     
     setDate(selectedDate);
+    // Clear any error for this field
+    setErrors(prev => ({ ...prev, date: undefined }));
     // Explicitly close the departure date popover
     setDepartureDateOpen(false);
   }
@@ -84,6 +94,8 @@ export default function SearchPage() {
     }
     
     setReturnDate(selectedDate);
+    // Clear any error for this field
+    setErrors(prev => ({ ...prev, returnDate: undefined }));
     // Explicitly close the return date popover
     setReturnDateOpen(false);
   }
@@ -104,8 +116,44 @@ export default function SearchPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!departure || !destination || !date || !returnDate) {
-      return
+    // Reset errors
+    const newErrors: {
+      departure?: string;
+      destination?: string;
+      date?: string;
+      returnDate?: string;
+    } = {};
+    
+    // Validate all fields
+    if (!departure) {
+      newErrors.departure = "Please select a departure airport";
+    }
+    
+    if (!destination) {
+      newErrors.destination = "Please select a destination airport";
+    }
+    
+    if (!date) {
+      newErrors.date = "Please select a departure date";
+    }
+    
+    if (!returnDate) {
+      newErrors.returnDate = "Please select a return date";
+    }
+    
+    // Update error state
+    setErrors(newErrors);
+    
+    // Check if there are any errors
+    if (Object.keys(newErrors).length > 0) {
+      // Record validation error event
+      addSelection({
+        type: "search_validation_error",
+        errors: newErrors,
+        iterationId: iterationId,
+      });
+      
+      return;
     }
 
     const params = {
@@ -142,6 +190,9 @@ export default function SearchPage() {
     // Always update the input field value
     setDeparture(value);
     
+    // Clear any error for this field
+    setErrors(prev => ({ ...prev, departure: undefined }));
+    
     // Parse the airport code if this is a valid selection
     const match = value.match(/^([A-Z]{3})/);
     if (match && match[1]) {
@@ -161,6 +212,9 @@ export default function SearchPage() {
   const handleDestinationChange = (value: string) => {
     // Always update the input field value
     setDestination(value);
+    
+    // Clear any error for this field
+    setErrors(prev => ({ ...prev, destination: undefined }));
     
     // Parse the airport code if this is a valid selection
     const match = value.match(/^([A-Z]{3})/);
@@ -189,8 +243,11 @@ export default function SearchPage() {
               onChange={handleDepartureChange}
               placeholder="Select departure airport"
               data-track-id="departure-airport-input"
-              className="w-full bg-white"
+              className={`w-full bg-white ${errors.departure ? 'border-red-500' : ''}`}
             />
+            {errors.departure && (
+              <p className="text-red-400 text-sm mt-1">{errors.departure}</p>
+            )}
           </div>
           
           <div className="col-span-1">
@@ -201,8 +258,11 @@ export default function SearchPage() {
               onChange={handleDestinationChange}
               placeholder="Select destination airport"
               data-track-id="destination-airport-input"
-              className="w-full bg-white"
+              className={`w-full bg-white ${errors.destination ? 'border-red-500' : ''}`}
             />
+            {errors.destination && (
+              <p className="text-red-400 text-sm mt-1">{errors.destination}</p>
+            )}
           </div>
           
           <div className="col-span-1">
@@ -212,7 +272,11 @@ export default function SearchPage() {
                 <Button
                   id="date"
                   variant={"outline"}
-                  className={cn("w-full bg-white justify-start text-left font-normal", !date && "text-muted-foreground")}
+                  className={cn(
+                    "w-full bg-white justify-start text-left font-normal", 
+                    !date && "text-muted-foreground",
+                    errors.date && "border-red-500"
+                  )}
                   data-track-id="departure-date-trigger"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -223,12 +287,14 @@ export default function SearchPage() {
                 <CalendarWrapper
                   selected={date}
                   onSelect={handleDateSelect}
-                  // Remove onClose since we're handling it in the onSelect function
                   trackingIdPrefix="departure-calendar"
                   className="rounded-md border-0"
                 />
               </PopoverContent>
             </Popover>
+            {errors.date && (
+              <p className="text-red-400 text-sm mt-1">{errors.date}</p>
+            )}
           </div>
           
           <div className="col-span-1">
@@ -238,7 +304,11 @@ export default function SearchPage() {
                 <Button
                   id="returnDate"
                   variant={"outline"}
-                  className={cn("w-full bg-white justify-start text-left font-normal", !returnDate && "text-muted-foreground")}
+                  className={cn(
+                    "w-full bg-white justify-start text-left font-normal", 
+                    !returnDate && "text-muted-foreground",
+                    errors.returnDate && "border-red-500"
+                  )}
                   data-track-id="return-date-trigger"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -249,12 +319,14 @@ export default function SearchPage() {
                 <CalendarWrapper
                   selected={returnDate}
                   onSelect={handleReturnDateSelect}
-                  // Remove onClose since we're handling it in the onSelect function
                   trackingIdPrefix="return-calendar"
                   className="rounded-md border-0"
                 />
               </PopoverContent>
             </Popover>
+            {errors.returnDate && (
+              <p className="text-red-400 text-sm mt-1">{errors.returnDate}</p>
+            )}
           </div>
           
           <div className="col-span-1 md:col-span-2 mt-4">
@@ -265,6 +337,11 @@ export default function SearchPage() {
             >
               Search Flights
             </Button>
+            {Object.keys(errors).length > 0 && (
+              <p className="text-red-400 text-sm text-center mt-2">
+                Please fill in all required fields to continue
+              </p>
+            )}
           </div>
         </div>
       </div>
