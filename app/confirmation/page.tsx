@@ -103,6 +103,7 @@ export default function ConfirmationPage() {
             variant="ghost"
             className="flex items-center gap-2"
             onClick={handleBack}
+            data-track-id="back-to-return-results"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Results
@@ -124,7 +125,7 @@ export default function ConfirmationPage() {
               <p className="text-muted-foreground mb-6">
                 Your flight booking has been confirmed and your experiment data has been submitted.
               </p>
-              <Button onClick={handleFinish}>
+              <Button onClick={handleFinish} data-track-id="return-to-home">
                 Return to Home
               </Button>
             </div>

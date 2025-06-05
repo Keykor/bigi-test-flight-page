@@ -111,7 +111,7 @@ export default function OutboundResultsPage() {
           variant="ghost"
           className="flex items-center gap-2"
           onClick={handleBack}
-          data-tracking-id="back-to-search"
+          data-track-id="back-to-search"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Search
@@ -130,7 +130,7 @@ export default function OutboundResultsPage() {
             <div className="text-center py-8">
               <p className="text-lg font-medium mb-2">No flights found</p>
               <p className="text-muted-foreground mb-4">Try adjusting your search criteria</p>
-              <Button onClick={handleBack} data-tracking-id="no-results-back">
+              <Button onClick={handleBack} data-track-id="no-results-back">
                 Back to Search
               </Button>
             </div>
@@ -209,7 +209,7 @@ export default function OutboundResultsPage() {
                       <Button
                         className={`mt-2 ${flight.isOffer ? "bg-orange-600 hover:bg-orange-700" : ""}`}
                         onClick={() => handleSelectFlight(flight)}
-                        data-tracking-id={`select-outbound-flight-${flight.id}`}
+                        data-track-id={`select-outbound-flight=${flight.id}`}
                       >
                         Select
                       </Button>

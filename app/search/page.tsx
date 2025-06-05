@@ -97,6 +97,7 @@ export default function SearchPage() {
           variant="ghost"
           className="flex items-center gap-2"
           onClick={handleBackToWelcome}
+          data-track-id="back-to-welcome"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Welcome
@@ -119,6 +120,7 @@ export default function SearchPage() {
                   value={departure}
                   onChange={handleDepartureChange}
                   placeholder="Select departure airport"
+                  data-track-id="departure-airport-input"
                 />
               </div>
 
@@ -129,6 +131,7 @@ export default function SearchPage() {
                   value={destination}
                   onChange={handleDestinationChange}
                   placeholder="Select destination airport"
+                  data-track-id="destination-airport-input"
                 />
               </div>
 
@@ -141,6 +144,7 @@ export default function SearchPage() {
                         id="date"
                         variant={"outline"}
                         className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
+                        data-track-id="departure-date-selector"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {date ? format(date, "PPP") : <span>Pick departure date</span>}
@@ -168,6 +172,7 @@ export default function SearchPage() {
                           "w-full justify-start text-left font-normal",
                           !returnDate && "text-muted-foreground",
                         )}
+                        data-track-id="return-date-selector"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {returnDate ? format(returnDate, "PPP") : <span>Pick return date</span>}
@@ -187,7 +192,7 @@ export default function SearchPage() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" data-track-id="search-flights-button">
               Search Flights
             </Button>
           </form>

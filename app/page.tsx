@@ -46,10 +46,11 @@ export default function ParticipantIdPage() {
                     setParticipantId(e.target.value)
                     setError("")
                   }}
+                  data-track-id="participant-id-input"
                 />
                 {error && <p className="text-sm text-red-500">{error}</p>}
               </div>
-              <Button type="submit">
+              <Button type="submit" data-track-id="start-experiment">
                 Start Experiment
               </Button>
             </div>

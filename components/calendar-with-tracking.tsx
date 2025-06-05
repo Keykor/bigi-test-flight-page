@@ -30,8 +30,8 @@ export function Calendar({ trackingIdPrefix = "calendar-day", ...props }: Calend
           // Crear un ID de tracking
           const trackingId = `${trackingIdPrefix}-${year}-${month.toString().padStart(2, "0")}-${dayText.padStart(2, "0")}`
 
-          // Añadir el atributo data-tracking-id
-          button.setAttribute("data-tracking-id", trackingId)
+          // Añadir el atributo data-track-id
+          button.setAttribute("data-track-id", trackingId)
         }
       })
     }

@@ -84,6 +84,7 @@ export default function WelcomePage() {
                 className="w-full"
                 disabled={iteration.completed}
                 onClick={() => handleStartIteration(iteration.id)}
+                data-track-id={`start-iteration=${iteration.id}`}
               >
                 {iteration.completed ? "Completed" : "Start Iteration"}
               </Button>
