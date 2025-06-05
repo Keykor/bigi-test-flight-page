@@ -34,6 +34,19 @@ export function Calendar({ trackingIdPrefix = "calendar-day", ...props }: Calend
           button.setAttribute("data-track-id", trackingId)
         }
       })
+      
+      // También agregar track-id a los botones de navegación del calendario
+      const navButtons = calendarRef.current.querySelectorAll('.rdp-nav_button')
+      navButtons.forEach((button, index) => {
+        const isNext = index === 1 // Normalmente el segundo botón es "next"
+        button.setAttribute("data-track-id", `${trackingIdPrefix}-nav-${isNext ? 'next' : 'prev'}`)
+      })
+      
+      // Agregar track-id a otros elementos interactivos del calendario
+      const todayButton = calendarRef.current.querySelector('.rdp-day_today')
+      if (todayButton) {
+        todayButton.setAttribute("data-track-id", `${trackingIdPrefix}-today`)
+      }
     }
   }, [trackingIdPrefix])
 

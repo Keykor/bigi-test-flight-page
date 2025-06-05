@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,15 +23,60 @@ export default function SearchPage() {
   const [destination, setDestination] = useState("")
   const initialRenderRef = useRef(true)
   const { addSelection } = useEventTracker()
+  
+  // Add state to track all form field changes
+  const [formChanges, setFormChanges] = useState<Array<{
+    type: string;
+    field: string;
+    value: string;
+    previousValue?: string;
+    timestamp: string;
+  }>>([]);
+
+  // Function to record a change to the form changes array
+  const recordChange = useCallback((field: string, value: string, previousValue?: string) => {
+    setFormChanges(prev => [
+      ...prev,
+      {
+        type: 'field_change',
+        field,
+        value,
+        previousValue,
+        timestamp: new Date().toISOString()
+      }
+    ]);
+  }, []);
 
   // Función para manejar la selección de fecha de ida
   const handleDateSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate)
+    // Only record changes if there was a previous date or a new date is selected
+    if (date || selectedDate) {
+      const prevDateString = date ? format(date, "yyyy-MM-dd") : undefined;
+      const newDateString = selectedDate ? format(selectedDate, "yyyy-MM-dd") : undefined;
+      
+      // Don't record if the same date was selected
+      if (prevDateString !== newDateString) {
+        recordChange('departure_date', newDateString || '', prevDateString);
+      }
+    }
+    
+    setDate(selectedDate);
   }
 
   // Función para manejar la selección de fecha de vuelta
   const handleReturnDateSelect = (selectedDate: Date | undefined) => {
-    setReturnDate(selectedDate)
+    // Only record changes if there was a previous date or a new date is selected
+    if (returnDate || selectedDate) {
+      const prevDateString = returnDate ? format(returnDate, "yyyy-MM-dd") : undefined;
+      const newDateString = selectedDate ? format(selectedDate, "yyyy-MM-dd") : undefined;
+      
+      // Don't record if the same date was selected
+      if (prevDateString !== newDateString) {
+        recordChange('return_date', newDateString || '', prevDateString);
+      }
+    }
+    
+    setReturnDate(selectedDate);
   }
 
   // Inicializar datos de la página
@@ -61,11 +106,12 @@ export default function SearchPage() {
       returnDate: returnDate ? format(returnDate, "yyyy-MM-dd") : "",
     }
 
-    // Add selection to track search parameters
+    // Add selection to track search parameters along with only the form changes array
     addSelection({
       type: "search_parameters",
       ...params,
-      iterationId: iterationId
+      iterationId: iterationId,
+      formChanges: formChanges, // Include only the history of changes
     });
 
     const searchParamsString = new URLSearchParams({
@@ -82,12 +128,38 @@ export default function SearchPage() {
 
   // Manejar cambios en el aeropuerto de salida
   const handleDepartureChange = (value: string) => {
-    setDeparture(value)
+    // Check if this is a complete airport selection (not just typing)
+    if (value && value.includes(" - ")) {
+      // Extract the airport code from the selection (e.g., "ATL - Hartsfield-Jackson" -> "ATL")
+      const airportCode = value.split(" - ")[0].trim();
+      
+      // Only record if this is a different value than before
+      const prevAirportCode = departure.includes(" - ") ? departure.split(" - ")[0].trim() : "";
+      
+      if (airportCode !== prevAirportCode) {
+        recordChange('departure_airport', airportCode, prevAirportCode || undefined);
+      }
+    }
+    
+    setDeparture(value);
   }
 
   // Manejar cambios en el aeropuerto de destino
   const handleDestinationChange = (value: string) => {
-    setDestination(value)
+    // Check if this is a complete airport selection (not just typing)
+    if (value && value.includes(" - ")) {
+      // Extract the airport code from the selection (e.g., "ATL - Hartsfield-Jackson" -> "ATL")
+      const airportCode = value.split(" - ")[0].trim();
+      
+      // Only record if this is a different value than before
+      const prevAirportCode = destination.includes(" - ") ? destination.split(" - ")[0].trim() : "";
+      
+      if (airportCode !== prevAirportCode) {
+        recordChange('destination_airport', airportCode, prevAirportCode || undefined);
+      }
+    }
+    
+    setDestination(value);
   }
 
   return (
@@ -144,7 +216,7 @@ export default function SearchPage() {
                         id="date"
                         variant={"outline"}
                         className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
-                        data-track-id="departure-date-selector"
+                        data-track-id="departure-date-trigger"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {date ? format(date, "PPP") : <span>Pick departure date</span>}
@@ -156,6 +228,7 @@ export default function SearchPage() {
                         selected={date}
                         onSelect={handleDateSelect}
                         initialFocus
+                        trackingIdPrefix="departure-calendar"
                       />
                     </PopoverContent>
                   </Popover>
@@ -172,7 +245,7 @@ export default function SearchPage() {
                           "w-full justify-start text-left font-normal",
                           !returnDate && "text-muted-foreground",
                         )}
-                        data-track-id="return-date-selector"
+                        data-track-id="return-date-trigger"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {returnDate ? format(returnDate, "PPP") : <span>Pick return date</span>}
@@ -185,6 +258,7 @@ export default function SearchPage() {
                         onSelect={handleReturnDateSelect}
                         initialFocus
                         disabled={(date) => date < new Date() || (date && date < new Date())}
+                        trackingIdPrefix="return-calendar"
                       />
                     </PopoverContent>
                   </Popover>
@@ -192,7 +266,7 @@ export default function SearchPage() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" data-track-id="search-flights-button">
+            <Button type="submit" className="w-full" data-track-id="search-flights-submit">
               Search Flights
             </Button>
           </form>

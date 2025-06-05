@@ -286,7 +286,7 @@ export default function ReturnResultsPage() {
                       <Button
                         className={`mt-2 ${flight.isOffer ? "bg-orange-600 hover:bg-orange-700" : ""}`}
                         onClick={() => handleSelectFlight(flight)}
-                        data-track-id={`select-return-flight=${flight.id}`}
+                        data-track-id={`select-return-flight-${flight.id}`}
                       >
                         Select
                       </Button>

@@ -147,6 +147,7 @@ export interface ClickEvent {
   element: string
   trackId: string | null
   time: number
+  elementData?: any // Additional data about the clicked element if available
 }
 
 export interface ExperimentData {
@@ -157,4 +158,9 @@ export interface ExperimentData {
   selections: any[]
   uuid: string
   sampleCounter?: number
+  metrics?: {
+    interactionCounts?: Record<string, number>
+    timeOnPage?: Record<string, number>
+    clickCounts?: Record<string, number>
+  }
 }
