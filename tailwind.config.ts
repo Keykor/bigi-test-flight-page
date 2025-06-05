@@ -44,6 +44,14 @@ const config: Config = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
+            airline: {
+                green: '#157A43',
+                lightgreen: '#1A8D4E',
+                darkgreen: '#116A3A',
+                white: '#FFFFFF',
+                gray: '#F5F5F5',
+                black: '#333333',
+            },
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

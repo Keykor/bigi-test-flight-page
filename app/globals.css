@@ -20,7 +20,7 @@ body {
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --primary: 142 68% 29%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
@@ -32,7 +32,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 142 68% 29%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -55,8 +55,8 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary: 142 50% 35%;
+    --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
@@ -67,7 +67,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: 142 50% 35%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -91,4 +91,44 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.airline-header {
+  @apply bg-airline-green text-white py-4;
+}
+
+.airline-nav {
+  @apply flex justify-end space-x-6 container mx-auto px-4;
+}
+
+.airline-nav a {
+  @apply text-white hover:text-airline-gray transition-colors;
+}
+
+.airline-tabs {
+  @apply flex space-x-1 mt-4 container mx-auto px-4;
+}
+
+.airline-tab {
+  @apply bg-airline-lightgreen text-white px-4 py-2 rounded-t-lg hover:bg-airline-darkgreen transition-colors;
+}
+
+.airline-tab.active {
+  @apply bg-white text-airline-green;
+}
+
+.airline-form {
+  @apply bg-airline-green pb-8 pt-4;
+}
+
+.airline-form-content {
+  @apply container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-4;
+}
+
+.airline-search-button {
+  @apply bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded;
+}
+
+.airline-promo {
+  @apply my-8 container mx-auto;
 }

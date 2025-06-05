@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 import { AirportAutocomplete } from "@/components/airport-autocomplete"
 import { Calendar } from "@/components/ui/calendar"
 import { useEventTracker } from "@/context/EventTrackerProvider"
+import AirlineLayout from "@/components/airline-layout"
 
 export default function SearchPage() {
   const router = useRouter()
@@ -47,7 +48,7 @@ export default function SearchPage() {
     ]);
   }, []);
 
-  // Función para manejar la selección de fecha de ida
+  // Handle departure date selection
   const handleDateSelect = (selectedDate: Date | undefined) => {
     // Only record changes if there was a previous date or a new date is selected
     if (date || selectedDate) {
@@ -63,7 +64,7 @@ export default function SearchPage() {
     setDate(selectedDate);
   }
 
-  // Función para manejar la selección de fecha de vuelta
+  // Handle return date selection
   const handleReturnDateSelect = (selectedDate: Date | undefined) => {
     // Only record changes if there was a previous date or a new date is selected
     if (returnDate || selectedDate) {
@@ -79,7 +80,7 @@ export default function SearchPage() {
     setReturnDate(selectedDate);
   }
 
-  // Inicializar datos de la página
+  // Initialize page data
   useEffect(() => {
     if (!iterationId) {
       router.push("/welcome")
@@ -128,7 +129,7 @@ export default function SearchPage() {
 
   // Modified airport change handlers with more reliable tracking
   
-  // Manejar cambios en el aeropuerto de salida
+  // Handle departure airport changes
   const handleDepartureChange = (value: string) => {
     // Always update the input field value
     setDeparture(value);
@@ -148,7 +149,7 @@ export default function SearchPage() {
     }
   }
 
-  // Manejar cambios en el aeropuerto de destino
+  // Handle destination airport changes
   const handleDestinationChange = (value: string) => {
     // Always update the input field value
     setDestination(value);
@@ -169,115 +170,148 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-6">
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2"
-          onClick={handleBackToWelcome}
-          data-track-id="back-to-welcome"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Welcome
-        </Button>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Search for Round-Trip Flights</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Flight Information</h3>
-
-              <div className="grid gap-2">
-                <Label htmlFor="departure">Departure Airport</Label>
-                <AirportAutocomplete
-                  id="departure"
-                  value={departure}
-                  onChange={handleDepartureChange}
-                  placeholder="Select departure airport"
-                  data-track-id="departure-airport-input"
+    <AirlineLayout activeTab="flights">
+      <div className="airline-form">
+        <div className="airline-form-content grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+          <div className="col-span-1">
+            <label className="block text-white font-medium mb-2">Origin</label>
+            <AirportAutocomplete
+              id="departure"
+              value={departure}
+              onChange={handleDepartureChange}
+              placeholder="Select departure airport"
+              data-track-id="departure-airport-input"
+              className="w-full bg-white"
+            />
+          </div>
+          
+          <div className="col-span-1">
+            <label className="block text-white font-medium mb-2">Destination</label>
+            <AirportAutocomplete
+              id="destination"
+              value={destination}
+              onChange={handleDestinationChange}
+              placeholder="Select destination airport"
+              data-track-id="destination-airport-input"
+              className="w-full bg-white"
+            />
+          </div>
+          
+          <div className="col-span-1">
+            <label className="block text-white font-medium mb-2">Departure Date</label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="date"
+                  variant={"outline"}
+                  className={cn("w-full bg-white justify-start text-left font-normal", !date && "text-muted-foreground")}
+                  data-track-id="departure-date-trigger"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "dd/MM/yyyy") : <span>Select date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 bg-white">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  initialFocus
+                  trackingIdPrefix="departure-calendar"
                 />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="destination">Destination Airport</Label>
-                <AirportAutocomplete
-                  id="destination"
-                  value={destination}
-                  onChange={handleDestinationChange}
-                  placeholder="Select destination airport"
-                  data-track-id="destination-airport-input"
+              </PopoverContent>
+            </Popover>
+          </div>
+          
+          <div className="col-span-1">
+            <label className="block text-white font-medium mb-2">Return Date</label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="returnDate"
+                  variant={"outline"}
+                  className={cn("w-full bg-white justify-start text-left font-normal", !returnDate && "text-muted-foreground")}
+                  data-track-id="return-date-trigger"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {returnDate ? format(returnDate, "dd/MM/yyyy") : <span>Select date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 bg-white">
+                <Calendar
+                  mode="single"
+                  selected={returnDate}
+                  onSelect={handleReturnDateSelect}
+                  initialFocus
+                  trackingIdPrefix="return-calendar"
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="date">Departure Date</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="date"
-                        variant={"outline"}
-                        className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
-                        data-track-id="departure-date-trigger"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick departure date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={handleDateSelect}
-                        initialFocus
-                        trackingIdPrefix="departure-calendar"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="returnDate">Return Date</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="returnDate"
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !returnDate && "text-muted-foreground",
-                        )}
-                        data-track-id="return-date-trigger"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {returnDate ? format(returnDate, "PPP") : <span>Pick return date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={returnDate}
-                        onSelect={handleReturnDateSelect}
-                        initialFocus
-                        disabled={(date) => date < new Date() || (date && date < new Date())}
-                        trackingIdPrefix="return-calendar"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full" data-track-id="search-flights-submit">
+              </PopoverContent>
+            </Popover>
+          </div>
+          
+          <div className="col-span-1 md:col-span-2 mt-4">
+            <Button 
+              onClick={handleSubmit} 
+              className="w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white"
+              data-track-id="search-flights-submit"
+            >
               Search Flights
             </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Discount section - less prominent */}
+      <div className="container mx-auto px-4 py-4">
+        <div className="bg-gray-100 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center">
+            <div className="w-1/4 hidden md:block">
+              <img 
+                src="/images/plane-sunset.jpg" 
+                alt="Last minute offer" 
+                className="w-full h-28 object-cover rounded"
+                onError={e => {
+                  // Fallback if image not found
+                  const target = e.target as HTMLImageElement;
+                  target.src = "https://images.unsplash.com/photo-1496427011580-7f32943ee9d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80";
+                }}
+              />
+            </div>
+            <div className="w-3/4 pl-4">
+              <h3 className="text-lg font-bold mb-1">Last Minute Offers</h3>
+              <p className="text-sm mb-2">Get 30% off on selected destinations. Limited time offer.</p>
+              <Button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 cursor-not-allowed" disabled>
+                View Offers
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-gray-100 rounded-lg p-6">
+          <h3 className="text-xl font-bold mb-4">Subscribe now for the best deals</h3>
+          <p className="mb-4">Never miss an offer!</p>
+          
+          <ul className="ml-6 mb-4 list-disc">
+            <li className="mb-1">Get notified about the latest deals</li>
+            <li className="mb-1">Be the first to get promotions</li>
+            <li className="mb-1">Discover new destinations</li>
+          </ul>
+          
+          <div className="flex flex-col md:flex-row gap-3">
+            <input
+              type="email"
+              placeholder="Email"
+              className="flex-grow p-2 border rounded cursor-not-allowed bg-gray-50"
+              disabled
+            />
+            <Button className="bg-gray-300 hover:bg-gray-400 text-gray-800 cursor-not-allowed" disabled>
+              Subscribe
+            </Button>
+          </div>
+        </div>
+      </div>
+    </AirlineLayout>
   )
 }
