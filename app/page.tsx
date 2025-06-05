@@ -8,21 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ExperimentTracker } from "@/components/experiment-tracker"
-import { useExperimentStore } from "@/lib/experiment-store"
 
 export default function ParticipantIdPage() {
   const [participantId, setParticipantId] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
-  const { setParticipantId: storeParticipantId, participantId: storedId, resetExperiment } = useExperimentStore()
-
-  useEffect(() => {
-    // If participant ID is already set, redirect to welcome page
-    if (storedId) {
-      router.push("/welcome")
-    }
-  }, [storedId, router])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,20 +22,12 @@ export default function ParticipantIdPage() {
       return
     }
 
-    // Reset any previous experiment data
-    resetExperiment()
-
-    // Store the participant ID
-    storeParticipantId(participantId.trim())
-
     // Navigate to the welcome page
     router.push("/welcome")
   }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-md">
-      <ExperimentTracker pageId="participant-id" />
-
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Flight Booking Experiment</CardTitle>
@@ -64,11 +46,10 @@ export default function ParticipantIdPage() {
                     setParticipantId(e.target.value)
                     setError("")
                   }}
-                  data-tracking-id="participant-id-input"
                 />
                 {error && <p className="text-sm text-red-500">{error}</p>}
               </div>
-              <Button type="submit" data-tracking-id="participant-id-submit">
+              <Button type="submit">
                 Start Experiment
               </Button>
             </div>

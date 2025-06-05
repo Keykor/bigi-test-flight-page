@@ -13,10 +13,9 @@ interface AirportAutocompleteProps {
   onChange: (value: string) => void
   placeholder: string
   id: string
-  trackingId: string
 }
 
-export function AirportAutocomplete({ value, onChange, placeholder, id, trackingId }: AirportAutocompleteProps) {
+export function AirportAutocomplete({ value, onChange, placeholder, id }: AirportAutocompleteProps) {
   const [open, setOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
@@ -51,7 +50,6 @@ export function AirportAutocomplete({ value, onChange, placeholder, id, tracking
           aria-expanded={open}
           className="w-full justify-between"
           id={id}
-          data-tracking-id={trackingId}
         >
           {value ? (
             <div className="flex items-center">
@@ -81,7 +79,6 @@ export function AirportAutocomplete({ value, onChange, placeholder, id, tracking
             onValueChange={setSearchQuery}
             ref={inputRef}
             className="h-9"
-            data-tracking-id={`${trackingId}-search`}
           />
           <CommandList>
             <CommandEmpty>No airport found.</CommandEmpty>
@@ -96,7 +93,6 @@ export function AirportAutocomplete({ value, onChange, placeholder, id, tracking
                     setSearchQuery("")
                   }}
                   className="flex items-center"
-                  data-tracking-id={`${trackingId}-option-${airport.code}`}
                 >
                   <Check className={cn("mr-2 h-4 w-4", value === airport.code ? "opacity-100" : "opacity-0")} />
                   <div className="flex flex-col">

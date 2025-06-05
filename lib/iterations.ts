@@ -1,6 +1,5 @@
 "use client"
 
-import { useExperimentStore } from "./experiment-store"
 import type { Flight, IterationConfig, SearchParameters, OfferConfig } from "./types"
 import { addDays, format, parseISO } from "date-fns"
 
@@ -329,11 +328,10 @@ function generateOfferFlights(baseFlights: Flight[], originalDate: string, offer
 
 // Get available iterations (marking completed ones)
 export function getAvailableIterations(): IterationConfig[] {
-  const { completedIterations } = useExperimentStore.getState()
-
+  // Without tracking, just return all iterations as not completed
   return iterationsConfig.map((iteration) => ({
     ...iteration,
-    completed: completedIterations.includes(iteration.id),
+    completed: false,
   }))
 }
 

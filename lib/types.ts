@@ -13,20 +13,21 @@ export interface Flight {
   luggage: string
   refundable: boolean
   isTarget?: boolean
-  departureDate?: string // Fecha de salida en formato YYYY-MM-DD
-  type: "outbound" | "return" // Tipo de vuelo: ida o vuelta
-  isOffer?: boolean // Si es una oferta especial
-  originalDate?: string // Fecha original solicitada (para ofertas)
-  dateOffset?: number // Días de diferencia respecto a la fecha original (-1, 0, +1)
-  offerType?: "earlier" | "later" // Tipo de oferta: más temprano o más tarde
-  discountPercentage?: number // Porcentaje de descuento para ofertas
+  departureDate: string
+  type: "outbound" | "return"
+  originalDate?: string
+  dateOffset?: number
+  isOffer?: boolean
+  offerType?: "earlier" | "later"
+  discountPercentage?: number
 }
 
 export interface SearchParameters {
   departure: string
   destination: string
   date: string
-  returnDate?: string // Fecha de vuelta opcional
+  returnDate: string
+  passengers?: number
 }
 
 export interface SelectedFlights {
@@ -97,18 +98,6 @@ export interface IterationConfig {
   offerConfig: OfferConfig // Configuración de ofertas para esta iteración
 }
 
-export interface ExperimentData {
-  participantId: string | null
-  iterationId: string | null
-  interactions: Interaction[]
-  pageVisits: PageVisit[]
-  experimentStartTime: Date | null
-  experimentEndTime: Date | null
-  experimentDuration?: number // in milliseconds
-  completedAt: Date | null
-  blobUrl?: string // URL to the stored blob for this iteration
-}
-
 export interface CentralExperimentData {
   participantId: string | null
   iterationOrder: string[]
@@ -121,4 +110,51 @@ export interface CentralExperimentData {
 export interface TargetSearchConfig {
   iterationId: string
   targetParams: SearchParameters
+}
+
+// New types for tracking
+export interface TrackingEvent {
+  type: string
+  timestamp: string
+  data?: any
+}
+
+export interface PageVisit {
+  page: string
+  visitStartTime: string
+  visitEndTime: string | null
+  pageTransitionDuration?: number
+  mouseMovements: MouseMovement[]
+  scrollPositions: ScrollPosition[]
+  clicks: ClickEvent[]
+  widgetTimes: Record<string, any>
+}
+
+export interface MouseMovement {
+  x: number
+  y: number
+  time: number
+}
+
+export interface ScrollPosition {
+  scrollY: number
+  time: number
+}
+
+export interface ClickEvent {
+  x: number
+  y: number
+  element: string
+  trackId: string | null
+  time: number
+}
+
+export interface ExperimentData {
+  iterationId: string
+  pages: PageVisit[]
+  experimentStartTime: string
+  experimentEndTime?: string
+  selections: any[]
+  uuid: string
+  sampleCounter?: number
 }

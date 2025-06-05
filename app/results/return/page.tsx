@@ -5,13 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Clock, Luggage, Plane } from "lucide-react"
-import { ExperimentTracker } from "@/components/experiment-tracker"
 import { getReturnFlightsForIteration, getFlightById } from "@/lib/iterations"
-import { useExperimentStore } from "@/lib/experiment-store"
 import type { Flight, SearchParameters } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Percent } from "lucide-react"
 import { format, parseISO } from "date-fns"
+import { useEventTracker } from "@/context/EventTrackerProvider"
 
 export default function ReturnResultsPage() {
   const router = useRouter()
@@ -20,13 +19,9 @@ export default function ReturnResultsPage() {
   const outboundFlightId = searchParams.get("outboundFlightId")
   const [flights, setFlights] = useState<Flight[]>([])
   const [outboundFlight, setOutboundFlight] = useState<Flight | null>(null)
-  const pageExitRecordedRef = useRef(false)
   const [currentSearchParams, setCurrentSearchParams] = useState<SearchParameters | undefined>(undefined)
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, any>>({})
   const initialRenderRef = useRef(true)
-  const optionsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  const { currentIteration, participantId, recordPageExit } = useExperimentStore()
+  const { addSelection } = useEventTracker()
 
   // Extraer parámetros de búsqueda de la URL - memorizado para evitar recrear en cada renderizado
   const extractSearchParams = useCallback(() => {
@@ -70,12 +65,6 @@ export default function ReturnResultsPage() {
 
   // Inicializar datos de la página
   useEffect(() => {
-    // Si no hay ID de participante, redirigir a la página de ID de participante
-    if (!participantId) {
-      router.push("/")
-      return
-    }
-
     if (!iterationId) {
       router.push("/welcome")
       return
@@ -93,6 +82,7 @@ export default function ReturnResultsPage() {
 
       // Extraer parámetros de búsqueda de la URL
       const params = extractSearchParams()
+      setCurrentSearchParams(params)
 
       // Obtener el vuelo de ida seleccionado
       const selectedOutboundFlight = getFlightById(outboundFlightId)
@@ -105,122 +95,31 @@ export default function ReturnResultsPage() {
       console.log("Found outbound flight:", selectedOutboundFlight)
       setOutboundFlight(selectedOutboundFlight)
 
-      // Establecer los parámetros de búsqueda actuales
-      setCurrentSearchParams(params)
-
       // Obtener vuelos de vuelta basados en la iteración actual, los parámetros de búsqueda y el vuelo de ida
       const flightsData = getReturnFlightsForIteration(iterationId, params, selectedOutboundFlight)
       setFlights(flightsData)
-
-      // Establecer opciones seleccionadas para el seguimiento inmediatamente
-      const options = {
-        flightType: "return",
-        flightsCount: flightsData.length,
-        hasTargetFlight: flightsData.some((flight) => flight.isTarget),
-        hasOffers: flightsData.some((flight) => flight.isOffer),
-        offerCount: flightsData.filter((flight) => flight.isOffer).length,
-        searchCriteria: params,
-        outboundFlightId: selectedOutboundFlight.id,
-        outboundFlightDetails: {
-          airline: selectedOutboundFlight.airline,
-          flightNumber: selectedOutboundFlight.flightNumber,
-          price: selectedOutboundFlight.price,
-          origin: selectedOutboundFlight.origin,
-          destination: selectedOutboundFlight.destination,
-          departureDate: selectedOutboundFlight.departureDate,
-          isOffer: selectedOutboundFlight.isOffer,
-          offerType: selectedOutboundFlight.offerType,
-        },
-      }
-
-      setSelectedOptions(options)
-      console.log("Return results page - setting selected options:", options)
-      console.log("Return results page - setting search params:", params)
-      console.log(`Return results page mounted with iteration: ${iterationId}`)
     }
-
-    // Función de limpieza para asegurar que se registre la salida de la página
-    return () => {
-      if (!pageExitRecordedRef.current) {
-        console.log(`Manual page exit: return-results at ${new Date().toISOString()}`)
-        recordPageExit("return-results", new Date())
-        pageExitRecordedRef.current = true
-      }
-
-      // Limpiar cualquier timeout pendiente
-      if (optionsUpdateTimeoutRef.current) {
-        clearTimeout(optionsUpdateTimeoutRef.current)
-      }
-    }
-  }, [iterationId, outboundFlightId, participantId, recordPageExit, router, extractSearchParams, searchParams])
+  }, [iterationId, outboundFlightId, router, extractSearchParams, searchParams])
 
   const handleSelectFlight = useCallback(
     (flight: Flight) => {
-      // Extraer parámetros de búsqueda actuales
-      const params = extractSearchParams()
-
-      // Actualizar opciones seleccionadas antes de la navegación
-      const updatedOptions = {
-        ...selectedOptions,
-        selectedReturnFlightId: flight.id,
-        isTargetReturnFlight: flight.isTarget || false,
-        isOfferReturnFlight: flight.isOffer || false,
-        offerTypeReturn: flight.offerType || null,
-        dateOffsetReturn: flight.dateOffset || 0,
-        discountPercentageReturn: flight.discountPercentage || 0,
-        returnFlightDetails: {
-          airline: flight.airline,
-          flightNumber: flight.flightNumber,
-          price: flight.price,
-          departureTime: flight.departureTime,
-          arrivalTime: flight.arrivalTime,
-          origin: flight.origin,
-          destination: flight.destination,
-          departureDate: flight.departureDate,
-          duration: flight.duration,
-          stops: flight.stops,
-          class: flight.class,
-          luggage: flight.luggage,
-          refundable: flight.refundable,
-          isOffer: flight.isOffer,
-          offerType: flight.offerType,
-          originalDate: flight.originalDate,
-          dateOffset: flight.dateOffset,
-          discountPercentage: flight.discountPercentage,
-        },
-        searchCriteria: params,
-      }
-
-      console.log("Return results page - updating selected options before navigation:", updatedOptions)
-      setSelectedOptions(updatedOptions)
-
-      // Asegurar que se registre la salida de la página antes de la navegación
-      if (!pageExitRecordedRef.current) {
-        console.log(`Page exit (select flight): return-results at ${new Date().toISOString()}`)
-        recordPageExit("return-results", new Date())
-        pageExitRecordedRef.current = true
-      }
-
-      // Navegar a la página de confirmación con ambos vuelos seleccionados
-      setTimeout(() => {
-        const newParams = new URLSearchParams(searchParams)
-        newParams.set("returnFlightId", flight.id)
-        console.log("Navigating to confirmation with params:", newParams.toString())
-        router.push(`/confirmation?${newParams.toString()}`)
-      }, 10)
+      // Record the flight selection before navigation
+      addSelection({
+        type: "return_flight_selection",
+        flight: flight
+      })
+      
+      // Navigate to the confirmation page with selected flights
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set("returnFlightId", flight.id)
+      console.log("Navigating to confirmation with params:", newParams.toString())
+      router.push(`/confirmation?${newParams.toString()}`)
     },
-    [selectedOptions, pageExitRecordedRef, recordPageExit, searchParams, router, extractSearchParams],
+    [searchParams, router, addSelection]
   )
 
   const handleBack = useCallback(() => {
-    // Asegurar que se registre la salida de la página antes de la navegación
-    if (!pageExitRecordedRef.current) {
-      console.log(`Page exit (back): return-results at ${new Date().toISOString()}`)
-      recordPageExit("return-results", new Date())
-      pageExitRecordedRef.current = true
-    }
-
-    // Mantener todos los parámetros al volver
+    // Maintain all parameters when going back
     const backParams = new URLSearchParams()
     searchParams.forEach((value, key) => {
       if (key !== "returnFlightId") {
@@ -230,7 +129,7 @@ export default function ReturnResultsPage() {
 
     console.log("Going back to outbound results with params:", backParams.toString())
     router.push(`/results/outbound?${backParams.toString()}`)
-  }, [pageExitRecordedRef, recordPageExit, router, searchParams])
+  }, [router, searchParams])
 
   if (!outboundFlight) {
     return (
@@ -247,8 +146,6 @@ export default function ReturnResultsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <ExperimentTracker pageId="return-results" searchParams={currentSearchParams} selectedOptions={selectedOptions} />
-
       <div className="mb-6">
         <Button
           variant="ghost"

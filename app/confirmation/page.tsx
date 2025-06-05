@@ -5,11 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Check, Clock, Luggage } from "lucide-react"
-import { ExperimentTracker } from "@/components/experiment-tracker"
 import { getFlightById } from "@/lib/iterations"
-import { useExperimentStore } from "@/lib/experiment-store"
+import { useEventTracker } from "@/context/EventTrackerProvider"
 import type { Flight, SearchParameters } from "@/lib/types"
-import { submitExperimentData, submitCentralData } from "@/lib/submit-data"
 
 export default function ConfirmationPage() {
   const router = useRouter()
@@ -19,58 +17,20 @@ export default function ConfirmationPage() {
   const returnFlightId = searchParams.get("returnFlightId")
   const [outboundFlight, setOutboundFlight] = useState<Flight | null>(null)
   const [returnFlight, setReturnFlight] = useState<Flight | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const pageExitRecordedRef = useRef(false)
-  const [currentSearchParams, setCurrentSearchParams] = useState<SearchParameters | undefined>(undefined)
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, any>>({})
   const initialRenderRef = useRef(true)
-  const optionsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const { stopExperiment, addSelection } = useEventTracker()
 
-  const {
-    completeIteration,
-    endExperiment,
-    getExperimentData,
-    getCentralExperimentData,
-    participantId,
-    addIterationBlob,
-    areAllIterationsCompleted,
-    recordPageExit,
-  } = useExperimentStore()
-
-  // Extraer parámetros de búsqueda de la URL - memorizado para evitar recrear en cada renderizado
-  const extractSearchParams = useCallback(() => {
-    const departure = searchParams.get("departure") || ""
-    const destination = searchParams.get("destination") || ""
-    const date = searchParams.get("date") || ""
-
-    return {
-      departure,
-      destination,
-      date,
-    }
-  }, [searchParams])
-
+  // Initialize page data
   useEffect(() => {
-    // Si no hay ID de participante, redirigir a la página de ID de participante
-    if (!participantId) {
-      router.push("/")
-      return
-    }
-
     if (!iterationId || !outboundFlightId || !returnFlightId) {
       router.push("/welcome")
       return
     }
 
-    // Solo ejecutar esto una vez en el renderizado inicial
+    // Only execute this once on the initial render
     if (initialRenderRef.current) {
       initialRenderRef.current = false
-
-      // Extraer parámetros de búsqueda de la URL
-      const params = extractSearchParams()
-      setCurrentSearchParams(params)
 
       console.log("Confirmation page - looking for flights:", { outboundFlightId, returnFlightId })
 
@@ -96,154 +56,40 @@ export default function ConfirmationPage() {
 
       setOutboundFlight(selectedOutboundFlight)
       setReturnFlight(selectedReturnFlight)
-
-      // Establecer opciones seleccionadas para el seguimiento - con un ligero retraso para evitar actualizaciones de estado inmediatas
-      setTimeout(() => {
-        setSelectedOptions({
-          outboundFlightId: selectedOutboundFlight.id,
-          returnFlightId: selectedReturnFlight.id,
-          isTargetOutboundFlight: selectedOutboundFlight.isTarget || false,
-          isTargetReturnFlight: selectedReturnFlight.isTarget || false,
-          totalPrice: selectedOutboundFlight.price + selectedReturnFlight.price,
-          outboundFlightDetails: {
-            airline: selectedOutboundFlight.airline,
-            flightNumber: selectedOutboundFlight.flightNumber,
-            price: selectedOutboundFlight.price,
-            departureTime: selectedOutboundFlight.departureTime,
-            arrivalTime: selectedOutboundFlight.arrivalTime,
-            origin: selectedOutboundFlight.origin,
-            destination: selectedOutboundFlight.destination,
-            departureDate: selectedOutboundFlight.departureDate,
-            duration: selectedOutboundFlight.duration,
-            stops: selectedOutboundFlight.stops,
-            class: selectedOutboundFlight.class,
-            luggage: selectedOutboundFlight.luggage,
-            refundable: selectedOutboundFlight.refundable,
-          },
-          returnFlightDetails: {
-            airline: selectedReturnFlight.airline,
-            flightNumber: selectedReturnFlight.flightNumber,
-            price: selectedReturnFlight.price,
-            departureTime: selectedReturnFlight.departureTime,
-            arrivalTime: selectedReturnFlight.arrivalTime,
-            origin: selectedReturnFlight.origin,
-            destination: selectedReturnFlight.destination,
-            departureDate: selectedReturnFlight.departureDate,
-            duration: selectedReturnFlight.duration,
-            stops: selectedReturnFlight.stops,
-            class: selectedReturnFlight.class,
-            luggage: selectedReturnFlight.luggage,
-            refundable: selectedReturnFlight.refundable,
-          },
-          searchCriteria: params,
-        })
-      }, 0)
+      
+      // Record the final flight selections
+      addSelection({
+        type: "final_selection",
+        outboundFlight: selectedOutboundFlight,
+        returnFlight: selectedReturnFlight,
+        timestamp: new Date().toISOString()
+      });
     }
-
-    // Función de limpieza para asegurar que se registre la salida de la página
-    return () => {
-      if (!pageExitRecordedRef.current) {
-        console.log(`Manual page exit: confirmation at ${new Date().toISOString()}`)
-        recordPageExit("confirmation", new Date())
-        pageExitRecordedRef.current = true
-      }
-
-      // Limpiar cualquier timeout pendiente
-      if (optionsUpdateTimeoutRef.current) {
-        clearTimeout(optionsUpdateTimeoutRef.current)
-      }
-    }
-  }, [iterationId, outboundFlightId, returnFlightId, router, participantId, recordPageExit, extractSearchParams])
+  }, [iterationId, outboundFlightId, returnFlightId, router, searchParams, addSelection])
 
   const handleBack = useCallback(() => {
-    // Asegurar que se registre la salida de la página antes de la navegación
-    if (!pageExitRecordedRef.current) {
-      console.log(`Page exit (back button): confirmation at ${new Date().toISOString()}`)
-      recordPageExit("confirmation", new Date())
-      pageExitRecordedRef.current = true
-    }
     router.push(`/results/return?${searchParams.toString()}`)
-  }, [pageExitRecordedRef, recordPageExit, router, searchParams])
+  }, [router, searchParams])
 
   const handleSubmit = useCallback(async () => {
-    if (!iterationId || isSubmitting) return
+    if (!iterationId) return
 
-    setIsSubmitting(true)
-    setSubmitError(null)
+    // Record booking confirmation event
+    addSelection({
+      type: "booking_confirmed",
+      timestamp: new Date().toISOString()
+    });
 
-    try {
-      // Extraer parámetros de búsqueda actuales
-      const params = extractSearchParams()
-
-      // Actualizar opciones seleccionadas antes de enviar
-      const updatedOptions = {
-        ...selectedOptions,
-        confirmed: true,
-        confirmationTime: new Date().toISOString(),
-      }
-      setSelectedOptions(updatedOptions)
-
-      // Asegurar que se registre la salida de la página antes de enviar datos
-      if (!pageExitRecordedRef.current) {
-        console.log(`Page exit (submit): confirmation at ${new Date().toISOString()}`)
-        recordPageExit("confirmation", new Date())
-        pageExitRecordedRef.current = true
-      }
-
-      // Finalizar el experimento antes de enviar datos
-      endExperiment()
-
-      // Obtener los datos del experimento directamente del store
-      const experimentData = getExperimentData()
-
-      // Enviar los datos
-      const blobUrl = await submitExperimentData(experimentData)
-
-      // Almacenar la URL del blob
-      if (blobUrl) {
-        addIterationBlob(iterationId, blobUrl)
-      }
-
-      // Marcar la iteración como completada
-      completeIteration(iterationId, blobUrl || undefined)
-
-      // Comprobar si todas las iteraciones están completadas
-      if (areAllIterationsCompleted()) {
-        // Enviar los datos centrales
-        const centralData = getCentralExperimentData()
-        await submitCentralData(centralData)
-      }
-
-      setIsSubmitted(true)
-    } catch (error) {
-      setSubmitError("Failed to submit data. Please try again.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [
-    iterationId,
-    isSubmitting,
-    selectedOptions,
-    pageExitRecordedRef,
-    recordPageExit,
-    endExperiment,
-    getExperimentData,
-    addIterationBlob,
-    completeIteration,
-    areAllIterationsCompleted,
-    getCentralExperimentData,
-    extractSearchParams,
-  ])
+    // Stop tracking the iteration
+    stopExperiment();
+    
+    // Mark as submitted to show completion screen
+    setIsSubmitted(true)
+  }, [iterationId, addSelection, stopExperiment])
 
   const handleFinish = useCallback(() => {
-    // Asegurar que se registre la salida de la página antes de la navegación
-    if (!pageExitRecordedRef.current) {
-      console.log(`Page exit (finish): confirmation at ${new Date().toISOString()}`)
-      recordPageExit("confirmation", new Date())
-      pageExitRecordedRef.current = true
-    }
     router.push("/welcome")
-  }, [pageExitRecordedRef, recordPageExit, router])
+  }, [router])
 
   if (!outboundFlight || !returnFlight) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>
@@ -251,15 +97,12 @@ export default function ConfirmationPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <ExperimentTracker pageId="confirmation" searchParams={currentSearchParams} selectedOptions={selectedOptions} />
-
       {!isSubmitted && (
         <div className="mb-6">
           <Button
             variant="ghost"
             className="flex items-center gap-2"
             onClick={handleBack}
-            data-tracking-id="back-to-results"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Results
@@ -281,7 +124,7 @@ export default function ConfirmationPage() {
               <p className="text-muted-foreground mb-6">
                 Your flight booking has been confirmed and your experiment data has been submitted.
               </p>
-              <Button onClick={handleFinish} data-tracking-id="finish-experiment">
+              <Button onClick={handleFinish}>
                 Return to Home
               </Button>
             </div>
@@ -427,16 +270,13 @@ export default function ConfirmationPage() {
                 </div>
               </div>
 
-              {submitError && <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg">{submitError}</div>}
-
               <div className="text-center">
                 <Button
                   onClick={handleSubmit}
-                  disabled={isSubmitting}
                   className="w-full md:w-auto"
-                  data-tracking-id="confirm-booking"
+                  data-track-id="confirm-booking-button"
                 >
-                  {isSubmitting ? "Submitting..." : "Confirm Booking"}
+                  Confirm Booking
                 </Button>
               </div>
             </>

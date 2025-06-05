@@ -4,12 +4,16 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { getAvailableIterations } from "@/lib/iterations"
-import { ExperimentTracker } from "@/components/experiment-tracker"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useEventTracker } from "@/context/EventTrackerProvider"
 import type { IterationConfig } from "@/lib/types"
 
 export default function WelcomePage() {
   const [availableIterations, setAvailableIterations] = useState<IterationConfig[]>([])
+  const [isNavigating, setIsNavigating] = useState(false)
+  const { startExperiment } = useEventTracker()
+  const router = useRouter()
 
   useEffect(() => {
     // Get available iterations when the component mounts
@@ -17,13 +21,33 @@ export default function WelcomePage() {
     setAvailableIterations(iterations)
   }, [])
 
+  // Handle starting an iteration with tracking
+  const handleStartIteration = (iterationId: string) => {
+    // Prevent multiple clicks/executions
+    if (isNavigating) return;
+    
+    // Set navigating state to prevent multiple executions
+    setIsNavigating(true);
+    
+    try {
+      // Start tracking this iteration
+      startExperiment(iterationId)
+      
+      // Navigate to the search page (use a timeout to ensure state updates complete)
+      setTimeout(() => {
+        router.push(`/search?iteration=${iterationId}`)
+      }, 0);
+    } catch (error) {
+      console.error("Error starting iteration:", error);
+      setIsNavigating(false);
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <ExperimentTracker pageId="welcome" />
-
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle className="text-2xl" data-tracking-id="welcome-title">
+          <CardTitle className="text-2xl">
             Flight Booking Experiment
           </CardTitle>
           <CardDescription>Welcome to our user experience research study</CardDescription>
@@ -40,10 +64,6 @@ export default function WelcomePage() {
               <li>You will select a flight that meets your requirements</li>
               <li>You will review and confirm your selection</li>
             </ol>
-            <p>
-              Your interactions with the interface will be recorded anonymously to help us analyze patterns and improve
-              the design. No personal information will be collected.
-            </p>
             <p>
               Please select one of the iterations below to begin the experiment. Each iteration represents a slightly
               different version of the booking interface.
@@ -63,12 +83,9 @@ export default function WelcomePage() {
               <Button
                 className="w-full"
                 disabled={iteration.completed}
-                asChild
-                data-tracking-id={`iteration-${iteration.id}`}
+                onClick={() => handleStartIteration(iteration.id)}
               >
-                <Link href={`/search?iteration=${iteration.id}`}>
-                  {iteration.completed ? "Completed" : "Start Iteration"}
-                </Link>
+                {iteration.completed ? "Completed" : "Start Iteration"}
               </Button>
             </CardFooter>
           </Card>
