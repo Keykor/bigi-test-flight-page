@@ -7,39 +7,61 @@ import { DayPicker } from "react-day-picker"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  trackingIdPrefix?: string
+}
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  trackingIdPrefix = "calendar-day",
   ...props
 }: CalendarProps) {
+  // Add tracking to day buttons
+  const handleDayClick = React.useCallback(
+    (day: Date, modifiers: any, e: React.MouseEvent<HTMLButtonElement>) => {
+      // Add data attribute for tracking
+      if (e.currentTarget) {
+        e.currentTarget.setAttribute(
+          "data-track-id",
+          `${trackingIdPrefix}-${day.getDate()}`
+        )
+      }
+
+      // Call the original onDayClick if it exists
+      if (props.onDayClick) {
+        props.onDayClick(day, modifiers, e)
+      }
+    },
+    [props.onDayClick, trackingIdPrefix]
+  )
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
+      onDayClick={handleDayClick}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
+        caption: "flex justify-center pt-1 relative items-center mb-2",
         caption_label: "text-sm font-medium",
-        nav: "space-x-1 flex items-center",
+        nav: "flex items-center justify-between px-1 space-x-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          "h-7 w-7 bg-transparent p-0 opacity-75 hover:opacity-100 border-0"
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
-        head_row: "flex",
-        head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-        row: "flex w-full mt-2",
-        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+        table: "w-full border-collapse",
+        head_row: "", // Let the global styles handle this
+        head_cell: "text-muted-foreground font-normal text-[0.8rem]",
+        row: "", // Let the global styles handle this
+        cell: "text-center p-0 relative [&:has([aria-selected])]:bg-accent",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-full"
         ),
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
@@ -52,8 +74,16 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" data-track-id="calendar-prev-month" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" data-track-id="calendar-next-month" />,
+        IconLeft: ({ ...props }) => (
+          <ChevronLeft className="h-4 w-4" data-track-id={`${trackingIdPrefix}-prev-month`} />
+        ),
+        IconRight: ({ ...props }) => (
+          <ChevronRight className="h-4 w-4" data-track-id={`${trackingIdPrefix}-next-month`} />
+        ),
+      }}
+      modifiersClassNames={{
+        selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground rounded-full",
+        today: "bg-accent text-accent-foreground rounded-full border border-primary",
       }}
       {...props}
     />

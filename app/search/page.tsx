@@ -10,7 +10,7 @@ import { format } from "date-fns"
 import { CalendarIcon, ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AirportAutocomplete } from "@/components/airport-autocomplete"
-import { Calendar } from "@/components/ui/calendar"
+import { CalendarWrapper } from "@/components/ui/calendar-wrapper" 
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import AirlineLayout from "@/components/airline-layout"
 
@@ -211,13 +211,12 @@ export default function SearchPage() {
                   {date ? format(date, "dd/MM/yyyy") : <span>Select date</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white">
-                <Calendar
-                  mode="single"
+              <PopoverContent className="w-auto p-0 bg-white min-w-[320px]" align="start">
+                <CalendarWrapper
                   selected={date}
                   onSelect={handleDateSelect}
-                  initialFocus
                   trackingIdPrefix="departure-calendar"
+                  className="rounded-md border-0"
                 />
               </PopoverContent>
             </Popover>
@@ -237,13 +236,12 @@ export default function SearchPage() {
                   {returnDate ? format(returnDate, "dd/MM/yyyy") : <span>Select date</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white">
-                <Calendar
-                  mode="single"
+              <PopoverContent className="w-auto p-0 bg-white min-w-[320px]" align="start">
+                <CalendarWrapper
                   selected={returnDate}
                   onSelect={handleReturnDateSelect}
-                  initialFocus
                   trackingIdPrefix="return-calendar"
+                  className="rounded-md border-0"
                 />
               </PopoverContent>
             </Popover>

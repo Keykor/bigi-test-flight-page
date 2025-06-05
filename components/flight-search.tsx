@@ -74,6 +74,7 @@ export function FlightSearch() {
                 selected={departureDate}
                 onSelect={setDepartureDate}
                 initialFocus
+                trackingIdPrefix="flight-search-departure"
               />
             </PopoverContent>
           </Popover>
@@ -100,6 +101,7 @@ export function FlightSearch() {
                 selected={returnDate}
                 onSelect={setReturnDate}
                 initialFocus
+                trackingIdPrefix="flight-search-return"
               />
             </PopoverContent>
           </Popover>

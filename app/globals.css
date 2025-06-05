@@ -132,3 +132,57 @@ body {
 .airline-promo {
   @apply my-8 container mx-auto;
 }
+
+/* Calendar styling */
+.rdp {
+  --rdp-accent-color: #3b82f6;
+  --rdp-background-color: #e0e7ff;
+  margin: 0;
+}
+
+.rdp-months {
+  background-color: white;
+}
+
+.rdp-month {
+  background-color: white;
+}
+
+.rdp-caption {
+  padding: 0 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.rdp-nav {
+  padding: 0 0.5rem;
+}
+
+.rdp-cell {
+  padding: 0;
+  margin: 0;
+}
+
+.rdp-day {
+  margin: 0.15rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.rdp-day_selected,
+.rdp-day_selected:focus-visible,
+.rdp-day_selected:hover {
+  background-color: var(--rdp-accent-color);
+  color: white;
+}
+
+.rdp-day_today {
+  border: 1px solid var(--rdp-accent-color);
+  background-color: var(--rdp-background-color);
+  font-weight: bold;
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: #f3f4f6;
+  color: currentColor;
+}
