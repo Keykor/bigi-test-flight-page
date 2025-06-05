@@ -126,40 +126,46 @@ export default function SearchPage() {
     router.push("/welcome")
   }
 
+  // Modified airport change handlers with more reliable tracking
+  
   // Manejar cambios en el aeropuerto de salida
   const handleDepartureChange = (value: string) => {
-    // Check if this is a complete airport selection (not just typing)
-    if (value && value.includes(" - ")) {
-      // Extract the airport code from the selection (e.g., "ATL - Hartsfield-Jackson" -> "ATL")
-      const airportCode = value.split(" - ")[0].trim();
+    // Always update the input field value
+    setDeparture(value);
+    
+    // Parse the airport code if this is a valid selection
+    const match = value.match(/^([A-Z]{3})/);
+    if (match && match[1]) {
+      const airportCode = match[1];
       
-      // Only record if this is a different value than before
-      const prevAirportCode = departure.includes(" - ") ? departure.split(" - ")[0].trim() : "";
+      // Extract departure code from params or use empty string
+      const departureParam = searchParams.get("departure") || "";
       
-      if (airportCode !== prevAirportCode) {
-        recordChange('departure_airport', airportCode, prevAirportCode || undefined);
+      // Only record if different from the URL parameter
+      if (departureParam !== airportCode) {
+        recordChange('departure_airport', airportCode, departureParam || undefined);
       }
     }
-    
-    setDeparture(value);
   }
 
   // Manejar cambios en el aeropuerto de destino
   const handleDestinationChange = (value: string) => {
-    // Check if this is a complete airport selection (not just typing)
-    if (value && value.includes(" - ")) {
-      // Extract the airport code from the selection (e.g., "ATL - Hartsfield-Jackson" -> "ATL")
-      const airportCode = value.split(" - ")[0].trim();
+    // Always update the input field value
+    setDestination(value);
+    
+    // Parse the airport code if this is a valid selection
+    const match = value.match(/^([A-Z]{3})/);
+    if (match && match[1]) {
+      const airportCode = match[1];
       
-      // Only record if this is a different value than before
-      const prevAirportCode = destination.includes(" - ") ? destination.split(" - ")[0].trim() : "";
+      // Extract destination code from params or use empty string
+      const destinationParam = searchParams.get("destination") || "";
       
-      if (airportCode !== prevAirportCode) {
-        recordChange('destination_airport', airportCode, prevAirportCode || undefined);
+      // Only record if different from the URL parameter
+      if (destinationParam !== airportCode) {
+        recordChange('destination_airport', airportCode, destinationParam || undefined);
       }
     }
-    
-    setDestination(value);
   }
 
   return (
