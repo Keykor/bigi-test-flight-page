@@ -93,28 +93,58 @@ body {
   }
 }
 
+/* Add airline-specific colors */
+.bg-airline-darkgreen {
+  background-color: #1a5336;
+}
+
+.bg-airline-green {
+  background-color: #2a7c4f;
+}
+
+.hover\:bg-airline-green:hover {
+  background-color: #2a7c4f;
+}
+
+/* Airline header and tabs styles */
 .airline-header {
-  @apply bg-airline-green text-white py-4;
+  background-color: #1a5336;
+  color: white;
+  padding: 1rem 0 0 0;
 }
 
 .airline-nav {
-  @apply flex justify-end space-x-6 container mx-auto px-4;
-}
-
-.airline-nav a {
-  @apply text-white hover:text-airline-gray transition-colors;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
 }
 
 .airline-tabs {
-  @apply flex space-x-1 mt-4 container mx-auto px-4;
+  display: flex;
+  margin-top: 1.5rem;
+  background-color: #2a7c4f;
+  padding: 0 1rem;
 }
 
 .airline-tab {
-  @apply bg-airline-lightgreen text-white px-4 py-2 rounded-t-lg hover:bg-airline-darkgreen transition-colors;
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.airline-tab:hover:not(.disabled) {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .airline-tab.active {
-  @apply bg-white text-airline-green;
+  color: white;
+  background-color: #1a5336;
+}
+
+.airline-tab.disabled {
+  pointer-events: none;
 }
 
 .airline-form {

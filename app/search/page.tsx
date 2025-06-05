@@ -46,6 +46,9 @@ export default function SearchPage() {
     timestamp: string;
   }>>([]);
 
+  // Add state to track if form was submitted
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  
   // Function to record a change to the form changes array
   const recordChange = useCallback((field: string, value: string, previousValue?: string) => {
     setFormChanges(prev => [
@@ -115,6 +118,9 @@ export default function SearchPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Set form as submitted to display the summary error if needed
+    setFormSubmitted(true);
 
     // Reset errors
     const newErrors: {
@@ -233,128 +239,145 @@ export default function SearchPage() {
 
   return (
     <AirlineLayout activeTab="flights">
-      <div className="airline-form">
-        <div className="airline-form-content grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
-          <div className="col-span-1">
-            <label className="block text-white font-medium mb-2">Origin</label>
-            <AirportAutocomplete
-              id="departure"
-              value={departure}
-              onChange={handleDepartureChange}
-              placeholder="Select departure airport"
-              data-track-id="departure-airport-input"
-              className={`w-full bg-white ${errors.departure ? 'border-red-500' : ''}`}
-            />
-            {errors.departure && (
-              <p className="text-red-400 text-sm mt-1">{errors.departure}</p>
-            )}
+      {/* Add space between navbar and form */}
+      <div className="mt-6 md:mt-8"></div>
+      
+      {/* Use container to match width of cards below */}
+      <div className="container mx-auto px-4">
+        <div className="airline-form shadow-xl rounded-lg overflow-hidden">
+          {/* Use airline-darkgreen class to match the footer */}
+          <div className="bg-airline-darkgreen py-4 px-6">
+            <h2 className="text-white text-xl font-bold">Find Your Flight</h2>
+            <p className="text-green-100 text-sm mt-1">Enter your travel details to search for available flights</p>
           </div>
-          
-          <div className="col-span-1">
-            <label className="block text-white font-medium mb-2">Destination</label>
-            <AirportAutocomplete
-              id="destination"
-              value={destination}
-              onChange={handleDestinationChange}
-              placeholder="Select destination airport"
-              data-track-id="destination-airport-input"
-              className={`w-full bg-white ${errors.destination ? 'border-red-500' : ''}`}
-            />
-            {errors.destination && (
-              <p className="text-red-400 text-sm mt-1">{errors.destination}</p>
-            )}
-          </div>
-          
-          <div className="col-span-1">
-            <label className="block text-white font-medium mb-2">Departure Date</label>
-            <Popover open={departureDateOpen} onOpenChange={setDepartureDateOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  id="date"
-                  variant={"outline"}
-                  className={cn(
-                    "w-full bg-white justify-start text-left font-normal", 
-                    !date && "text-muted-foreground",
-                    errors.date && "border-red-500"
-                  )}
-                  data-track-id="departure-date-trigger"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "dd/MM/yyyy") : <span>Select date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white min-w-[320px]" align="start">
-                <CalendarWrapper
-                  selected={date}
-                  onSelect={handleDateSelect}
-                  trackingIdPrefix="departure-calendar"
-                  className="rounded-md border-0"
-                />
-              </PopoverContent>
-            </Popover>
-            {errors.date && (
-              <p className="text-red-400 text-sm mt-1">{errors.date}</p>
-            )}
-          </div>
-          
-          <div className="col-span-1">
-            <label className="block text-white font-medium mb-2">Return Date</label>
-            <Popover open={returnDateOpen} onOpenChange={setReturnDateOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  id="returnDate"
-                  variant={"outline"}
-                  className={cn(
-                    "w-full bg-white justify-start text-left font-normal", 
-                    !returnDate && "text-muted-foreground",
-                    errors.returnDate && "border-red-500"
-                  )}
-                  data-track-id="return-date-trigger"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {returnDate ? format(returnDate, "dd/MM/yyyy") : <span>Select date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white min-w-[320px]" align="start">
-                <CalendarWrapper
-                  selected={returnDate}
-                  onSelect={handleReturnDateSelect}
-                  trackingIdPrefix="return-calendar"
-                  className="rounded-md border-0"
-                />
-              </PopoverContent>
-            </Popover>
-            {errors.returnDate && (
-              <p className="text-red-400 text-sm mt-1">{errors.returnDate}</p>
-            )}
-          </div>
-          
-          <div className="col-span-1 md:col-span-2 mt-4">
-            <Button 
-              onClick={handleSubmit} 
-              className="w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white"
-              data-track-id="search-flights-submit"
-            >
-              Search Flights
-            </Button>
-            {Object.keys(errors).length > 0 && (
-              <p className="text-red-400 text-sm text-center mt-2">
-                Please fill in all required fields to continue
-              </p>
-            )}
+          <div className="airline-form-content grid grid-cols-1 md:grid-cols-2 gap-6 p-8 bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className="col-span-1">
+              <label className="block text-gray-700 font-medium mb-2">Origin</label>
+              <AirportAutocomplete
+                id="departure"
+                value={departure}
+                onChange={handleDepartureChange}
+                placeholder="Select departure airport"
+                data-track-id="departure-airport-input"
+                className={`w-full bg-white shadow-sm ${errors.departure ? 'border-2 border-red-500' : 'border border-gray-300'}`}
+              />
+              {errors.departure && (
+                <p className="text-red-600 font-medium text-sm mt-1">{errors.departure}</p>
+              )}
+            </div>
+            
+            <div className="col-span-1">
+              <label className="block text-gray-700 font-medium mb-2">Destination</label>
+              <AirportAutocomplete
+                id="destination"
+                value={destination}
+                onChange={handleDestinationChange}
+                placeholder="Select destination airport"
+                data-track-id="destination-airport-input"
+                className={`w-full bg-white shadow-sm ${errors.destination ? 'border-2 border-red-500' : 'border border-gray-300'}`}
+              />
+              {errors.destination && (
+                <p className="text-red-600 font-medium text-sm mt-1">{errors.destination}</p>
+              )}
+            </div>
+            
+            <div className="col-span-1">
+              <label className="block text-gray-700 font-medium mb-2">Departure Date</label>
+              <Popover open={departureDateOpen} onOpenChange={setDepartureDateOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="date"
+                    variant={"outline"}
+                    className={cn(
+                      "w-full bg-white justify-start text-left font-normal shadow-sm", 
+                      !date && "text-muted-foreground",
+                      errors.date ? 'border-2 border-red-500' : 'border border-gray-300'
+                    )}
+                    data-track-id="departure-date-trigger"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "dd/MM/yyyy") : <span>Select date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-white min-w-[320px] shadow-lg" align="start">
+                  <CalendarWrapper
+                    selected={date}
+                    onSelect={handleDateSelect}
+                    trackingIdPrefix="departure-calendar"
+                    className="rounded-md border-0"
+                  />
+                </PopoverContent>
+              </Popover>
+              {errors.date && (
+                <p className="text-red-600 font-medium text-sm mt-1">{errors.date}</p>
+              )}
+            </div>
+            
+            <div className="col-span-1">
+              <label className="block text-gray-700 font-medium mb-2">Return Date</label>
+              <Popover open={returnDateOpen} onOpenChange={setReturnDateOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="returnDate"
+                    variant={"outline"}
+                    className={cn(
+                      "w-full bg-white justify-start text-left font-normal shadow-sm", 
+                      !returnDate && "text-muted-foreground",
+                      errors.returnDate ? 'border-2 border-red-500' : 'border border-gray-300'
+                    )}
+                    data-track-id="return-date-trigger"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {returnDate ? format(returnDate, "dd/MM/yyyy") : <span>Select date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-white min-w-[320px] shadow-lg" align="start">
+                  <CalendarWrapper
+                    selected={returnDate}
+                    onSelect={handleReturnDateSelect}
+                    trackingIdPrefix="return-calendar"
+                    className="rounded-md border-0"
+                  />
+                </PopoverContent>
+              </Popover>
+              {errors.returnDate && (
+                <p className="text-red-600 font-medium text-sm mt-1">{errors.returnDate}</p>
+              )}
+            </div>
+            
+            <div className="col-span-1 md:col-span-2 mt-4">
+              <Button 
+                onClick={handleSubmit} 
+                className="w-full py-4 text-lg font-semibold bg-airline-darkgreen hover:bg-airline-green text-white shadow-md transition-colors duration-200 rounded-md"
+                data-track-id="search-flights-submit"
+              >
+                Search Flights
+              </Button>
+              {/* Only show summary error if form was submitted and there are errors */}
+              {formSubmitted && Object.keys(errors).length > 0 && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-red-600 font-medium text-sm text-center">
+                    Please fill in all required fields to continue
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
       
-      {/* Discount section - less prominent */}
+      {/* Add more space between form and offers section */}
+      <div className="mt-10"></div>
+      
+      {/* Discount section - updated for better appearance */}
       <div className="container mx-auto px-4 py-4">
-        <div className="bg-gray-100 rounded-lg p-4 shadow-sm">
+        <div className="bg-white rounded-lg p-5 shadow-md border border-gray-100">
           <div className="flex items-center">
             <div className="w-1/4 hidden md:block">
               <img 
                 src="/images/plane-sunset.jpg" 
                 alt="Last minute offer" 
-                className="w-full h-28 object-cover rounded"
+                className="w-full h-28 object-cover rounded-md shadow-sm"
                 onError={e => {
                   // Fallback if image not found
                   const target = e.target as HTMLImageElement;
@@ -362,10 +385,10 @@ export default function SearchPage() {
                 }}
               />
             </div>
-            <div className="w-3/4 pl-4">
-              <h3 className="text-lg font-bold mb-1">Last Minute Offers</h3>
-              <p className="text-sm mb-2">Get 30% off on selected destinations. Limited time offer.</p>
-              <Button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 cursor-not-allowed" disabled>
+            <div className="w-full md:w-3/4 pl-0 md:pl-6">
+              <h3 className="text-lg font-bold mb-2 text-gray-800">Last Minute Offers</h3>
+              <p className="text-gray-600 mb-3">Get 30% off on selected destinations. Limited time offer.</p>
+              <Button className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 cursor-not-allowed shadow-sm" disabled>
                 View Offers
               </Button>
             </div>
@@ -374,14 +397,14 @@ export default function SearchPage() {
       </div>
       
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-gray-100 rounded-lg p-6">
-          <h3 className="text-xl font-bold mb-4">Subscribe now for the best deals</h3>
-          <p className="mb-4">Never miss an offer!</p>
+        <div className="bg-white rounded-lg p-6 shadow-md border border-gray-100">
+          <h3 className="text-xl font-bold mb-4 text-gray-800">Subscribe now for the best deals</h3>
+          <p className="text-gray-600 mb-4">Never miss an offer!</p>
           
-          <ul className="ml-6 mb-4 list-disc">
-            <li className="mb-1">Get notified about the latest deals</li>
-            <li className="mb-1">Be the first to get promotions</li>
-            <li className="mb-1">Discover new destinations</li>
+          <ul className="ml-6 mb-5 list-disc text-gray-600">
+            <li className="mb-2">Get notified about the latest deals</li>
+            <li className="mb-2">Be the first to get promotions</li>
+            <li className="mb-2">Discover new destinations</li>
           </ul>
           
           <div className="flex flex-col md:flex-row gap-3">
@@ -391,12 +414,15 @@ export default function SearchPage() {
               className="flex-grow p-2 border rounded cursor-not-allowed bg-gray-50"
               disabled
             />
-            <Button className="bg-gray-300 hover:bg-gray-400 text-gray-800 cursor-not-allowed" disabled>
+            <Button className="bg-gray-200 hover:bg-gray-300 text-gray-700 cursor-not-allowed shadow-sm" disabled>
               Subscribe
             </Button>
           </div>
         </div>
       </div>
+      
+      {/* Add bottom spacing */}
+      <div className="mb-10"></div>
     </AirlineLayout>
   )
 }
