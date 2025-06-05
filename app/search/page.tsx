@@ -25,6 +25,10 @@ export default function SearchPage() {
   const initialRenderRef = useRef(true)
   const { addSelection } = useEventTracker()
   
+  // Add state to control popover open/close state
+  const [departureDateOpen, setDepartureDateOpen] = useState(false)
+  const [returnDateOpen, setReturnDateOpen] = useState(false)
+  
   // Add state to track all form field changes
   const [formChanges, setFormChanges] = useState<Array<{
     type: string;
@@ -62,6 +66,8 @@ export default function SearchPage() {
     }
     
     setDate(selectedDate);
+    // Explicitly close the departure date popover
+    setDepartureDateOpen(false);
   }
 
   // Handle return date selection
@@ -78,6 +84,8 @@ export default function SearchPage() {
     }
     
     setReturnDate(selectedDate);
+    // Explicitly close the return date popover
+    setReturnDateOpen(false);
   }
 
   // Initialize page data
@@ -199,7 +207,7 @@ export default function SearchPage() {
           
           <div className="col-span-1">
             <label className="block text-white font-medium mb-2">Departure Date</label>
-            <Popover>
+            <Popover open={departureDateOpen} onOpenChange={setDepartureDateOpen}>
               <PopoverTrigger asChild>
                 <Button
                   id="date"
@@ -215,6 +223,7 @@ export default function SearchPage() {
                 <CalendarWrapper
                   selected={date}
                   onSelect={handleDateSelect}
+                  // Remove onClose since we're handling it in the onSelect function
                   trackingIdPrefix="departure-calendar"
                   className="rounded-md border-0"
                 />
@@ -224,7 +233,7 @@ export default function SearchPage() {
           
           <div className="col-span-1">
             <label className="block text-white font-medium mb-2">Return Date</label>
-            <Popover>
+            <Popover open={returnDateOpen} onOpenChange={setReturnDateOpen}>
               <PopoverTrigger asChild>
                 <Button
                   id="returnDate"
@@ -240,6 +249,7 @@ export default function SearchPage() {
                 <CalendarWrapper
                   selected={returnDate}
                   onSelect={handleReturnDateSelect}
+                  // Remove onClose since we're handling it in the onSelect function
                   trackingIdPrefix="return-calendar"
                   className="rounded-md border-0"
                 />

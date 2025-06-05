@@ -11,6 +11,7 @@ export type CalendarWrapperProps = {
   className?: string
   selected?: Date
   onSelect?: (date: Date | undefined) => void
+  onClose?: () => void // Add onClose prop
   trackingIdPrefix?: string
   initialFocus?: boolean
 }
@@ -19,6 +20,7 @@ export function CalendarWrapper({
   className,
   selected,
   onSelect,
+  onClose, // Add the onClose parameter
   trackingIdPrefix = "calendar-day",
   initialFocus,
   ...props
@@ -47,6 +49,11 @@ export function CalendarWrapper({
   const handleDayClick = (day: Date) => {
     if (onSelect) {
       onSelect(day)
+    }
+    
+    // Close the popover after selection
+    if (onClose) {
+      onClose()
     }
   }
   
