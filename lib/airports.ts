@@ -36,4 +36,49 @@ export const airports: Airport[] = [
   { code: "MUC", name: "Munich Airport", city: "Munich", country: "Germany" },
   { code: "DEL", name: "Indira Gandhi International Airport", city: "Delhi", country: "India" },
   { code: "YYZ", name: "Toronto Pearson International Airport", city: "Toronto", country: "Canada" },
+  { code: "EZE", name: "Ministro Pistarini International Airport", city: "Buenos Aires", country: "Argentina" },
+  { code: "AEP", name: "Aeroparque Jorge Newbery", city: "Buenos Aires", country: "Argentina" },
+  { code: "BCN", name: "Barcelona El Prat Airport", city: "Barcelona", country: "Spain" },
 ]
+
+/**
+ * Get an airport by its code
+ * @param code - Airport code (e.g., "EZE", "MAD")
+ * @returns Airport object or undefined if not found
+ */
+export function getAirportByCode(code: string): Airport | undefined {
+  return airports.find((airport) => airport.code.toUpperCase() === code.toUpperCase())
+}
+
+/**
+ * Get all airports in a specific city
+ * @param city - City name (e.g., "Buenos Aires", "Madrid")
+ * @returns Array of airports in that city
+ */
+export function getAirportsByCity(city: string): Airport[] {
+  return airports.filter((airport) => airport.city.toLowerCase() === city.toLowerCase())
+}
+
+/**
+ * Extract airport code from autocomplete value
+ * Autocomplete format is typically "CODE - Airport Name, City"
+ * @param value - Value from airport autocomplete
+ * @returns Airport code or null if not found
+ */
+export function extractAirportCode(value: string): string | null {
+  if (!value) return null
+
+  // Try to match the pattern "CODE" at the start (e.g., "EZE - Ministro Pistarini...")
+  const match = value.match(/^([A-Z]{3})/)
+  if (match && match[1]) {
+    return match[1]
+  }
+
+  // If exact match to a code, return it
+  const upperValue = value.toUpperCase()
+  if (airports.some((airport) => airport.code === upperValue)) {
+    return upperValue
+  }
+
+  return null
+}

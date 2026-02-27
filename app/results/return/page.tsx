@@ -4,14 +4,14 @@ import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Clock, Luggage, Plane } from "lucide-react"
-import { getReturnFlightsForIteration, getFlightById } from "@/lib/iterations"
+import { ArrowLeft, Clock, Luggage, Plane, Calendar } from "lucide-react"
+import { getFlightsForSearch, getFlightById } from "@/lib/experiments"
 import type { Flight, SearchParameters } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Percent } from "lucide-react"
 import { format, parseISO } from "date-fns"
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import AirlineLayout from "@/components/airline-layout"
+import { FloatingTaskCard } from "@/components/floating-task-card"
 
 export default function ReturnResultsPage() {
   const router = useRouter()
@@ -48,22 +48,6 @@ export default function ReturnResultsPage() {
     }
   }
 
-  // Función para obtener el texto de la oferta
-  const getOfferText = (flight: Flight, originalDate: string) => {
-    if (!flight.isOffer) return null
-
-    const originalDateFormatted = formatFlightDate(originalDate)
-    const flightDateFormatted = formatFlightDate(flight.departureDate || "")
-
-    if (flight.offerType === "earlier") {
-      return `Fly 1 day earlier (${flightDateFormatted}) instead of ${originalDateFormatted}`
-    } else if (flight.offerType === "later") {
-      return `Fly 1 day later (${flightDateFormatted}) instead of ${originalDateFormatted}`
-    }
-
-    return null
-  }
-
   // Inicializar datos de la página
   useEffect(() => {
     if (!iterationId) {
@@ -96,11 +80,32 @@ export default function ReturnResultsPage() {
       console.log("Found outbound flight:", selectedOutboundFlight)
       setOutboundFlight(selectedOutboundFlight)
 
-      // Obtener vuelos de vuelta basados en la iteración actual, los parámetros de búsqueda y el vuelo de ida
-      const flightsData = getReturnFlightsForIteration(iterationId, params, selectedOutboundFlight)
-      setFlights(flightsData)
+      // Obtener vuelos basados en el experimento y los parámetros de búsqueda
+      const flightsResult = getFlightsForSearch(iterationId, params)
+
+      if (!flightsResult) {
+        // No matching combination found - redirect to no-flights page
+        console.warn("No matching search combination found for parameters:", params)
+
+        // Track no flights found event
+        addSelection({
+          type: "no_flights_found_redirect",
+          reason: "no_matching_combination",
+          searchParams: params,
+          iterationId: iterationId,
+          page: "return",
+        })
+
+        // Redirect to no-flights page with iteration and search params
+        const searchParamsObj = new URLSearchParams(searchParams)
+        router.push(`/no-flights?${searchParamsObj.toString()}`)
+        return
+      }
+
+      // Set return flights
+      setFlights(flightsResult.return)
     }
-  }, [iterationId, outboundFlightId, router, extractSearchParams, searchParams])
+  }, [iterationId, outboundFlightId, router, extractSearchParams, searchParams, addSelection])
 
   const handleSelectFlight = useCallback(
     (flight: Flight) => {
@@ -156,6 +161,7 @@ export default function ReturnResultsPage() {
 
   return (
     <AirlineLayout activeTab="flights">
+      <FloatingTaskCard experimentId={iterationId} />
       <div className="container mx-auto px-4 py-8 max-w-4xl bg-gray-50 min-h-screen">
         <div className="mb-6">
           <Button
@@ -175,14 +181,10 @@ export default function ReturnResultsPage() {
             <CardTitle className="text-xl text-green-600 font-bold">Selected Outbound Flight</CardTitle>
           </CardHeader>
           <CardContent className="py-4">
-            <div
-              className={`flex items-center justify-between p-5 rounded-lg ${
-                outboundFlight.isOffer ? "bg-orange-50 border border-orange-200" : "bg-green-50 border border-green-100"
-              } shadow-sm`}
-            >
+            <div className="flex items-center justify-between p-5 rounded-lg bg-green-50 border border-green-100 shadow-sm">
               <div>
                 <div className="flex items-start gap-3 mb-2">
-                  <div className={`text-green-500 mt-1 ${outboundFlight.isOffer ? "bg-orange-50" : "bg-green-50"} p-1.5 rounded-full`}>
+                  <div className="text-green-500 mt-1 bg-green-50 p-1.5 rounded-full">
                     <Plane className="h-4 w-4" />
                   </div>
                   <div>
@@ -191,7 +193,7 @@ export default function ReturnResultsPage() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className={`text-green-500 mt-1 ${outboundFlight.isOffer ? "bg-orange-50" : "bg-green-50"} p-1.5 rounded-full`}>
+                  <div className="text-green-500 mt-1 bg-green-50 p-1.5 rounded-full">
                     <Calendar className="h-4 w-4" />
                   </div>
                   <div>
@@ -257,31 +259,12 @@ export default function ReturnResultsPage() {
                 {flights.map((flight) => (
                   <Card
                     key={flight.id}
-                    className={`overflow-hidden shadow-sm hover:shadow-md transition-shadow ${flight.isOffer ? "border-orange-200 bg-orange-50" : "border-gray-200"}`}
+                    className="overflow-hidden shadow-sm hover:shadow-md transition-shadow border-gray-200"
                   >
-                    {flight.isOffer && (
-                      <div className="bg-orange-100 px-4 py-3 border-b border-orange-200">
-                        <div className="flex items-center gap-2">
-                          <div className="bg-orange-200 p-1.5 rounded-full">
-                            <Percent className="h-4 w-4 text-orange-600" />
-                          </div>
-                          <span className="text-sm font-bold text-orange-800">
-                            Special Offer - {flight.discountPercentage}% Off
-                          </span>
-                          <Badge variant="secondary" className="bg-orange-200 text-orange-800 ml-2">
-                            {flight.offerType === "earlier" ? "1 Day Earlier" : "1 Day Later"}
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-orange-700 mt-1 pl-8">
-                          {getOfferText(flight, flight.originalDate || currentSearchParams?.returnDate || "")}
-                        </div>
-                      </div>
-                    )}
-
                     <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
                       <div>
                         <div className="flex items-start gap-3 mb-3">
-                          <div className={`text-green-500 mt-1 ${flight.isOffer ? "bg-orange-50" : "bg-gray-50"} p-1.5 rounded-full`}>
+                          <div className="text-green-500 mt-1 bg-gray-50 p-1.5 rounded-full">
                             <Plane className="h-4 w-4" />
                           </div>
                           <div>
@@ -290,17 +273,12 @@ export default function ReturnResultsPage() {
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <div className={`text-green-500 mt-1 ${flight.isOffer ? "bg-orange-50" : "bg-gray-50"} p-1.5 rounded-full`}>
+                          <div className="text-green-500 mt-1 bg-gray-50 p-1.5 rounded-full">
                             <Calendar className="h-4 w-4" />
                           </div>
                           <div>
                             <div className="text-sm text-muted-foreground">Date</div>
                             <div className="font-medium">{formatFlightDate(flight.departureDate || "")}</div>
-                            {flight.isOffer && (
-                              <div className="text-xs text-orange-600 mt-1">
-                                Original: {formatFlightDate(flight.originalDate || "")}
-                              </div>
-                            )}
                           </div>
                         </div>
                       </div>
@@ -339,11 +317,7 @@ export default function ReturnResultsPage() {
                         <div className="text-2xl font-bold text-green-600">${flight.price}</div>
                         <div className="text-sm font-medium mb-4">{flight.class} Class</div>
                         <Button
-                          className={`px-6 py-2 shadow-md transition-all ${
-                            flight.isOffer 
-                              ? "bg-orange-600 hover:bg-orange-700" 
-                              : "bg-green-500 hover:bg-green-600"
-                          }`}
+                          className="px-6 py-2 shadow-md transition-all bg-green-500 hover:bg-green-600"
                           onClick={() => handleSelectFlight(flight)}
                           data-track-id={`select-return-flight-${flight.id}`}
                         >

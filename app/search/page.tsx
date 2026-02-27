@@ -10,9 +10,10 @@ import { format } from "date-fns"
 import { CalendarIcon, ArrowLeft, Calendar, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AirportAutocomplete } from "@/components/airport-autocomplete"
-import { CalendarWrapper } from "@/components/ui/calendar-wrapper" 
+import { CalendarWrapper } from "@/components/ui/calendar-wrapper"
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import AirlineLayout from "@/components/airline-layout"
+import { FloatingTaskCard } from "@/components/floating-task-card"
 
 export default function SearchPage() {
   const router = useRouter()
@@ -48,7 +49,7 @@ export default function SearchPage() {
 
   // Add state to track if form was submitted
   const [formSubmitted, setFormSubmitted] = useState(false);
-  
+
   // Function to record a change to the form changes array
   const recordChange = useCallback((field: string, value: string, previousValue?: string) => {
     setFormChanges(prev => [
@@ -239,10 +240,11 @@ export default function SearchPage() {
 
   return (
     <AirlineLayout activeTab="flights">
+      <FloatingTaskCard experimentId={iterationId} />
       <div className="container mx-auto px-4 py-8 bg-gray-50 min-h-screen">
         {/* Add space between navbar and form */}
         <div className="mt-4 md:mt-6"></div>
-        
+
         {/* Use container to match width of cards below */}
         <div className="max-w-4xl mx-auto">
           <Card className="mb-8 shadow-md border-t-4 border-t-green-500 overflow-hidden">

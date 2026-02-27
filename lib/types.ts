@@ -81,6 +81,7 @@ export interface PageVisit {
   selectedOptions?: Record<string, any> // Opciones seleccionadas en esta página
 }
 
+// DEPRECATED: Old iteration system types - kept for backward compatibility
 export interface OfferConfig {
   enabled: boolean
   earlierDayOffers: boolean // Ofertas para el día anterior
@@ -96,6 +97,26 @@ export interface IterationConfig {
   targetReturnFlightId: string // ID del vuelo de vuelta objetivo
   attemptsBeforeTarget: number
   offerConfig: OfferConfig // Configuración de ofertas para esta iteración
+}
+
+// NEW: Experiment-based configuration system
+export interface ExperimentMetadata {
+  id: string
+  name: string
+  description: string
+}
+
+export interface SearchCombination {
+  departure: string // Airport code (e.g., "EZE")
+  destination: string // Airport code (e.g., "MAD")
+  departureDate: string // ISO date string (e.g., "2025-06-15")
+  returnDate: string // ISO date string (e.g., "2025-06-22")
+  outboundFlights: Flight[]
+  returnFlights: Flight[]
+}
+
+export interface ExperimentConfig extends ExperimentMetadata {
+  searchCombinations: SearchCombination[]
 }
 
 export interface CentralExperimentData {

@@ -3,22 +3,22 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { getAvailableIterations } from "@/lib/iterations"
+import { loadExperiments } from "@/lib/experiments"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useEventTracker } from "@/context/EventTrackerProvider"
-import type { IterationConfig } from "@/lib/types"
+import type { ExperimentConfig } from "@/lib/types"
 
 export default function WelcomePage() {
-  const [availableIterations, setAvailableIterations] = useState<IterationConfig[]>([])
+  const [availableExperiments, setAvailableExperiments] = useState<ExperimentConfig[]>([])
   const [isNavigating, setIsNavigating] = useState(false)
   const { startExperiment } = useEventTracker()
   const router = useRouter()
 
   useEffect(() => {
-    // Get available iterations when the component mounts
-    const iterations = getAvailableIterations()
-    setAvailableIterations(iterations)
+    // Get available experiments when the component mounts
+    const experiments = loadExperiments()
+    setAvailableExperiments(experiments)
   }, [])
 
   // Handle starting an iteration with tracking
@@ -73,20 +73,19 @@ export default function WelcomePage() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {availableIterations.map((iteration) => (
-          <Card key={iteration.id} className={iteration.completed ? "opacity-50" : ""}>
+        {availableExperiments.map((experiment) => (
+          <Card key={experiment.id}>
             <CardHeader>
-              <CardTitle>Iteration {iteration.id}</CardTitle>
-              <CardDescription>{iteration.completed ? "Completed" : "Not completed"}</CardDescription>
+              <CardTitle>{experiment.name}</CardTitle>
+              <CardDescription className="line-clamp-2">{experiment.description}</CardDescription>
             </CardHeader>
             <CardFooter>
               <Button
                 className="w-full"
-                disabled={iteration.completed}
-                onClick={() => handleStartIteration(iteration.id)}
-                data-track-id={`start-iteration=${iteration.id}`}
+                onClick={() => handleStartIteration(experiment.id)}
+                data-track-id={`start-experiment-${experiment.id}`}
               >
-                {iteration.completed ? "Completed" : "Start Iteration"}
+                Start Experiment
               </Button>
             </CardFooter>
           </Card>

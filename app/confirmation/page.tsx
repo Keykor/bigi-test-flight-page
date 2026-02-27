@@ -5,10 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Check, Clock, Luggage, Plane, Calendar, MapPin, Timer, Ban, DollarSign } from "lucide-react"
-import { getFlightById } from "@/lib/iterations"
+import { getFlightById } from "@/lib/experiments"
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import type { Flight, SearchParameters } from "@/lib/types"
 import AirlineLayout from "@/components/airline-layout"
+import { FloatingTaskCard } from "@/components/floating-task-card"
 
 export default function ConfirmationPage() {
   const router = useRouter()
@@ -102,6 +103,7 @@ export default function ConfirmationPage() {
 
   return (
     <AirlineLayout activeTab="flights">
+      <FloatingTaskCard experimentId={iterationId} />
       <div className="container mx-auto px-4 py-8 max-w-4xl bg-gray-50 min-h-screen">
         {!isSubmitted && (
           <div className="mb-6">
