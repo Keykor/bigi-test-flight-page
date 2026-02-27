@@ -82,9 +82,13 @@ export default function ConfirmationPage() {
       timestamp: new Date().toISOString()
     });
 
-    // Stop tracking the iteration
-    stopExperiment();
-    
+    // Try to stop tracking the iteration (may fail if page was reloaded)
+    try {
+      stopExperiment();
+    } catch (error) {
+      console.warn("Could not stop experiment (may have been reloaded):", error);
+    }
+
     // Mark as submitted to show completion screen
     setIsSubmitted(true)
   }, [iterationId, addSelection, stopExperiment])

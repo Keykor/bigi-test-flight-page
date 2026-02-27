@@ -10,6 +10,9 @@ interface FloatingTaskCardProps {
   experimentId: string | null
 }
 
+const POSITION_KEY = "floating_task_card_position"
+const IS_OPEN_KEY = "floating_task_card_is_open"
+
 export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [description, setDescription] = useState<string>("")
@@ -30,11 +33,51 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     }
   }, [experimentId])
 
-  // Initialize position to top-right corner
+  // Constrain position to viewport bounds
+  const constrainPosition = (x: number, y: number) => {
+    const maxX = window.innerWidth - (cardRef.current?.offsetWidth || 320)
+    const maxY = window.innerHeight - (cardRef.current?.offsetHeight || 100)
+
+    return {
+      x: Math.max(0, Math.min(x, maxX)),
+      y: Math.max(0, Math.min(y, maxY))
+    }
+  }
+
+  // Initialize position from localStorage or default to top-right corner
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setPosition({ x: window.innerWidth - 336, y: 80 }) // 336 = 320px width + 16px padding
+      try {
+        const savedPosition = localStorage.getItem(POSITION_KEY)
+        const savedIsOpen = localStorage.getItem(IS_OPEN_KEY)
+
+        if (savedPosition) {
+          const parsed = JSON.parse(savedPosition)
+          const constrained = constrainPosition(parsed.x, parsed.y)
+          setPosition(constrained)
+        } else {
+          // Default position: top-right corner
+          setPosition({ x: window.innerWidth - 336, y: 80 })
+        }
+
+        if (savedIsOpen !== null) {
+          setIsOpen(savedIsOpen === 'true')
+        }
+      } catch (e) {
+        console.error("Error loading floating card state:", e)
+        setPosition({ x: window.innerWidth - 336, y: 80 })
+      }
     }
+  }, [])
+
+  // Handle window resize - keep card within bounds
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition(prev => constrainPosition(prev.x, prev.y))
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   // Handle mouse down - start dragging
@@ -57,6 +100,13 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     })
   }
 
+  // Save position to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && position.x !== 0 && position.y !== 0) {
+      localStorage.setItem(POSITION_KEY, JSON.stringify(position))
+    }
+  }, [position])
+
   // Handle mouse move - update position
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -66,13 +116,8 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       const newY = e.clientY - dragStart.y
 
       // Keep card within viewport bounds
-      const maxX = window.innerWidth - (cardRef.current?.offsetWidth || 320)
-      const maxY = window.innerHeight - (cardRef.current?.offsetHeight || 100)
-
-      setPosition({
-        x: Math.max(0, Math.min(newX, maxX)),
-        y: Math.max(0, Math.min(newY, maxY))
-      })
+      const constrained = constrainPosition(newX, newY)
+      setPosition(constrained)
     }
 
     const handleMouseUp = () => {
@@ -98,7 +143,14 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   }, [isDragging, dragStart, position, experimentId, addSelection])
 
   const handleToggle = () => {
-    setIsOpen(!isOpen)
+    const newIsOpen = !isOpen
+    setIsOpen(newIsOpen)
+
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(IS_OPEN_KEY, String(newIsOpen))
+    }
+
     addSelection({
       type: "floating_task_card_toggle",
       action: isOpen ? "collapsed" : "expanded",

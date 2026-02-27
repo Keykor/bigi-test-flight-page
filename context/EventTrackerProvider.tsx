@@ -97,10 +97,10 @@ const EventTrackerContext = createContext<EventTrackerContextType | undefined>(u
 export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isTracking, setIsTracking] = useState(false);
   const [experimentData, setExperimentData] = useState<ExperimentData | null>(null);
-  const [uuid] = useState(uuidv4()); 
+  const [uuid] = useState(uuidv4());
   const [sampleCounter, setSampleCounter] = useState(0);
   const router = useRouter();
-  
+
   // Add ref to track current page URL
   const currentPageRef = useRef<string | null>(null);
   // Add ref to track experiment data to avoid dependency issues
@@ -110,6 +110,38 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   useEffect(() => {
     experimentDataRef.current = experimentData;
   }, [experimentData]);
+
+  // Persist experimentData to sessionStorage whenever it changes
+  useEffect(() => {
+    if (experimentData && experimentData.iterationId) {
+      try {
+        sessionStorage.setItem(`experiment_data_${experimentData.iterationId}`, JSON.stringify(experimentData));
+      } catch (e) {
+        console.error("Error saving experiment data to sessionStorage:", e);
+      }
+    }
+  }, [experimentData]);
+
+  // Restore experimentData from sessionStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !experimentData) {
+      try {
+        // Try to find any experiment data in sessionStorage
+        const keys = Object.keys(sessionStorage).filter(key => key.startsWith('experiment_data_'));
+        if (keys.length > 0) {
+          const savedData = sessionStorage.getItem(keys[0]);
+          if (savedData) {
+            const parsed = JSON.parse(savedData);
+            setExperimentData(parsed);
+            setIsTracking(true);
+            console.log("Restored experiment data from sessionStorage:", parsed.iterationId);
+          }
+        }
+      } catch (e) {
+        console.error("Error restoring experiment data from sessionStorage:", e);
+      }
+    }
+  }, []);
 
   // Memoize startExperiment to avoid recreating on every render
   const startExperiment = useCallback((iterationId: string) => {
@@ -139,7 +171,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const stopExperiment = () => {
     if (!experimentData) {
-      console.error("No experiment in progress!");
+      console.warn("No experiment in progress! Experiment may have already been stopped or page was reloaded.");
       return;
     }
 
@@ -175,6 +207,14 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       // Mark experiment as completed in localStorage
       if (prev.iterationId) {
         markExperimentAsCompleted(prev.iterationId);
+        // Clean up sessionStorage for this experiment
+        try {
+          sessionStorage.removeItem(`experiment_data_${prev.iterationId}`);
+          sessionStorage.removeItem(`search_form_${prev.iterationId}`);
+          console.log(`Cleaned up sessionStorage for experiment ${prev.iterationId}`);
+        } catch (e) {
+          console.error("Error cleaning up sessionStorage:", e);
+        }
       }
 
       return updatedExperimentData;

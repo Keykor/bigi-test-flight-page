@@ -454,6 +454,91 @@
           ]
         }
       ]
+    },
+    {
+      "id": "test",
+      "name": "Test Flight - NYC to LA",
+      "description": "Simple test experiment: Find any direct flight from New York (JFK) to Los Angeles (LAX) departing today (Feb 27, 2026) and returning tomorrow (Feb 28, 2026).",
+      "searchCombinations": [
+        {
+          "departure": "JFK",
+          "destination": "LAX",
+          "departureDate": "2026-02-27",
+          "returnDate": "2026-02-28",
+          "outboundFlights": [
+            {
+              "id": "test-jfk-lax-aa100",
+              "airline": "American Airlines",
+              "flightNumber": "AA100",
+              "origin": "JFK",
+              "destination": "LAX",
+              "departureTime": "08:00",
+              "arrivalTime": "11:30",
+              "duration": "5h 30m",
+              "price": 350,
+              "stops": 0,
+              "class": "Economy",
+              "luggage": "1 checked bag",
+              "refundable": false,
+              "departureDate": "2026-02-27",
+              "type": "outbound"
+            },
+            {
+              "id": "test-jfk-lax-dl200",
+              "airline": "Delta",
+              "flightNumber": "DL200",
+              "origin": "JFK",
+              "destination": "LAX",
+              "departureTime": "14:00",
+              "arrivalTime": "17:30",
+              "duration": "5h 30m",
+              "price": 380,
+              "stops": 0,
+              "class": "Economy",
+              "luggage": "1 checked bag",
+              "refundable": true,
+              "departureDate": "2026-02-27",
+              "type": "outbound"
+            }
+          ],
+          "returnFlights": [
+            {
+              "id": "test-lax-jfk-aa101",
+              "airline": "American Airlines",
+              "flightNumber": "AA101",
+              "origin": "LAX",
+              "destination": "JFK",
+              "departureTime": "09:00",
+              "arrivalTime": "17:30",
+              "duration": "5h 30m",
+              "price": 360,
+              "stops": 0,
+              "class": "Economy",
+              "luggage": "1 checked bag",
+              "refundable": false,
+              "departureDate": "2026-02-28",
+              "type": "return"
+            },
+            {
+              "id": "test-lax-jfk-dl201",
+              "airline": "Delta",
+              "flightNumber": "DL201",
+              "origin": "LAX",
+              "destination": "JFK",
+              "departureTime": "15:00",
+              "arrivalTime": "23:30",
+              "duration": "5h 30m",
+              "price": 390,
+              "stops": 0,
+              "class": "Economy",
+              "luggage": "1 checked bag",
+              "refundable": true,
+              "departureDate": "2026-02-28",
+              "type": "return"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
