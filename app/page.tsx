@@ -9,10 +9,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+const PARTICIPANT_ID_KEY = "participant_id"
+
 export default function ParticipantIdPage() {
   const [participantId, setParticipantId] = useState("")
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
+
+  // Check if participant ID is already saved
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedId = localStorage.getItem(PARTICIPANT_ID_KEY)
+      if (savedId) {
+        console.log("Participant ID already saved, redirecting to welcome page")
+        router.push("/welcome")
+      } else {
+        setIsLoading(false)
+      }
+    }
+  }, [router])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,8 +38,19 @@ export default function ParticipantIdPage() {
       return
     }
 
+    // Save participant ID to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(PARTICIPANT_ID_KEY, participantId.trim())
+      console.log("Participant ID saved:", participantId.trim())
+    }
+
     // Navigate to the welcome page
     router.push("/welcome")
+  }
+
+  // Show loading state while checking for saved ID
+  if (isLoading) {
+    return null
   }
 
   return (

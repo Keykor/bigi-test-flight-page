@@ -5,6 +5,52 @@ import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 
+// Helper functions for localStorage
+const COMPLETED_EXPERIMENTS_KEY = "completed_experiments";
+const PARTICIPANT_ID_KEY = "participant_id";
+
+export const getCompletedExperiments = (): string[] => {
+  if (typeof window === 'undefined') return [];
+
+  try {
+    const stored = localStorage.getItem(COMPLETED_EXPERIMENTS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    console.error("Error reading completed experiments from localStorage:", e);
+    return [];
+  }
+};
+
+export const markExperimentAsCompleted = (experimentId: string): void => {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const completed = getCompletedExperiments();
+    if (!completed.includes(experimentId)) {
+      completed.push(experimentId);
+      localStorage.setItem(COMPLETED_EXPERIMENTS_KEY, JSON.stringify(completed));
+      console.log(`Experiment ${experimentId} marked as completed`);
+    }
+  } catch (e) {
+    console.error("Error saving completed experiment to localStorage:", e);
+  }
+};
+
+export const isExperimentCompleted = (experimentId: string): boolean => {
+  return getCompletedExperiments().includes(experimentId);
+};
+
+export const getParticipantId = (): string | null => {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    return localStorage.getItem(PARTICIPANT_ID_KEY);
+  } catch (e) {
+    console.error("Error reading participant ID from localStorage:", e);
+    return null;
+  }
+};
+
 interface ExperimentData {
   subject?: string;
   version?: string;
@@ -72,19 +118,23 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       console.log("Experiment already started for this iteration");
       return;
     }
-    
+
+    // Get participant ID from localStorage
+    const participantId = getParticipantId();
+
     // Create new experiment but don't initialize pages yet
     // Pages will be initialized when user navigates to search page
     const newExperiment = {
+      subject: participantId || undefined,
       iterationId,
       pages: [],
       experimentStartTime: new Date().toISOString(),
       uuid: uuid,
     };
-    
+
     setExperimentData(newExperiment);
     setIsTracking(true);
-    console.log(`Experiment started for iteration: ${iterationId}`);
+    console.log(`Experiment started for iteration: ${iterationId}, participant: ${participantId}`);
   }, [uuid]);
 
   const stopExperiment = () => {
@@ -92,16 +142,16 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       console.error("No experiment in progress!");
       return;
     }
-  
+
     // Capture current time as experiment end time
     const experimentEndTime = new Date().toISOString();
-  
+
     // Update the last active page with visitEndTime
     setExperimentData((prev) => {
       if (!prev) return null;
-      
+
       const updatedPages = [...prev.pages];
-  
+
       // If there are registered pages, update the last one with its visitEndTime
       if (updatedPages.length > 0) {
         const lastPageIndex = updatedPages.length - 1;
@@ -116,14 +166,20 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         sampleCounter: sampleCounter + 1,
         experimentEndTime,
         pages: updatedPages,
-      };  
-      
-      downloadExperimentData(updatedExperimentData); 
+      };
+
+      downloadExperimentData(updatedExperimentData);
       console.log("Experiment data:", updatedExperimentData);
-      setSampleCounter((prev) => prev + 1); 
+      setSampleCounter((prev) => prev + 1);
+
+      // Mark experiment as completed in localStorage
+      if (prev.iterationId) {
+        markExperimentAsCompleted(prev.iterationId);
+      }
+
       return updatedExperimentData;
     });
-  
+
     console.log("Experiment completed.");
     resetExperiment();
   };

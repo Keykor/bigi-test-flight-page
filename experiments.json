@@ -3,13 +3,13 @@
     {
       "id": "1",
       "name": "Buenos Aires to Spain - Cheapest under 6h",
-      "description": "Choose the cheapest outbound and return flights that arrive in under 6 hours from Buenos Aires to Spain. You can fly into Madrid (MAD) or Barcelona (BCN), depart from EZE or AEP. Search for flights departing on June 15, 2025 and returning on June 22, 2025.",
+      "description": "Choose the cheapest outbound and return flights that arrive in under 6 hours from Buenos Aires to Spain. You can fly into Madrid (MAD) or Barcelona (BCN), depart from EZE or AEP. Search for flights departing on June 15, 2026 and returning on June 22, 2026.",
       "searchCombinations": [
         {
           "departure": "EZE",
           "destination": "MAD",
-          "departureDate": "2025-06-15",
-          "returnDate": "2025-06-22",
+          "departureDate": "2026-06-15",
+          "returnDate": "2026-06-22",
           "outboundFlights": [
             {
               "id": "eze-mad-ib6841",
@@ -25,7 +25,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -42,7 +42,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -59,7 +59,7 @@
               "class": "Economy",
               "luggage": "Carry-on only",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             }
           ],
@@ -78,7 +78,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -95,7 +95,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -112,7 +112,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             }
           ]
@@ -120,8 +120,8 @@
         {
           "departure": "EZE",
           "destination": "BCN",
-          "departureDate": "2025-06-15",
-          "returnDate": "2025-06-22",
+          "departureDate": "2026-06-15",
+          "returnDate": "2026-06-22",
           "outboundFlights": [
             {
               "id": "eze-bcn-ar1155",
@@ -137,7 +137,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -154,7 +154,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -171,7 +171,7 @@
               "class": "Economy",
               "luggage": "Carry-on only",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             }
           ],
@@ -190,7 +190,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -207,7 +207,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -224,7 +224,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             }
           ]
@@ -232,8 +232,8 @@
         {
           "departure": "AEP",
           "destination": "MAD",
-          "departureDate": "2025-06-15",
-          "returnDate": "2025-06-22",
+          "departureDate": "2026-06-15",
+          "returnDate": "2026-06-22",
           "outboundFlights": [
             {
               "id": "aep-mad-ar1131",
@@ -249,7 +249,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -266,7 +266,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -283,7 +283,7 @@
               "class": "Economy",
               "luggage": "Carry-on only",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             }
           ],
@@ -302,7 +302,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -319,7 +319,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -336,7 +336,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             }
           ]
@@ -344,8 +344,8 @@
         {
           "departure": "AEP",
           "destination": "BCN",
-          "departureDate": "2025-06-15",
-          "returnDate": "2025-06-22",
+          "departureDate": "2026-06-15",
+          "returnDate": "2026-06-22",
           "outboundFlights": [
             {
               "id": "aep-bcn-la8091",
@@ -361,7 +361,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -378,7 +378,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             },
             {
@@ -395,7 +395,7 @@
               "class": "Economy",
               "luggage": "Carry-on only",
               "refundable": false,
-              "departureDate": "2025-06-15",
+              "departureDate": "2026-06-15",
               "type": "outbound"
             }
           ],
@@ -414,7 +414,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -431,7 +431,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             },
             {
@@ -448,7 +448,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2025-06-22",
+              "departureDate": "2026-06-22",
               "type": "return"
             }
           ]

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
+import { format, parse } from "date-fns"
 import { CalendarIcon, ArrowLeft, Calendar, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AirportAutocomplete } from "@/components/airport-autocomplete"
@@ -104,7 +104,7 @@ export default function SearchPage() {
     setReturnDateOpen(false);
   }
 
-  // Initialize page data
+  // Initialize page data and restore form values from sessionStorage
   useEffect(() => {
     if (!iterationId) {
       router.push("/welcome")
@@ -114,6 +114,44 @@ export default function SearchPage() {
     if (initialRenderRef.current) {
       initialRenderRef.current = false
       console.log(`Search page mounted with iteration: ${iterationId}`)
+
+      // Restore form values from sessionStorage
+      const storageKey = `search_form_${iterationId}`
+      const savedFormData = sessionStorage.getItem(storageKey)
+
+      if (savedFormData) {
+        try {
+          const formData = JSON.parse(savedFormData)
+
+          if (formData.departure) {
+            setDeparture(formData.departure)
+          }
+
+          if (formData.destination) {
+            setDestination(formData.destination)
+          }
+
+          if (formData.date) {
+            // Parse the date string in local timezone to avoid timezone issues
+            const parsedDate = parse(formData.date, "yyyy-MM-dd", new Date())
+            if (!isNaN(parsedDate.getTime())) {
+              setDate(parsedDate)
+            }
+          }
+
+          if (formData.returnDate) {
+            // Parse the date string in local timezone to avoid timezone issues
+            const parsedReturnDate = parse(formData.returnDate, "yyyy-MM-dd", new Date())
+            if (!isNaN(parsedReturnDate.getTime())) {
+              setReturnDate(parsedReturnDate)
+            }
+          }
+
+          console.log(`Restored form data for iteration ${iterationId}:`, formData)
+        } catch (e) {
+          console.error("Error parsing saved form data:", e)
+        }
+      }
     }
   }, [iterationId, router])
 
@@ -169,6 +207,11 @@ export default function SearchPage() {
       date: date ? format(date, "yyyy-MM-dd") : "",
       returnDate: returnDate ? format(returnDate, "yyyy-MM-dd") : "",
     }
+
+    // Save form data to sessionStorage for restoration on back navigation
+    const storageKey = `search_form_${iterationId}`
+    sessionStorage.setItem(storageKey, JSON.stringify(params))
+    console.log(`Saved form data to sessionStorage with key: ${storageKey}`)
 
     // Add selection to track search parameters along with only the form changes array
     addSelection({
