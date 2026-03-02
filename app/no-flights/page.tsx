@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,14 +8,13 @@ import { AlertCircle } from "lucide-react"
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import AirlineLayout from "@/components/airline-layout"
 
-export default function NoFlightsPage() {
+function NoFlightsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const iterationId = searchParams.get("iteration")
   const { addToSelectionHistory } = useEventTracker()
 
   useEffect(() => {
-    // Track that user landed on no-flights page
     addToSelectionHistory({
       type: "no_flights_found",
       iterationId: iterationId,
@@ -29,7 +28,6 @@ export default function NoFlightsPage() {
   }, [iterationId, searchParams, addToSelectionHistory])
 
   const handleBackToSearch = () => {
-    // Record navigation
     addToSelectionHistory({
       type: "navigation",
       button: "back",
@@ -81,5 +79,13 @@ export default function NoFlightsPage() {
         </div>
       </div>
     </AirlineLayout>
+  )
+}
+
+export default function NoFlightsPage() {
+  return (
+    <Suspense>
+      <NoFlightsContent />
+    </Suspense>
   )
 }
