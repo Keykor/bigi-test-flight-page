@@ -12,11 +12,11 @@ export default function NoFlightsPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const iterationId = searchParams.get("iteration")
-  const { addSelection } = useEventTracker()
+  const { addToSelectionHistory } = useEventTracker()
 
   useEffect(() => {
     // Track that user landed on no-flights page
-    addSelection({
+    addToSelectionHistory({
       type: "no_flights_found",
       iterationId: iterationId,
       searchParams: {
@@ -26,9 +26,15 @@ export default function NoFlightsPage() {
         returnDate: searchParams.get("returnDate") || "",
       },
     })
-  }, [iterationId, searchParams, addSelection])
+  }, [iterationId, searchParams, addToSelectionHistory])
 
   const handleBackToSearch = () => {
+    // Record navigation
+    addToSelectionHistory({
+      type: "navigation",
+      button: "back",
+    });
+
     if (iterationId) {
       router.push(`/search?iteration=${iterationId}`)
     } else {

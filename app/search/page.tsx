@@ -14,6 +14,7 @@ import { CalendarWrapper } from "@/components/ui/calendar-wrapper"
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import AirlineLayout from "@/components/airline-layout"
 import { FloatingTaskCard } from "@/components/floating-task-card"
+import { getFlightsForSearch } from "@/lib/experiments"
 
 export default function SearchPage() {
   const router = useRouter()
@@ -24,7 +25,7 @@ export default function SearchPage() {
   const [departure, setDeparture] = useState("")
   const [destination, setDestination] = useState("")
   const initialRenderRef = useRef(true)
-  const { addSelection } = useEventTracker()
+  const { addToSelectionHistory, updateExperimentState } = useEventTracker()
   
   // Add state to control popover open/close state
   const [departureDateOpen, setDepartureDateOpen] = useState(false)
@@ -38,31 +39,18 @@ export default function SearchPage() {
     returnDate?: string;
   }>({})
   
-  // Add state to track all form field changes
-  const [formChanges, setFormChanges] = useState<Array<{
-    type: string;
-    field: string;
-    value: string;
-    previousValue?: string;
-    timestamp: string;
-  }>>([]);
-
   // Add state to track if form was submitted
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Function to record a change to the form changes array
+  // Function to record a change using the new tracking system
   const recordChange = useCallback((field: string, value: string, previousValue?: string) => {
-    setFormChanges(prev => [
-      ...prev,
-      {
-        type: 'field_change',
-        field,
-        value,
-        previousValue,
-        timestamp: new Date().toISOString()
-      }
-    ]);
-  }, []);
+    addToSelectionHistory({
+      type: 'field_change',
+      field,
+      value,
+      previousValue: previousValue || "",
+    });
+  }, [addToSelectionHistory]);
 
   // Handle departure date selection
   const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -192,12 +180,13 @@ export default function SearchPage() {
     // Check if there are any errors
     if (Object.keys(newErrors).length > 0) {
       // Record validation error event
-      addSelection({
-        type: "search_validation_error",
+      addToSelectionHistory({
+        type: "validation_error",
+        fields: Object.keys(newErrors),
         errors: newErrors,
         iterationId: iterationId,
       });
-      
+
       return;
     }
 
@@ -208,17 +197,58 @@ export default function SearchPage() {
       returnDate: returnDate ? format(returnDate, "yyyy-MM-dd") : "",
     }
 
+    // Validate if flights exist for these parameters BEFORE navigating
+    const flightsResult = getFlightsForSearch(iterationId!, params)
+
+    if (!flightsResult) {
+      // No matching combination found - redirect to no-flights page
+      console.warn("No matching search combination found for parameters:", params)
+
+      // Track no flights found event
+      addToSelectionHistory({
+        type: "no_flights_found_redirect",
+        reason: "no_matching_combination",
+        searchParams: params,
+        iterationId: iterationId,
+      })
+
+      // Record navigation to no-flights
+      addToSelectionHistory({
+        type: "navigation",
+        button: "search_submit",
+        destination: "no-flights",
+        ...params,
+        iterationId: iterationId,
+      });
+
+      // Redirect to no-flights page with search params
+      const searchParamsString = new URLSearchParams({
+        ...params,
+        iteration: iterationId || "",
+      }).toString()
+
+      router.push(`/no-flights?${searchParamsString}`)
+      return
+    }
+
+    // Flights found - proceed normally
     // Save form data to sessionStorage for restoration on back navigation
     const storageKey = `search_form_${iterationId}`
     sessionStorage.setItem(storageKey, JSON.stringify(params))
     console.log(`Saved form data to sessionStorage with key: ${storageKey}`)
 
-    // Add selection to track search parameters along with only the form changes array
-    addSelection({
-      type: "search_parameters",
+    // Update experiment state with search parameters
+    updateExperimentState({
+      searchParams: params
+    });
+
+    // Record navigation to results
+    addToSelectionHistory({
+      type: "navigation",
+      button: "search_submit",
+      destination: "results",
       ...params,
       iterationId: iterationId,
-      formChanges: formChanges, // Include only the history of changes
     });
 
     const searchParamsString = new URLSearchParams({

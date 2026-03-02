@@ -21,7 +21,7 @@ export default function ConfirmationPage() {
   const [returnFlight, setReturnFlight] = useState<Flight | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const initialRenderRef = useRef(true)
-  const { stopExperiment, addSelection } = useEventTracker()
+  const { stopExperiment, addToSelectionHistory } = useEventTracker()
 
   // Initialize page data
   useEffect(() => {
@@ -58,28 +58,37 @@ export default function ConfirmationPage() {
 
       setOutboundFlight(selectedOutboundFlight)
       setReturnFlight(selectedReturnFlight)
-      
+
       // Record the final flight selections
-      addSelection({
+      addToSelectionHistory({
         type: "final_selection",
         outboundFlight: selectedOutboundFlight,
         returnFlight: selectedReturnFlight,
-        timestamp: new Date().toISOString()
       });
     }
-  }, [iterationId, outboundFlightId, returnFlightId, router, searchParams, addSelection])
+  }, [iterationId, outboundFlightId, returnFlightId, router, searchParams, addToSelectionHistory])
 
   const handleBack = useCallback(() => {
+    // Record navigation
+    addToSelectionHistory({
+      type: "navigation",
+      button: "back",
+    });
     router.push(`/results/return?${searchParams.toString()}`)
-  }, [router, searchParams])
+  }, [router, searchParams, addToSelectionHistory])
 
   const handleSubmit = useCallback(async () => {
     if (!iterationId) return
 
     // Record booking confirmation event
-    addSelection({
+    addToSelectionHistory({
       type: "booking_confirmed",
-      timestamp: new Date().toISOString()
+    });
+
+    // Record navigation
+    addToSelectionHistory({
+      type: "navigation",
+      button: "confirm_booking",
     });
 
     // Try to stop tracking the iteration (may fail if page was reloaded)
@@ -91,7 +100,7 @@ export default function ConfirmationPage() {
 
     // Mark as submitted to show completion screen
     setIsSubmitted(true)
-  }, [iterationId, addSelection, stopExperiment])
+  }, [iterationId, addToSelectionHistory, stopExperiment])
 
   const handleFinish = useCallback(() => {
     router.push("/welcome")

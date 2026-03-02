@@ -22,7 +22,7 @@ export default function ReturnResultsPage() {
   const [outboundFlight, setOutboundFlight] = useState<Flight | null>(null)
   const [currentSearchParams, setCurrentSearchParams] = useState<SearchParameters | undefined>(undefined)
   const initialRenderRef = useRef(true)
-  const { addSelection } = useEventTracker()
+  const { addToSelectionHistory, updateExperimentState } = useEventTracker()
 
   // Extraer parámetros de búsqueda de la URL - memorizado para evitar recrear en cada renderizado
   const extractSearchParams = useCallback(() => {
@@ -88,7 +88,7 @@ export default function ReturnResultsPage() {
         console.warn("No matching search combination found for parameters:", params)
 
         // Track no flights found event
-        addSelection({
+        addToSelectionHistory({
           type: "no_flights_found_redirect",
           reason: "no_matching_combination",
           searchParams: params,
@@ -105,26 +105,54 @@ export default function ReturnResultsPage() {
       // Set return flights
       setFlights(flightsResult.return)
     }
-  }, [iterationId, outboundFlightId, router, extractSearchParams, searchParams, addSelection])
+  }, [iterationId, outboundFlightId, router, extractSearchParams, searchParams, addToSelectionHistory])
 
   const handleSelectFlight = useCallback(
     (flight: Flight) => {
-      // Record the flight selection before navigation
-      addSelection({
-        type: "return_flight_selection",
-        flight: flight
-      })
-      
+      // Update experiment state with return flight
+      updateExperimentState({
+        returnFlight: {
+          flightId: flight.id,
+          price: flight.price,
+          airline: flight.airline,
+          departureTime: flight.departureTime,
+          arrivalTime: flight.arrivalTime,
+          duration: flight.duration,
+        }
+      });
+
+      // Record flight selection in history
+      addToSelectionHistory({
+        type: "flight_selection",
+        direction: "return",
+        flightId: flight.id,
+        price: flight.price,
+        airline: flight.airline,
+        isTarget: flight.isTarget || false,
+      });
+
+      // Record navigation
+      addToSelectionHistory({
+        type: "navigation",
+        button: "select_flight",
+      });
+
       // Navigate to the confirmation page with selected flights
       const newParams = new URLSearchParams(searchParams)
       newParams.set("returnFlightId", flight.id)
       console.log("Navigating to confirmation with params:", newParams.toString())
       router.push(`/confirmation?${newParams.toString()}`)
     },
-    [searchParams, router, addSelection]
+    [searchParams, router, addToSelectionHistory, updateExperimentState]
   )
 
   const handleBack = useCallback(() => {
+    // Record navigation
+    addToSelectionHistory({
+      type: "navigation",
+      button: "back",
+    });
+
     // Maintain all parameters when going back
     const backParams = new URLSearchParams()
     searchParams.forEach((value, key) => {
@@ -135,7 +163,7 @@ export default function ReturnResultsPage() {
 
     console.log("Going back to outbound results with params:", backParams.toString())
     router.push(`/results/outbound?${backParams.toString()}`)
-  }, [router, searchParams])
+  }, [router, searchParams, addToSelectionHistory])
 
   if (!outboundFlight) {
     return (

@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
+import { getExperimentById } from "@/lib/experiments";
 
 // Helper functions for localStorage
 const COMPLETED_EXPERIMENTS_KEY = "completed_experiments";
@@ -52,8 +53,10 @@ export const getParticipantId = (): string | null => {
 };
 
 interface ExperimentData {
-  subject?: string;
-  version?: string;
+  participantId?: string;
+  experimentId?: string;
+  experimentName?: string;
+  experimentDescription?: string;
   iterationId?: string;
   pages: Array<{
     page: string;
@@ -76,7 +79,17 @@ interface ExperimentData {
       trackId: string | null;
       time: number;
     }>;
-    selection?: any; // Cambiamos a un único objeto de selección opcional
+    keyPresses: Array<{
+      key: string;
+      inputId: string | null;
+      time: number;
+    }>;
+    selectionHistory: any[];
+    experimentState: {
+      searchParams: any;
+      outboundFlight: any;
+      returnFlight: any;
+    };
   }>;
   experimentStartTime: string;
   experimentEndTime?: string;
@@ -87,9 +100,10 @@ interface ExperimentData {
 interface EventTrackerContextType {
   isTracking: boolean;
   experimentData: ExperimentData | null;
-  startExperiment: (iterationId: string) => void;
+  startExperiment: (experimentId: string) => void;
   stopExperiment: () => void;
-  addSelection: (selection: any) => void;
+  addToSelectionHistory: (entry: any) => void;
+  updateExperimentState: (updates: any) => void;
 }
 
 const EventTrackerContext = createContext<EventTrackerContextType | undefined>(undefined);
@@ -144,10 +158,17 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   // Memoize startExperiment to avoid recreating on every render
-  const startExperiment = useCallback((iterationId: string) => {
+  const startExperiment = useCallback((experimentId: string) => {
     // Prevent duplicate experiment creation
-    if (experimentDataRef.current?.iterationId === iterationId) {
-      console.log("Experiment already started for this iteration");
+    if (experimentDataRef.current?.experimentId === experimentId) {
+      console.log("Experiment already started");
+      return;
+    }
+
+    // Load experiment metadata
+    const experiment = getExperimentById(experimentId);
+    if (!experiment) {
+      console.error(`Experiment ${experimentId} not found`);
       return;
     }
 
@@ -157,8 +178,11 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     // Create new experiment but don't initialize pages yet
     // Pages will be initialized when user navigates to search page
     const newExperiment = {
-      subject: participantId || undefined,
-      iterationId,
+      participantId: participantId || undefined,
+      experimentId: experiment.id,
+      experimentName: experiment.name,
+      experimentDescription: experiment.description,
+      iterationId: experimentId,
       pages: [],
       experimentStartTime: new Date().toISOString(),
       uuid: uuid,
@@ -166,7 +190,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     setExperimentData(newExperiment);
     setIsTracking(true);
-    console.log(`Experiment started for iteration: ${iterationId}, participant: ${participantId}`);
+    console.log(`Experiment started: ${experiment.name}, participant: ${participantId}`);
   }, [uuid]);
 
   const stopExperiment = () => {
@@ -253,7 +277,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const handleMouseMove = throttle((event: MouseEvent) => {
       setExperimentData((prev) => {
         if (!prev || prev.pages.length === 0) return prev;
-        
+
         const updatedPages = [...prev.pages];
         const lastPageIndex = updatedPages.length - 1;
 
@@ -265,12 +289,12 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
         return { ...prev, pages: updatedPages };
       });
-    }, 100);
+    }, 100, { leading: true, trailing: false });
 
     const handleScroll = throttle(() => {
       setExperimentData((prev) => {
         if (!prev) return null;
-        
+
         const updatedPages = [...prev.pages];
         const lastPageIndex = updatedPages.length - 1;
 
@@ -283,12 +307,12 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
         return { ...prev, pages: updatedPages };
       });
-    }, 100);
+    }, 100, { leading: true, trailing: false });
 
     const handleClick = (event: MouseEvent) => {
       setExperimentData((prev) => {
         if (!prev) return null;
-        
+
         const updatedPages = [...prev.pages];
         const lastPageIndex = updatedPages.length - 1;
 
@@ -296,7 +320,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const trackedElement = target.closest('[data-track-id]');
         const trackId = trackedElement ? (trackedElement as HTMLElement).dataset.trackId || null : null;
         console.log("Click on element with track ID:", trackId);
-  
+
         if (lastPageIndex >= 0) {
           updatedPages[lastPageIndex].clicks.push({
             x: event.clientX,
@@ -306,7 +330,31 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
             time: Date.now(),
           });
         }
-  
+
+        return { ...prev, pages: updatedPages };
+      });
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      setExperimentData((prev) => {
+        if (!prev || prev.pages.length === 0) return prev;
+
+        const updatedPages = [...prev.pages];
+        const lastPageIndex = updatedPages.length - 1;
+
+        // Find the active element and bubble up to find data-track-id
+        const activeElement = document.activeElement as HTMLElement;
+        const trackedElement = activeElement?.closest('[data-track-id]');
+        const inputId = trackedElement
+          ? (trackedElement as HTMLElement).dataset.trackId || null
+          : activeElement?.id || null;
+
+        updatedPages[lastPageIndex].keyPresses.push({
+          key: event.key,
+          inputId: inputId,
+          time: Date.now(),
+        });
+
         return { ...prev, pages: updatedPages };
       });
     };
@@ -314,12 +362,14 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("click", handleClick);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       console.log("Removing event listeners.");
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("keydown", handleKeyDown);
       handleMouseMove.cancel();
       handleScroll.cancel();
     };
@@ -356,7 +406,13 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
             mouseMovements: [],
             scrollPositions: [],
             clicks: [],
-            // No inicializamos selection ya que es opcional
+            keyPresses: [],
+            selectionHistory: [],
+            experimentState: {
+              searchParams: null,
+              outboundFlight: null,
+              returnFlight: null,
+            }
           }]
         };
       }
@@ -391,7 +447,16 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
             visitEndTime: visitStartTime,
           };
         }
-        
+
+        // Copy experimentState from previous page
+        const previousState = updatedPages.length > 0
+          ? updatedPages[updatedPages.length - 1].experimentState
+          : {
+              searchParams: null,
+              outboundFlight: null,
+              returnFlight: null,
+            };
+
         // Add new page
         updatedPages.push({
           page: newUrl,
@@ -400,7 +465,9 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
           mouseMovements: [],
           scrollPositions: [],
           clicks: [],
-          // No inicializamos selection ya que es opcional
+          keyPresses: [],
+          selectionHistory: [],
+          experimentState: { ...previousState }
         });
         
         return {
@@ -436,43 +503,92 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     };
   }, [isTracking]); // Only depend on isTracking
   
-  // Enhanced selection tracking for different page types
-  const addSelection = useCallback((selection: any) => {
+  // Add entry to selection history for current page
+  const addToSelectionHistory = useCallback((entry: any) => {
     const currentPage = currentPageRef.current;
-    
-    // Create enhanced selection with timestamp
-    let enhancedSelection = {
-      timestamp: new Date().toISOString(),
-      ...selection // Keep all the original selection data
-    };
-    
-    console.log(`Recording selection for ${currentPage}:`, enhancedSelection);
-    
+
     setExperimentData((prev) => {
       if (!prev) return null;
-      
-      // Actualizamos solo la selección de la página actual
+
       const updatedPages = [...prev.pages];
-      if (updatedPages.length > 0) {
-        const lastPageIndex = updatedPages.length - 1;
-        
-        // Make sure this is the right page (safety check)
-        if (updatedPages[lastPageIndex].page === currentPage) {
-          // Set the selection for this page
-          updatedPages[lastPageIndex] = {
-            ...updatedPages[lastPageIndex],
-            selection: enhancedSelection
+      if (updatedPages.length === 0) return prev;
+
+      const lastPageIndex = updatedPages.length - 1;
+      if (updatedPages[lastPageIndex].page !== currentPage) return prev;
+
+      const currentPageData = updatedPages[lastPageIndex];
+      const enhancedEntry = {
+        timestamp: new Date().toISOString(),
+        ...entry
+      };
+
+      // Calculate isCorrection if this is a field_change
+      if (entry.type === "field_change") {
+        // Try to get the real previous value from experimentState
+        let realPreviousValue = entry.previousValue;
+
+        // If no previousValue was provided or it's empty, check experimentState
+        if (!realPreviousValue && currentPageData.experimentState?.searchParams) {
+          const fieldMapping: Record<string, string> = {
+            'departure_airport': 'departure',
+            'destination_airport': 'destination',
+            'departure_date': 'date',
+            'return_date': 'returnDate'
           };
+
+          const stateKey = fieldMapping[entry.field] || entry.field;
+          realPreviousValue = currentPageData.experimentState.searchParams[stateKey] || "";
         }
+
+        enhancedEntry.previousValue = realPreviousValue;
+        enhancedEntry.isCorrection =
+          realPreviousValue !== "" &&
+          realPreviousValue !== null &&
+          realPreviousValue !== undefined;
       }
-      
+
+      console.log(`Adding to selection history for ${currentPage}:`, enhancedEntry);
+
+      updatedPages[lastPageIndex] = {
+        ...currentPageData,
+        selectionHistory: [
+          ...currentPageData.selectionHistory,
+          enhancedEntry
+        ]
+      };
+
       return {
         ...prev,
         pages: updatedPages,
       };
     });
-    
-    console.log(`Selection recorded for ${currentPage}:`, enhancedSelection);
+  }, []);
+
+  // Update experiment state for current page
+  const updateExperimentState = useCallback((updates: any) => {
+    console.log('Updating experiment state:', updates);
+
+    setExperimentData((prev) => {
+      if (!prev) return null;
+
+      const updatedPages = [...prev.pages];
+      if (updatedPages.length > 0) {
+        const lastPageIndex = updatedPages.length - 1;
+
+        updatedPages[lastPageIndex] = {
+          ...updatedPages[lastPageIndex],
+          experimentState: {
+            ...updatedPages[lastPageIndex].experimentState,
+            ...updates
+          }
+        };
+      }
+
+      return {
+        ...prev,
+        pages: updatedPages,
+      };
+    });
   }, []);
 
   return (
@@ -482,7 +598,8 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         experimentData,
         startExperiment,
         stopExperiment,
-        addSelection
+        addToSelectionHistory,
+        updateExperimentState
       }}
     >
       {children}

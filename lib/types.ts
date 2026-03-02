@@ -35,50 +35,23 @@ export interface SelectedFlights {
   return?: Flight
 }
 
-export interface MouseMoveInteraction {
-  type: "mousemove"
-  pageId: string
-  x: number
-  y: number
-  timestamp: Date
-  elementId: string | null
-}
-
-export interface ScrollInteraction {
-  type: "scroll"
-  pageId: string
-  x: number
-  y: number
-  timestamp: Date
-}
-
-export interface ClickInteraction {
-  type: "click"
-  pageId: string
-  x: number
-  y: number
-  timestamp: Date
-  elementId: string | null
-  elementType: string | null
-}
-
-export interface KeyPressInteraction {
-  type: "keypress"
-  pageId: string
+// NEW: Interfaces for improved tracking system
+export interface KeyPress {
   key: string
-  timestamp: Date
   inputId: string | null
+  time: number
 }
 
-export type Interaction = MouseMoveInteraction | ScrollInteraction | ClickInteraction | KeyPressInteraction
+export interface SelectionHistoryEntry {
+  type: string
+  timestamp: string
+  [key: string]: any
+}
 
-export interface PageVisit {
-  pageId: string
-  entryTime: Date
-  exitTime: Date | null
-  duration?: number // in milliseconds, calculated when exitTime is set
-  searchParams?: SearchParameters // Parámetros de búsqueda específicos para esta página
-  selectedOptions?: Record<string, any> // Opciones seleccionadas en esta página
+export interface ExperimentState {
+  searchParams: SearchParameters | null
+  outboundFlight: Partial<Flight> | null
+  returnFlight: Partial<Flight> | null
 }
 
 // DEPRECATED: Old iteration system types - kept for backward compatibility
@@ -148,7 +121,9 @@ export interface PageVisit {
   mouseMovements: MouseMovement[]
   scrollPositions: ScrollPosition[]
   clicks: ClickEvent[]
-  widgetTimes: Record<string, any>
+  keyPresses: KeyPress[]
+  selectionHistory: SelectionHistoryEntry[]
+  experimentState: ExperimentState
 }
 
 export interface MouseMovement {
@@ -172,16 +147,14 @@ export interface ClickEvent {
 }
 
 export interface ExperimentData {
+  participantId?: string
+  experimentId: string
+  experimentName: string
+  experimentDescription: string
   iterationId: string
   pages: PageVisit[]
   experimentStartTime: string
   experimentEndTime?: string
-  selections: any[]
   uuid: string
   sampleCounter?: number
-  metrics?: {
-    interactionCounts?: Record<string, number>
-    timeOnPage?: Record<string, number>
-    clickCounts?: Record<string, number>
-  }
 }
