@@ -1,9 +1,9 @@
 "use client"
 
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { DebugButton } from "@/components/debug-button"
 import { loadExperiments } from "@/lib/experiments"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
@@ -19,6 +19,16 @@ export default function WelcomePage() {
   const router = useRouter()
 
   useEffect(() => {
+    // Check if participant ID exists, redirect to home if not
+    if (typeof window !== 'undefined') {
+      const participantId = localStorage.getItem('participant_id')
+      if (!participantId) {
+        console.log('No participant ID found, redirecting to home')
+        router.push('/')
+        return
+      }
+    }
+
     // Get available experiments when the component mounts
     const experiments = loadExperiments()
     setAvailableExperiments(experiments)
@@ -26,7 +36,7 @@ export default function WelcomePage() {
     // Load completed experiments from localStorage
     const completed = experiments.filter(exp => isExperimentCompleted(exp.id)).map(exp => exp.id)
     setCompletedExperiments(completed)
-  }, [])
+  }, [router])
 
   // Handle starting an iteration with tracking
   const handleStartIteration = (iterationId: string) => {
@@ -59,10 +69,15 @@ export default function WelcomePage() {
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle className="text-2xl">
-            Flight Booking Research Study
-          </CardTitle>
-          <CardDescription>Help us improve the flight booking experience</CardDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <CardTitle className="text-2xl">
+                Flight Booking Research Study
+              </CardTitle>
+              <CardDescription>Help us improve the flight booking experience</CardDescription>
+            </div>
+            <DebugButton />
+          </div>
         </CardHeader>
         <CardContent>
           <div className="prose max-w-none">

@@ -458,13 +458,13 @@
     {
       "id": "test",
       "name": "Test Flight - NYC to LA",
-      "description": "Simple test experiment: Find any direct flight from New York (JFK) to Los Angeles (LAX) departing today (Feb 27, 2026) and returning tomorrow (Feb 28, 2026).",
+      "description": "Simple test experiment: Find any direct flight from New York (JFK) to Los Angeles (LAX) departing Mar 27, 2026 and returning Mar 28, 2026.",
       "searchCombinations": [
         {
           "departure": "JFK",
           "destination": "LAX",
-          "departureDate": "2026-02-27",
-          "returnDate": "2026-02-28",
+          "departureDate": "2026-03-27",
+          "returnDate": "2026-03-28",
           "outboundFlights": [
             {
               "id": "test-jfk-lax-aa100",
