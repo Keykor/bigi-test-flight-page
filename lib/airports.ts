@@ -39,6 +39,9 @@ export const airports: Airport[] = [
   { code: "EZE", name: "Ministro Pistarini International Airport", city: "Buenos Aires", country: "Argentina" },
   { code: "AEP", name: "Aeroparque Jorge Newbery", city: "Buenos Aires", country: "Argentina" },
   { code: "BCN", name: "Barcelona El Prat Airport", city: "Barcelona", country: "Spain" },
+  { code: "GRU", name: "São Paulo/Guarulhos International Airport", city: "São Paulo", country: "Brazil" },
+  { code: "PSA", name: "Pisa International Airport", city: "Pisa", country: "Italy" },
+  { code: "FLR", name: "Florence Airport", city: "Florence", country: "Italy" },
 ]
 
 /**
