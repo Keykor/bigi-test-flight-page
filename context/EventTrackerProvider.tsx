@@ -10,6 +10,17 @@ import { getExperimentById } from "@/lib/experiments";
 const COMPLETED_EXPERIMENTS_KEY = "completed_experiments";
 const PARTICIPANT_ID_KEY = "participant_id";
 const SAMPLE_COUNTER_KEY = "sample_counter";
+const DEBUG_MODE_KEY = "debug_mode";
+
+export const isDebugMode = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem(DEBUG_MODE_KEY) === "true";
+};
+
+export const setDebugMode = (value: boolean): void => {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(DEBUG_MODE_KEY, String(value));
+};
 
 export const getCompletedExperiments = (): string[] => {
   if (typeof window === 'undefined') return [];
@@ -273,8 +284,18 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
   
   const downloadExperimentData = async (data: ExperimentData) => {
+    const jsonData = JSON.stringify(data, null, 2);
+
+    // In debug mode, skip Vercel Blob upload and open locally
+    if (isDebugMode()) {
+      console.log("Debug mode: opening experiment data locally instead of uploading");
+      const blob = new Blob([jsonData], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      return;
+    }
+
     try {
-      const jsonData = JSON.stringify(data, null, 2);
       const blob = new Blob([jsonData], { type: "application/json" });
 
       // Build a descriptive filename
@@ -300,7 +321,6 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
       // Fallback: open JSON in new tab
       try {
-        const jsonData = JSON.stringify(data, null, 2);
         const fallbackBlob = new Blob([jsonData], { type: "application/json" });
         const fallbackUrl = URL.createObjectURL(fallbackBlob);
         window.open(fallbackUrl, "_blank");

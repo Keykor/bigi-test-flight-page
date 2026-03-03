@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { isDebugMode, setDebugMode } from "@/context/EventTrackerProvider"
 
 const PARTICIPANT_ID_KEY = "participant_id"
 
@@ -15,11 +17,13 @@ export default function ParticipantIdPage() {
   const [participantId, setParticipantId] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
+  const [debugMode, setDebugModeState] = useState(false)
   const router = useRouter()
 
   // Check if participant ID is already saved
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      setDebugModeState(isDebugMode())
       const savedId = localStorage.getItem(PARTICIPANT_ID_KEY)
       if (savedId) {
         console.log("Participant ID already saved, redirecting to welcome page")
@@ -46,6 +50,11 @@ export default function ParticipantIdPage() {
 
     // Navigate to the welcome page
     router.push("/welcome")
+  }
+
+  const handleDebugToggle = (checked: boolean) => {
+    setDebugMode(checked)
+    setDebugModeState(checked)
   }
 
   // Show loading state while checking for saved ID
@@ -84,6 +93,17 @@ export default function ParticipantIdPage() {
           </form>
         </CardContent>
       </Card>
+
+      <div className="flex items-center gap-2 mt-4 justify-end">
+        <Switch
+          id="debug-mode"
+          checked={debugMode}
+          onCheckedChange={handleDebugToggle}
+        />
+        <Label htmlFor="debug-mode" className="text-sm text-muted-foreground cursor-pointer">
+          Debug Mode
+        </Label>
+      </div>
     </div>
   )
 }

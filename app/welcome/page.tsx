@@ -7,14 +7,17 @@ import { DebugButton } from "@/components/debug-button"
 import { loadExperiments } from "@/lib/experiments"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useEventTracker, isExperimentCompleted } from "@/context/EventTrackerProvider"
+import { useEventTracker, isExperimentCompleted, isDebugMode, setDebugMode } from "@/context/EventTrackerProvider"
 import type { ExperimentConfig } from "@/lib/types"
 import { CheckCircle2 } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 export default function WelcomePage() {
   const [availableExperiments, setAvailableExperiments] = useState<ExperimentConfig[]>([])
   const [completedExperiments, setCompletedExperiments] = useState<string[]>([])
   const [isNavigating, setIsNavigating] = useState(false)
+  const [debugEnabled, setDebugEnabled] = useState(false)
   const { startExperiment, abandonExperiment, isTracking } = useEventTracker()
   const router = useRouter()
 
@@ -35,6 +38,8 @@ export default function WelcomePage() {
       abandonExperiment()
     }
 
+    setDebugEnabled(isDebugMode())
+
     // Get available experiments when the component mounts
     const experiments = loadExperiments()
     setAvailableExperiments(experiments)
@@ -43,6 +48,11 @@ export default function WelcomePage() {
     const completed = experiments.filter(exp => isExperimentCompleted(exp.id)).map(exp => exp.id)
     setCompletedExperiments(completed)
   }, [router])
+
+  const handleDebugToggle = (checked: boolean) => {
+    setDebugMode(checked)
+    setDebugEnabled(checked)
+  }
 
   // Handle starting an iteration with tracking
   const handleStartIteration = (iterationId: string) => {
@@ -82,7 +92,7 @@ export default function WelcomePage() {
               </CardTitle>
               <CardDescription>Help us improve the flight booking experience</CardDescription>
             </div>
-            <DebugButton />
+            {debugEnabled && <DebugButton />}
           </div>
         </CardHeader>
         <CardContent>
@@ -156,6 +166,17 @@ export default function WelcomePage() {
             </Card>
           );
         })}
+      </div>
+
+      <div className="flex items-center gap-2 mt-6 justify-end">
+        <Switch
+          id="debug-mode"
+          checked={debugEnabled}
+          onCheckedChange={handleDebugToggle}
+        />
+        <Label htmlFor="debug-mode" className="text-sm text-muted-foreground cursor-pointer">
+          Debug Mode
+        </Label>
       </div>
     </div>
   )
