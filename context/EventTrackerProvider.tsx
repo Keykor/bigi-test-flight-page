@@ -9,6 +9,7 @@ import { getExperimentById } from "@/lib/experiments";
 // Helper functions for localStorage
 const COMPLETED_EXPERIMENTS_KEY = "completed_experiments";
 const PARTICIPANT_ID_KEY = "participant_id";
+const SAMPLE_COUNTER_KEY = "sample_counter";
 
 export const getCompletedExperiments = (): string[] => {
   if (typeof window === 'undefined') return [];
@@ -50,6 +51,28 @@ export const getParticipantId = (): string | null => {
     console.error("Error reading participant ID from localStorage:", e);
     return null;
   }
+};
+
+const getSampleCounter = (): number => {
+  if (typeof window === 'undefined') return 0;
+
+  try {
+    const stored = localStorage.getItem(SAMPLE_COUNTER_KEY);
+    return stored ? parseInt(stored, 10) : 0;
+  } catch (e) {
+    console.error("Error reading sample counter from localStorage:", e);
+    return 0;
+  }
+};
+
+const incrementSampleCounter = (): number => {
+  const next = getSampleCounter() + 1;
+  try {
+    localStorage.setItem(SAMPLE_COUNTER_KEY, String(next));
+  } catch (e) {
+    console.error("Error saving sample counter to localStorage:", e);
+  }
+  return next;
 };
 
 interface ExperimentData {
@@ -102,6 +125,7 @@ interface EventTrackerContextType {
   experimentData: ExperimentData | null;
   startExperiment: (experimentId: string) => void;
   stopExperiment: () => void;
+  abandonExperiment: () => void;
   addToSelectionHistory: (entry: any) => void;
   updateExperimentState: (updates: any) => void;
 }
@@ -112,7 +136,6 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [isTracking, setIsTracking] = useState(false);
   const [experimentData, setExperimentData] = useState<ExperimentData | null>(null);
   const [uuid] = useState(uuidv4());
-  const [sampleCounter, setSampleCounter] = useState(0);
   const router = useRouter();
 
   // Add ref to track current page URL
@@ -217,16 +240,17 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         };
       }
 
+      const newSampleCounter = incrementSampleCounter();
+
       const updatedExperimentData = {
         ...prev,
-        sampleCounter: sampleCounter + 1,
+        sampleCounter: newSampleCounter,
         experimentEndTime,
         pages: updatedPages,
       };
 
       downloadExperimentData(updatedExperimentData);
       console.log("Experiment data:", updatedExperimentData);
-      setSampleCounter((prev) => prev + 1);
 
       // Mark experiment as completed in localStorage
       if (prev.iterationId) {
@@ -266,6 +290,25 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const resetExperiment = () => {
     setExperimentData(null);
     setIsTracking(false);
+  };
+
+  const abandonExperiment = () => {
+    if (!experimentData) return;
+
+    console.log("Abandoning experiment:", experimentData.iterationId);
+
+    // Clean up sessionStorage for this experiment
+    if (experimentData.iterationId) {
+      try {
+        sessionStorage.removeItem(`experiment_data_${experimentData.iterationId}`);
+        sessionStorage.removeItem(`search_form_${experimentData.iterationId}`);
+        console.log(`Cleaned up sessionStorage for abandoned experiment ${experimentData.iterationId}`);
+      } catch (e) {
+        console.error("Error cleaning up sessionStorage:", e);
+      }
+    }
+
+    resetExperiment();
   };
 
   // Event tracking listeners
@@ -505,8 +548,6 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   
   // Add entry to selection history for current page
   const addToSelectionHistory = useCallback((entry: any) => {
-    const currentPage = currentPageRef.current;
-
     setExperimentData((prev) => {
       if (!prev) return null;
 
@@ -514,7 +555,6 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (updatedPages.length === 0) return prev;
 
       const lastPageIndex = updatedPages.length - 1;
-      if (updatedPages[lastPageIndex].page !== currentPage) return prev;
 
       const currentPageData = updatedPages[lastPageIndex];
       const enhancedEntry = {
@@ -547,7 +587,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
           realPreviousValue !== undefined;
       }
 
-      console.log(`Adding to selection history for ${currentPage}:`, enhancedEntry);
+      console.log(`Adding to selection history for ${currentPageData.page}:`, enhancedEntry);
 
       updatedPages[lastPageIndex] = {
         ...currentPageData,
@@ -598,6 +638,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         experimentData,
         startExperiment,
         stopExperiment,
+        abandonExperiment,
         addToSelectionHistory,
         updateExperimentState
       }}

@@ -197,6 +197,16 @@ export default function SearchPage() {
       returnDate: returnDate ? format(returnDate, "yyyy-MM-dd") : "",
     }
 
+    // Always save form data to sessionStorage for restoration on back navigation
+    const storageKey = `search_form_${iterationId}`
+    sessionStorage.setItem(storageKey, JSON.stringify(params))
+    console.log(`Saved form data to sessionStorage with key: ${storageKey}`)
+
+    // Always update experiment state with search parameters
+    updateExperimentState({
+      searchParams: params
+    });
+
     // Validate if flights exist for these parameters BEFORE navigating
     const flightsResult = getFlightsForSearch(iterationId!, params)
 
@@ -230,17 +240,6 @@ export default function SearchPage() {
       router.push(`/no-flights?${searchParamsString}`)
       return
     }
-
-    // Flights found - proceed normally
-    // Save form data to sessionStorage for restoration on back navigation
-    const storageKey = `search_form_${iterationId}`
-    sessionStorage.setItem(storageKey, JSON.stringify(params))
-    console.log(`Saved form data to sessionStorage with key: ${storageKey}`)
-
-    // Update experiment state with search parameters
-    updateExperimentState({
-      searchParams: params
-    });
 
     // Record navigation to results
     addToSelectionHistory({

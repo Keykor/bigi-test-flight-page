@@ -23,9 +23,8 @@ const AirlineLayout = ({ children, activeTab = "flights" }: AirlineLayoutProps) 
           </div>
           
           <nav className="airline-nav">
-            <Link href="/" className="text-sm">Home</Link>
-            <Link href={`/search?iteration=${iterationId}`} className="text-sm">Check In</Link>
-            {/* Disabled links to avoid distraction */}
+            <span className="text-sm text-gray-400 cursor-not-allowed">Home</span>
+            <span className="text-sm text-gray-400 cursor-not-allowed">Check In</span>
             <span className="text-sm text-gray-400 cursor-not-allowed">Services</span>
             <span className="text-sm text-gray-400 cursor-not-allowed">Terms</span>
             <span className="text-sm text-gray-400 cursor-not-allowed">Contact</span>

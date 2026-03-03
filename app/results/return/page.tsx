@@ -104,6 +104,17 @@ export default function ReturnResultsPage() {
 
       // Set return flights
       setFlights(flightsResult.return)
+
+      // Track if no return flights available
+      if (flightsResult.return.length === 0) {
+        addToSelectionHistory({
+          type: "no_return_flights",
+          reason: "empty_return_flights",
+          searchParams: params,
+          iterationId: iterationId,
+          outboundFlightId: outboundFlightId,
+        })
+      }
     }
   }, [iterationId, outboundFlightId, router, extractSearchParams, searchParams, addToSelectionHistory])
 

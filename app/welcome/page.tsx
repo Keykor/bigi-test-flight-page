@@ -15,7 +15,7 @@ export default function WelcomePage() {
   const [availableExperiments, setAvailableExperiments] = useState<ExperimentConfig[]>([])
   const [completedExperiments, setCompletedExperiments] = useState<string[]>([])
   const [isNavigating, setIsNavigating] = useState(false)
-  const { startExperiment } = useEventTracker()
+  const { startExperiment, abandonExperiment, isTracking } = useEventTracker()
   const router = useRouter()
 
   useEffect(() => {
@@ -27,6 +27,12 @@ export default function WelcomePage() {
         router.push('/')
         return
       }
+    }
+
+    // If there's an active experiment when returning to welcome, abandon it
+    if (isTracking) {
+      console.log('Abandoning active experiment on return to welcome page')
+      abandonExperiment()
     }
 
     // Get available experiments when the component mounts

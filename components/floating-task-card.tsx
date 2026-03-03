@@ -12,17 +12,27 @@ interface FloatingTaskCardProps {
 
 const POSITION_KEY = "floating_task_card_position"
 const IS_OPEN_KEY = "floating_task_card_is_open"
+const SIZE_KEY = "floating_task_card_size"
+
+const MIN_WIDTH = 240
+const MIN_HEIGHT = 100
+const DEFAULT_WIDTH = 320
 
 export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [description, setDescription] = useState<string>("")
-  const { addSelection } = useEventTracker()
+  const { addToSelectionHistory } = useEventTracker()
 
   // Draggable state
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const cardRef = useRef<HTMLDivElement>(null)
+
+  // Resizable state
+  const [size, setSize] = useState({ width: DEFAULT_WIDTH, height: 0 })
+  const [isResizing, setIsResizing] = useState(false)
+  const resizeStartRef = useRef({ x: 0, y: 0, width: 0, height: 0 })
 
   useEffect(() => {
     if (experimentId) {
@@ -35,8 +45,10 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
 
   // Constrain position to viewport bounds
   const constrainPosition = (x: number, y: number) => {
-    const maxX = window.innerWidth - (cardRef.current?.offsetWidth || 320)
-    const maxY = window.innerHeight - (cardRef.current?.offsetHeight || 100)
+    const cardWidth = size.width || cardRef.current?.offsetWidth || DEFAULT_WIDTH
+    const cardHeight = cardRef.current?.offsetHeight || 100
+    const maxX = window.innerWidth - cardWidth
+    const maxY = window.innerHeight - cardHeight
 
     return {
       x: Math.max(0, Math.min(x, maxX)),
@@ -44,19 +56,24 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     }
   }
 
-  // Initialize position from localStorage or default to top-right corner
+  // Initialize position and size from localStorage or defaults
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
         const savedPosition = localStorage.getItem(POSITION_KEY)
         const savedIsOpen = localStorage.getItem(IS_OPEN_KEY)
+        const savedSize = localStorage.getItem(SIZE_KEY)
+
+        if (savedSize) {
+          const parsed = JSON.parse(savedSize)
+          setSize({ width: parsed.width || DEFAULT_WIDTH, height: parsed.height || 0 })
+        }
 
         if (savedPosition) {
           const parsed = JSON.parse(savedPosition)
           const constrained = constrainPosition(parsed.x, parsed.y)
           setPosition(constrained)
         } else {
-          // Default position: top-right corner
           setPosition({ x: window.innerWidth - 336, y: 80 })
         }
 
@@ -82,7 +99,6 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
 
   // Handle mouse down - start dragging
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Only allow dragging from the header, not from the chevron button area
     if ((e.target as HTMLElement).closest('button')) {
       return
     }
@@ -93,7 +109,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       y: e.clientY - position.y
     })
 
-    addSelection({
+    addToSelectionHistory({
       type: "floating_task_card_drag_start",
       experimentId: experimentId,
       position: position,
@@ -107,7 +123,14 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     }
   }, [position])
 
-  // Handle mouse move - update position
+  // Save size to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && size.width !== DEFAULT_WIDTH) {
+      localStorage.setItem(SIZE_KEY, JSON.stringify(size))
+    }
+  }, [size])
+
+  // Handle mouse move - update position (drag)
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return
@@ -115,7 +138,6 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       const newX = e.clientX - dragStart.x
       const newY = e.clientY - dragStart.y
 
-      // Keep card within viewport bounds
       const constrained = constrainPosition(newX, newY)
       setPosition(constrained)
     }
@@ -123,7 +145,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     const handleMouseUp = () => {
       if (isDragging) {
         setIsDragging(false)
-        addSelection({
+        addToSelectionHistory({
           type: "floating_task_card_drag_end",
           experimentId: experimentId,
           position: position,
@@ -140,18 +162,64 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [isDragging, dragStart, position, experimentId, addSelection])
+  }, [isDragging, dragStart, position, experimentId, addToSelectionHistory])
+
+  // Handle resize
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    setIsResizing(true)
+    resizeStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      width: size.width || cardRef.current?.offsetWidth || DEFAULT_WIDTH,
+      height: size.height || cardRef.current?.offsetHeight || MIN_HEIGHT,
+    }
+  }
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return
+
+      const deltaX = e.clientX - resizeStartRef.current.x
+      const deltaY = e.clientY - resizeStartRef.current.y
+
+      const maxWidth = window.innerWidth - position.x
+      const maxHeight = window.innerHeight - position.y
+
+      const newWidth = Math.min(maxWidth, Math.max(MIN_WIDTH, resizeStartRef.current.width + deltaX))
+      const newHeight = Math.min(maxHeight, Math.max(MIN_HEIGHT, resizeStartRef.current.height + deltaY))
+
+      setSize({ width: newWidth, height: newHeight })
+    }
+
+    const handleMouseUp = () => {
+      if (isResizing) {
+        setIsResizing(false)
+      }
+    }
+
+    if (isResizing) {
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isResizing, position])
 
   const handleToggle = () => {
     const newIsOpen = !isOpen
     setIsOpen(newIsOpen)
 
-    // Save to localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem(IS_OPEN_KEY, String(newIsOpen))
     }
 
-    addSelection({
+    addToSelectionHistory({
       type: "floating_task_card_toggle",
       action: isOpen ? "collapsed" : "expanded",
       experimentId: experimentId,
@@ -165,14 +233,15 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   return (
     <div
       ref={cardRef}
-      className="fixed z-50 w-80 max-w-[calc(100vw-2rem)]"
+      className="fixed z-50 max-w-[calc(100vw-2rem)]"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
+        width: `${size.width}px`,
         cursor: isDragging ? 'grabbing' : 'default'
       }}
     >
-      <Card className="shadow-2xl border-2 border-blue-500 bg-white">
+      <Card className="shadow-2xl border-2 border-blue-500 bg-white relative">
         <CardHeader
           className="bg-blue-50 border-b py-3 cursor-move hover:bg-blue-100 transition-colors"
           onMouseDown={handleMouseDown}
@@ -200,9 +269,27 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
           </div>
         </CardHeader>
         {isOpen && (
-          <CardContent className="pt-3 pb-3 bg-white">
+          <CardContent
+            className="pt-3 pb-3 bg-white overflow-auto"
+            style={{
+              overscrollBehavior: 'contain',
+              ...(size.height > 0 ? { maxHeight: `${size.height - (cardRef.current?.querySelector('[class*="CardHeader"]')?.clientHeight || 48)}px` } : {}),
+            }}
+            onWheel={(e) => e.stopPropagation()}
+          >
             <p className="text-sm text-gray-700 leading-relaxed">{description}</p>
           </CardContent>
+        )}
+        {/* Resize handle - bottom right corner */}
+        {isOpen && (
+          <div
+            onMouseDown={handleResizeMouseDown}
+            className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize"
+            style={{
+              background: 'linear-gradient(135deg, transparent 50%, #93c5fd 50%)',
+              borderBottomRightRadius: 'inherit',
+            }}
+          />
         )}
       </Card>
     </div>
