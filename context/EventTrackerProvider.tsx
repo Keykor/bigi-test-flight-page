@@ -4,7 +4,8 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
-import { getExperimentById } from "@/lib/experiments";
+import { getExperimentById, getFlightsForSearch, getCombinationKey, findMatchingCombination, registerSolutionFlight } from "@/lib/experiments";
+import type { Flight, SearchParameters, SearchCacheEntry } from "@/lib/types";
 
 // Helper functions for localStorage
 const COMPLETED_EXPERIMENTS_KEY = "completed_experiments";
@@ -129,6 +130,8 @@ interface ExperimentData {
   experimentEndTime?: string;
   uuid: string;
   sampleCounter?: number;
+  searchCache: SearchCacheEntry[];
+  foundTargetFlight: boolean | null;
 }
 
 interface EventTrackerContextType {
@@ -139,6 +142,8 @@ interface EventTrackerContextType {
   abandonExperiment: () => void;
   addToSelectionHistory: (entry: any) => void;
   updateExperimentState: (updates: any) => void;
+  getFlightsWithCache: (experimentId: string, searchParams: SearchParameters) => { outbound: Flight[]; return: Flight[] } | null;
+  setFoundTarget: (found: boolean) => void;
 }
 
 const EventTrackerContext = createContext<EventTrackerContextType | undefined>(undefined);
@@ -220,6 +225,8 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       pages: [],
       experimentStartTime: new Date().toISOString(),
       uuid: uuid,
+      searchCache: [],
+      foundTargetFlight: null,
     };
 
     setExperimentData(newExperiment);
@@ -647,6 +654,88 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     });
   }, []);
 
+  // Get flights for a search, using and updating the per-combination cache.
+  // Target flights (isTarget: true) are hidden until the solutionIteration is reached.
+  const getFlightsWithCache = useCallback((
+    experimentId: string,
+    searchParams: SearchParameters
+  ): { outbound: Flight[]; return: Flight[] } | null => {
+    const experiment = getExperimentById(experimentId);
+    if (!experiment || !experimentDataRef.current) return null;
+
+    const key = getCombinationKey(searchParams);
+    const cache = experimentDataRef.current.searchCache ?? [];
+
+    // Return cached results if this combination was already searched
+    const cached = cache.find(e => e.combinationKey === key);
+    if (cached) return { outbound: cached.outboundFlights, return: cached.returnFlights };
+
+    // New combination — get all flights from config
+    const baseFlights = getFlightsForSearch(experimentId, searchParams);
+    if (!baseFlights) return null;
+
+    // Determine attempt number (1-indexed count of unique searches so far)
+    const attemptNumber = cache.length + 1;
+    const isSolutionIteration = attemptNumber === experiment.solutionIteration;
+
+    let outboundFlights = [...baseFlights.outbound];
+    let returnFlights = [...baseFlights.return];
+
+    if (isSolutionIteration && experiment.solutionFlight) {
+      // Get exact airport codes from the matched combination
+      const combo = findMatchingCombination(experimentId, searchParams);
+      if (combo) {
+        // Build full solution flights by injecting origin/destination from current combo
+        const solutionOut: Flight = {
+          ...experiment.solutionFlight.outbound,
+          origin: combo.departure,
+          destination: combo.destination,
+          departureDate: combo.departureDate,
+          type: "outbound",
+          isTarget: true,
+        };
+        const solutionRet: Flight = {
+          ...experiment.solutionFlight.return,
+          origin: combo.destination,
+          destination: combo.departure,
+          departureDate: combo.returnDate,
+          type: "return",
+          isTarget: true,
+        };
+
+        // Register so getFlightById can find them later
+        registerSolutionFlight(solutionOut.id, solutionOut);
+        registerSolutionFlight(solutionRet.id, solutionRet);
+
+        // Replace flight at configured position (1-indexed → 0-indexed), clamped to array bounds
+        const posOut = Math.min((experiment.solutionPosition?.outbound ?? 1) - 1, outboundFlights.length - 1);
+        const posRet = Math.min((experiment.solutionPosition?.return ?? 1) - 1, returnFlights.length - 1);
+        outboundFlights[posOut] = solutionOut;
+        returnFlights[posRet] = solutionRet;
+      }
+    }
+
+    // Cache these results
+    const entry: SearchCacheEntry = {
+      combinationKey: key,
+      attemptNumber,
+      outboundFlights,
+      returnFlights,
+      timestamp: new Date().toISOString(),
+    };
+
+    setExperimentData(prev =>
+      prev ? { ...prev, searchCache: [...(prev.searchCache ?? []), entry] } : prev
+    );
+
+    return { outbound: outboundFlights, return: returnFlights };
+  }, []);
+
+  // Record whether the participant found and selected the target flight combination
+  const setFoundTarget = useCallback((found: boolean) => {
+    setExperimentData(prev => prev ? { ...prev, foundTargetFlight: found } : prev);
+  }, []);
+
   // Update experiment state for current page
   const updateExperimentState = useCallback((updates: any) => {
     console.log('Updating experiment state:', updates);
@@ -683,7 +772,9 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         stopExperiment,
         abandonExperiment,
         addToSelectionHistory,
-        updateExperimentState
+        updateExperimentState,
+        getFlightsWithCache,
+        setFoundTarget,
       }}
     >
       {children}

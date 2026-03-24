@@ -21,7 +21,7 @@ export default function ConfirmationPage() {
   const [returnFlight, setReturnFlight] = useState<Flight | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const initialRenderRef = useRef(true)
-  const { stopExperiment, addToSelectionHistory } = useEventTracker()
+  const { stopExperiment, addToSelectionHistory, setFoundTarget } = useEventTracker()
 
   // Initialize page data
   useEffect(() => {
@@ -90,6 +90,10 @@ export default function ConfirmationPage() {
       type: "navigation",
       button: "confirm_booking",
     });
+
+    // Record whether the participant found and selected the target flight combination
+    const foundTarget = !!(outboundFlight?.isTarget && returnFlight?.isTarget);
+    setFoundTarget(foundTarget);
 
     // Try to stop tracking the iteration (may fail if page was reloaded)
     try {

@@ -140,6 +140,11 @@ export default function WelcomePage() {
                     <CardDescription className="text-sm leading-relaxed">
                       {experiment.description}
                     </CardDescription>
+                    {debugEnabled && (
+                      <p className="text-xs font-mono text-amber-600 mt-2">
+                        Solution at iteration: {experiment.solutionIteration}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex-shrink-0 md:ml-6">

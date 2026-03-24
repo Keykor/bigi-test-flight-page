@@ -3,7 +3,37 @@
     {
       "id": "1",
       "name": "Buenos Aires to Spain - Cheapest under 14h",
-      "description": "Choose the cheapest outbound and return flights that take under 14 hours from Buenos Aires to Spain. You can fly into Madrid (MAD) or Barcelona (BCN), depart from EZE or AEP. Search for flights departing on June 15, 2026 and returning on June 22, 2026.",
+      "description": "Book the first outbound and return flight you find to Madrid (MAD) that each cost less than $1,100 and take under 14 hours. You can depart from Ezeiza (EZE) or Aeroparque (AEP). Search for flights departing on June 15, 2026 and returning on June 22, 2026.",
+      "solutionIteration": 2,
+      "solutionPosition": { "outbound": 2, "return": 2 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-1",
+          "airline": "Aerolíneas Argentinas",
+          "flightNumber": "AR1050",
+          "departureTime": "20:30",
+          "arrivalTime": "13:30+1",
+          "duration": "12h 00m",
+          "price": 1050,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-1",
+          "airline": "Aerolíneas Argentinas",
+          "flightNumber": "AR1080",
+          "departureTime": "14:00",
+          "arrivalTime": "23:00",
+          "duration": "13h 00m",
+          "price": 1080,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
       "searchCombinations": [
         {
           "departure": "EZE",
@@ -108,118 +138,6 @@
               "arrivalTime": "19:45",
               "duration": "14h 25m",
               "price": 1390,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            }
-          ]
-        },
-        {
-          "departure": "EZE",
-          "destination": "BCN",
-          "departureDate": "2026-06-15",
-          "returnDate": "2026-06-22",
-          "outboundFlights": [
-            {
-              "id": "eze-bcn-ar1155",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1155",
-              "origin": "EZE",
-              "destination": "BCN",
-              "departureTime": "22:00",
-              "arrivalTime": "16:20+1",
-              "duration": "13h 20m",
-              "price": 1290,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "eze-bcn-ib6845",
-              "airline": "Iberia",
-              "flightNumber": "IB6845",
-              "origin": "EZE",
-              "destination": "BCN",
-              "departureTime": "23:15",
-              "arrivalTime": "17:45+1",
-              "duration": "13h 30m",
-              "price": 1340,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "eze-bcn-af229",
-              "airline": "Air France",
-              "flightNumber": "AF229",
-              "origin": "EZE",
-              "destination": "BCN",
-              "departureTime": "09:30",
-              "arrivalTime": "05:15+1",
-              "duration": "14h 45m",
-              "price": 1410,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "bcn-eze-ar1156",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1156",
-              "origin": "BCN",
-              "destination": "EZE",
-              "departureTime": "17:40",
-              "arrivalTime": "03:10+1",
-              "duration": "14h 30m",
-              "price": 1310,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "bcn-eze-ib6846",
-              "airline": "Iberia",
-              "flightNumber": "IB6846",
-              "origin": "BCN",
-              "destination": "EZE",
-              "departureTime": "19:00",
-              "arrivalTime": "04:45+1",
-              "duration": "14h 45m",
-              "price": 1360,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "bcn-eze-kl703",
-              "airline": "KLM",
-              "flightNumber": "KL703",
-              "origin": "BCN",
-              "destination": "EZE",
-              "departureTime": "11:15",
-              "arrivalTime": "21:30",
-              "duration": "15h 15m",
-              "price": 1450,
               "stops": 1,
               "class": "Economy",
               "luggage": "1 checked bag",
@@ -340,125 +258,43 @@
               "type": "return"
             }
           ]
-        },
-        {
-          "departure": "AEP",
-          "destination": "BCN",
-          "departureDate": "2026-06-15",
-          "returnDate": "2026-06-22",
-          "outboundFlights": [
-            {
-              "id": "aep-bcn-la8091",
-              "airline": "LATAM",
-              "flightNumber": "LA8091",
-              "origin": "AEP",
-              "destination": "BCN",
-              "departureTime": "21:30",
-              "arrivalTime": "15:50+1",
-              "duration": "13h 20m",
-              "price": 1270,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "aep-bcn-ar1157",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1157",
-              "origin": "AEP",
-              "destination": "BCN",
-              "departureTime": "22:45",
-              "arrivalTime": "17:15+1",
-              "duration": "13h 30m",
-              "price": 1320,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "aep-bcn-ib6101",
-              "airline": "Iberia",
-              "flightNumber": "IB6101",
-              "origin": "AEP",
-              "destination": "BCN",
-              "departureTime": "08:20",
-              "arrivalTime": "04:40+1",
-              "duration": "15h 20m",
-              "price": 1390,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "bcn-aep-la8092",
-              "airline": "LATAM",
-              "flightNumber": "LA8092",
-              "origin": "BCN",
-              "destination": "AEP",
-              "departureTime": "16:50",
-              "arrivalTime": "02:20+1",
-              "duration": "14h 30m",
-              "price": 1290,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "bcn-aep-ar1158",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1158",
-              "origin": "BCN",
-              "destination": "AEP",
-              "departureTime": "18:30",
-              "arrivalTime": "04:15+1",
-              "duration": "14h 45m",
-              "price": 1340,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "bcn-aep-tp45",
-              "airline": "TAP Portugal",
-              "flightNumber": "TP45",
-              "origin": "BCN",
-              "destination": "AEP",
-              "departureTime": "10:30",
-              "arrivalTime": "21:20",
-              "duration": "15h 50m",
-              "price": 1420,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            }
-          ]
         }
       ]
     },
     {
       "id": "2",
       "name": "São Paulo to Cinque Terre - Cheapest under 15h",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), or Rome Fiumicino (FCO) — you'll travel overland from the airport. Choose the cheapest outbound and return flights that take under 15 hours. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), or Rome Fiumicino (FCO) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950 and take under 15 hours. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "solutionIteration": 2,
+      "solutionPosition": { "outbound": 1, "return": 2 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-2",
+          "airline": "LATAM",
+          "flightNumber": "LA8100",
+          "departureTime": "21:00",
+          "arrivalTime": "09:00+1",
+          "duration": "11h 00m",
+          "price": 880,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-2",
+          "airline": "LATAM",
+          "flightNumber": "LA8101",
+          "departureTime": "16:00",
+          "arrivalTime": "03:30+1",
+          "duration": "11h 30m",
+          "price": 920,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
       "searchCombinations": [
         {
           "departure": "GRU",
@@ -801,7 +637,37 @@
     {
       "id": "test",
       "name": "Test Flight - NYC to LA",
-      "description": "Simple test experiment: Find any direct flight from New York (JFK) to Los Angeles (LAX) departing Mar 27, 2026 and returning Mar 28, 2026.",
+      "description": "Book the first outbound and return flight you find from New York (JFK) to Los Angeles (LAX) that each are direct and cost less than $320. Search for flights departing Mar 27, 2026 and returning Mar 28, 2026.",
+      "solutionIteration": 1,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-test",
+          "airline": "American Airlines",
+          "flightNumber": "AA200",
+          "departureTime": "06:00",
+          "arrivalTime": "09:00",
+          "duration": "5h 00m",
+          "price": 300,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-test",
+          "airline": "American Airlines",
+          "flightNumber": "AA201",
+          "departureTime": "07:00",
+          "arrivalTime": "15:00",
+          "duration": "5h 00m",
+          "price": 310,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
       "searchCombinations": [
         {
           "departure": "JFK",
@@ -823,7 +689,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2026-02-27",
+              "departureDate": "2026-03-27",
               "type": "outbound"
             },
             {
@@ -840,7 +706,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2026-02-27",
+              "departureDate": "2026-03-27",
               "type": "outbound"
             }
           ],
@@ -859,7 +725,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": false,
-              "departureDate": "2026-02-28",
+              "departureDate": "2026-03-28",
               "type": "return"
             },
             {
@@ -876,7 +742,7 @@
               "class": "Economy",
               "luggage": "1 checked bag",
               "refundable": true,
-              "departureDate": "2026-02-28",
+              "departureDate": "2026-03-28",
               "type": "return"
             }
           ]

@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronDown, ChevronUp, Info, Move } from "lucide-react"
 import { getExperimentById } from "@/lib/experiments"
-import { useEventTracker } from "@/context/EventTrackerProvider"
+import { useEventTracker, isDebugMode } from "@/context/EventTrackerProvider"
+import type { SolutionFlightTemplate } from "@/lib/types"
 
 interface FloatingTaskCardProps {
   experimentId: string | null
@@ -21,7 +22,13 @@ const DEFAULT_WIDTH = 320
 export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [description, setDescription] = useState<string>("")
-  const { addToSelectionHistory } = useEventTracker()
+  const [solutionIteration, setSolutionIteration] = useState<number>(0)
+  const [solutionPosition, setSolutionPosition] = useState<{ outbound: number; return: number } | null>(null)
+  const [solutionFlight, setSolutionFlight] = useState<{ outbound: SolutionFlightTemplate; return: SolutionFlightTemplate } | null>(null)
+  const [debugActive, setDebugActive] = useState(false)
+  const { addToSelectionHistory, experimentData } = useEventTracker()
+
+  const searchCache = experimentData?.searchCache ?? []
 
   // Draggable state
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -39,8 +46,12 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       const experiment = getExperimentById(experimentId)
       if (experiment) {
         setDescription(experiment.description)
+        setSolutionIteration(experiment.solutionIteration)
+        setSolutionPosition(experiment.solutionPosition)
+        setSolutionFlight(experiment.solutionFlight)
       }
     }
+    setDebugActive(isDebugMode())
   }, [experimentId])
 
   // Constrain position to viewport bounds
@@ -278,6 +289,44 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
             onWheel={(e) => e.stopPropagation()}
           >
             <p className="text-sm text-gray-700 leading-relaxed">{description}</p>
+            {debugActive && (
+              <div className="mt-3 pt-2 border-t border-amber-200">
+                <p className="text-xs font-mono font-semibold text-amber-700 mb-1">
+                  Debug — Iterations
+                </p>
+                <p className="text-xs font-mono text-amber-600">
+                  Solution at attempt: <strong>{solutionIteration}</strong> · out pos: <strong>{solutionPosition?.outbound ?? "?"}</strong> · ret pos: <strong>{solutionPosition?.return ?? "?"}</strong>
+                </p>
+                {solutionFlight && (
+                  <div className="mt-1 mb-1 space-y-0.5">
+                    <p className="text-xs font-mono text-amber-600">
+                      Out: {solutionFlight.outbound.flightNumber} {solutionFlight.outbound.airline} ${solutionFlight.outbound.price} {solutionFlight.outbound.duration}
+                    </p>
+                    <p className="text-xs font-mono text-amber-600">
+                      Ret: {solutionFlight.return.flightNumber} {solutionFlight.return.airline} ${solutionFlight.return.price} {solutionFlight.return.duration}
+                    </p>
+                  </div>
+                )}
+                <p className="text-xs font-mono text-amber-600">
+                  Attempts made: <strong>{searchCache.length}</strong>
+                  {searchCache.length >= solutionIteration && solutionIteration > 0 && (
+                    <span className="ml-1 text-green-600">Solution reached</span>
+                  )}
+                </p>
+                {searchCache.length > 0 && (
+                  <div className="mt-1 space-y-0.5">
+                    {searchCache.map((entry, i) => (
+                      <p key={entry.combinationKey} className="text-xs font-mono text-gray-500">
+                        {i + 1}. {entry.combinationKey}
+                        {i + 1 === solutionIteration && (
+                          <span className="ml-1 text-green-600 font-semibold">← TARGET</span>
+                        )}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </CardContent>
         )}
         {/* Resize handle - bottom right corner */}

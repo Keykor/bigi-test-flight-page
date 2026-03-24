@@ -88,8 +88,40 @@ export interface SearchCombination {
   returnFlights: Flight[]
 }
 
+// Flight template without location/date fields — those are injected at runtime
+export interface SolutionFlightTemplate {
+  id: string
+  airline: string
+  flightNumber: string
+  departureTime: string
+  arrivalTime: string
+  duration: string
+  price: number
+  stops: number
+  class: string
+  luggage: string
+  refundable: boolean
+}
+
 export interface ExperimentConfig extends ExperimentMetadata {
+  solutionIteration: number // Which unique search attempt reveals the target flight(s)
+  solutionPosition: {
+    outbound: number // 1-indexed position in the outbound list where the target replaces a flight
+    return: number  // 1-indexed position in the return list where the target replaces a flight
+  }
+  solutionFlight: {
+    outbound: SolutionFlightTemplate
+    return: SolutionFlightTemplate
+  }
   searchCombinations: SearchCombination[]
+}
+
+export interface SearchCacheEntry {
+  combinationKey: string // e.g. "EZE-MAD-2026-06-15-2026-06-22"
+  attemptNumber: number // which unique attempt this was (1-indexed)
+  outboundFlights: Flight[] // cached outbound results (may include target)
+  returnFlights: Flight[] // cached return results (may include target)
+  timestamp: string
 }
 
 export interface CentralExperimentData {
@@ -157,4 +189,6 @@ export interface ExperimentData {
   experimentEndTime?: string
   uuid: string
   sampleCounter?: number
+  searchCache: SearchCacheEntry[]
+  foundTargetFlight: boolean | null // null = not yet confirmed
 }

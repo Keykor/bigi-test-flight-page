@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Clock, Luggage, Plane, Calendar } from "lucide-react"
-import { getFlightsForSearch, getFlightById } from "@/lib/experiments"
+import { getFlightById } from "@/lib/experiments"
 import type { Flight, SearchParameters } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { format, parseISO } from "date-fns"
@@ -22,7 +22,7 @@ export default function ReturnResultsPage() {
   const [outboundFlight, setOutboundFlight] = useState<Flight | null>(null)
   const [currentSearchParams, setCurrentSearchParams] = useState<SearchParameters | undefined>(undefined)
   const initialRenderRef = useRef(true)
-  const { addToSelectionHistory, updateExperimentState } = useEventTracker()
+  const { addToSelectionHistory, updateExperimentState, getFlightsWithCache } = useEventTracker()
 
   // Extraer parámetros de búsqueda de la URL - memorizado para evitar recrear en cada renderizado
   const extractSearchParams = useCallback(() => {
@@ -80,8 +80,8 @@ export default function ReturnResultsPage() {
       console.log("Found outbound flight:", selectedOutboundFlight)
       setOutboundFlight(selectedOutboundFlight)
 
-      // Obtener vuelos basados en el experimento y los parámetros de búsqueda
-      const flightsResult = getFlightsForSearch(iterationId, params)
+      // Obtener vuelos basados en el experimento y los parámetros de búsqueda (con caché)
+      const flightsResult = getFlightsWithCache(iterationId, params)
 
       if (!flightsResult) {
         // No matching combination found - redirect to no-flights page

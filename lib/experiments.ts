@@ -4,6 +4,24 @@ import type { ExperimentConfig, SearchCombination, Flight, SearchParameters } fr
 import experimentsData from "../experiments.json"
 import { extractAirportCode } from "./airports"
 
+// Registry for dynamically injected solution flights (keyed by flight id)
+const solutionFlightRegistry = new Map<string, Flight>()
+
+export function registerSolutionFlight(id: string, flight: Flight): void {
+  solutionFlightRegistry.set(id, flight)
+}
+
+/**
+ * Generate a unique cache key for a search combination
+ * @param searchParams - The search parameters
+ * @returns A string key identifying the combination
+ */
+export function getCombinationKey(searchParams: SearchParameters): string {
+  const dep = extractAirportCode(searchParams.departure) ?? searchParams.departure
+  const dest = extractAirportCode(searchParams.destination) ?? searchParams.destination
+  return `${dep.toUpperCase()}-${dest.toUpperCase()}-${searchParams.date}-${searchParams.returnDate}`
+}
+
 /**
  * Load all experiments from the JSON configuration
  * @returns Array of experiment configurations
@@ -113,6 +131,11 @@ export function validateSearchParameters(experimentId: string, searchParams: Sea
  * @returns The flight object or undefined if not found
  */
 export function getFlightById(flightId: string): Flight | undefined {
+  // Check registry first (dynamically injected solution flights)
+  if (solutionFlightRegistry.has(flightId)) {
+    return solutionFlightRegistry.get(flightId)
+  }
+
   const experiments = loadExperiments()
 
   for (const experiment of experiments) {
