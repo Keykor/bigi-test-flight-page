@@ -680,6 +680,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     let outboundFlights = [...baseFlights.outbound];
     let returnFlights = [...baseFlights.return];
+    let resolvedPosition: { outbound: number; return: number } | undefined;
 
     if (isSolutionIteration && experiment.solutionFlight) {
       // Get exact airport codes from the matched combination
@@ -707,11 +708,12 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         registerSolutionFlight(solutionOut.id, solutionOut);
         registerSolutionFlight(solutionRet.id, solutionRet);
 
-        // Replace flight at configured position (1-indexed → 0-indexed), clamped to array bounds
-        const posOut = Math.min((experiment.solutionPosition?.outbound ?? 1) - 1, outboundFlights.length - 1);
-        const posRet = Math.min((experiment.solutionPosition?.return ?? 1) - 1, returnFlights.length - 1);
-        outboundFlights[posOut] = solutionOut;
-        returnFlights[posRet] = solutionRet;
+        // Random 1-indexed position within the flight list bounds
+        const randomPosOut = Math.floor(Math.random() * outboundFlights.length) + 1;
+        const randomPosRet = Math.floor(Math.random() * returnFlights.length) + 1;
+        outboundFlights[randomPosOut - 1] = solutionOut;
+        returnFlights[randomPosRet - 1] = solutionRet;
+        resolvedPosition = { outbound: randomPosOut, return: randomPosRet };
       }
     }
 
@@ -722,6 +724,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       outboundFlights,
       returnFlights,
       timestamp: new Date().toISOString(),
+      ...(resolvedPosition && { resolvedSolutionPosition: resolvedPosition }),
     };
 
     setExperimentData(prev =>

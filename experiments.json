@@ -2,10 +2,13 @@
   "experiments": [
     {
       "id": "1",
-      "name": "Buenos Aires to Spain - Cheapest under 14h",
-      "description": "Book the first outbound and return flight you find to Madrid (MAD) that each cost less than $1,100 and take under 14 hours. You can depart from Ezeiza (EZE) or Aeroparque (AEP). Search for flights departing on June 15, 2026 and returning on June 22, 2026.",
+      "name": "Buenos Aires to Spain - Cheapest",
+      "description": "Book the first outbound and return flight you find to Madrid (MAD) that each cost less than $1,100. You can depart from Ezeiza (EZE) or Aeroparque (AEP). Search for flights departing on June 15, 2026 and returning on June 22, 2026.",
       "solutionIteration": 2,
-      "solutionPosition": { "outbound": 2, "return": 2 },
+      "solutionPosition": {
+        "outbound": 2,
+        "return": 2
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-1",
@@ -263,10 +266,13 @@
     },
     {
       "id": "2",
-      "name": "São Paulo to Cinque Terre - Cheapest under 15h",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), or Rome Fiumicino (FCO) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950 and take under 15 hours. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "name": "São Paulo to Cinque Terre - Cheapest",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), or Rome Fiumicino (FCO) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
       "solutionIteration": 2,
-      "solutionPosition": { "outbound": 1, "return": 2 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 2
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-2",
@@ -457,7 +463,7 @@
               "departureTime": "08:00",
               "arrivalTime": "05:30+1",
               "duration": "16h 30m",
-              "price": 950,
+              "price": 960,
               "stops": 1,
               "class": "Economy",
               "luggage": "Carry-on only",
@@ -639,7 +645,10 @@
       "name": "Test Flight - NYC to LA",
       "description": "Book the first outbound and return flight you find from New York (JFK) to Los Angeles (LAX) that each are direct and cost less than $320. Search for flights departing Mar 27, 2026 and returning Mar 28, 2026.",
       "solutionIteration": 1,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-test",

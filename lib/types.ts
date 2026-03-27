@@ -122,6 +122,7 @@ export interface SearchCacheEntry {
   outboundFlights: Flight[] // cached outbound results (may include target)
   returnFlights: Flight[] // cached return results (may include target)
   timestamp: string
+  resolvedSolutionPosition?: { outbound: number; return: number } // random position generated at solution iteration
 }
 
 export interface CentralExperimentData {

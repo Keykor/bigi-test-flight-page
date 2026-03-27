@@ -23,7 +23,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [description, setDescription] = useState<string>("")
   const [solutionIteration, setSolutionIteration] = useState<number>(0)
-  const [solutionPosition, setSolutionPosition] = useState<{ outbound: number; return: number } | null>(null)
+
   const [solutionFlight, setSolutionFlight] = useState<{ outbound: SolutionFlightTemplate; return: SolutionFlightTemplate } | null>(null)
   const [debugActive, setDebugActive] = useState(false)
   const { addToSelectionHistory, experimentData } = useEventTracker()
@@ -47,7 +47,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       if (experiment) {
         setDescription(experiment.description)
         setSolutionIteration(experiment.solutionIteration)
-        setSolutionPosition(experiment.solutionPosition)
+
         setSolutionFlight(experiment.solutionFlight)
       }
     }
@@ -295,7 +295,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
                   Debug — Iterations
                 </p>
                 <p className="text-xs font-mono text-amber-600">
-                  Solution at attempt: <strong>{solutionIteration}</strong> · out pos: <strong>{solutionPosition?.outbound ?? "?"}</strong> · ret pos: <strong>{solutionPosition?.return ?? "?"}</strong>
+                  Solution at attempt: <strong>{solutionIteration}</strong> · out pos: <strong>{searchCache.find(e => e.attemptNumber === solutionIteration)?.resolvedSolutionPosition?.outbound ?? "?"}</strong> · ret pos: <strong>{searchCache.find(e => e.attemptNumber === solutionIteration)?.resolvedSolutionPosition?.return ?? "?"}</strong>
                 </p>
                 {solutionFlight && (
                   <div className="mt-1 mb-1 space-y-0.5">
