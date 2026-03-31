@@ -42,6 +42,8 @@ export const airports: Airport[] = [
   { code: "GRU", name: "São Paulo/Guarulhos International Airport", city: "São Paulo", country: "Brazil" },
   { code: "PSA", name: "Pisa International Airport", city: "Pisa", country: "Italy" },
   { code: "FLR", name: "Florence Airport", city: "Florence", country: "Italy" },
+  { code: "NAP", name: "Naples International Airport", city: "Naples", country: "Italy" },
+  { code: "BLQ", name: "Bologna Guglielmo Marconi Airport", city: "Bologna", country: "Italy" },
 ]
 
 /**

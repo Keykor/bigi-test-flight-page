@@ -708,12 +708,10 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         registerSolutionFlight(solutionOut.id, solutionOut);
         registerSolutionFlight(solutionRet.id, solutionRet);
 
-        // Random 1-indexed position within the flight list bounds
-        const randomPosOut = Math.floor(Math.random() * outboundFlights.length) + 1;
-        const randomPosRet = Math.floor(Math.random() * returnFlights.length) + 1;
-        outboundFlights[randomPosOut - 1] = solutionOut;
-        returnFlights[randomPosRet - 1] = solutionRet;
-        resolvedPosition = { outbound: randomPosOut, return: randomPosRet };
+        // Always inject solution flight at position 1 (flights are price-sorted ASC)
+        outboundFlights[0] = solutionOut;
+        returnFlights[0] = solutionRet;
+        resolvedPosition = { outbound: 1, return: 1 };
       }
     }
 

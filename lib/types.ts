@@ -84,8 +84,8 @@ export interface SearchCombination {
   destination: string // Airport code (e.g., "MAD")
   departureDate: string // ISO date string (e.g., "2025-06-15")
   returnDate: string // ISO date string (e.g., "2025-06-22")
-  outboundFlights: Flight[]
-  returnFlights: Flight[]
+  outboundFlights?: Flight[]
+  returnFlights?: Flight[]
 }
 
 // Flight template without location/date fields — those are injected at runtime

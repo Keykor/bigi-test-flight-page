@@ -2,285 +2,18 @@
   "experiments": [
     {
       "id": "1",
-      "name": "Buenos Aires to Spain - Cheapest",
-      "description": "Book the first outbound and return flight you find to Madrid (MAD) that each cost less than $1,100. You can depart from Ezeiza (EZE) or Aeroparque (AEP). Search for flights departing on June 15, 2026 and returning on June 22, 2026.",
-      "solutionIteration": 2,
-      "solutionPosition": {
-        "outbound": 2,
-        "return": 2
-      },
+      "name": "GRU to Cinque Terre — Iter 1A",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 3, 2026 and returning on July 10, 2026.",
+      "solutionIteration": 1,
+      "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-1",
-          "airline": "Aerolíneas Argentinas",
-          "flightNumber": "AR1050",
-          "departureTime": "20:30",
-          "arrivalTime": "13:30+1",
-          "duration": "12h 00m",
-          "price": 1050,
-          "stops": 0,
-          "class": "Economy",
-          "luggage": "1 checked bag",
-          "refundable": false
-        },
-        "return": {
-          "id": "solution-ret-1",
-          "airline": "Aerolíneas Argentinas",
-          "flightNumber": "AR1080",
-          "departureTime": "14:00",
-          "arrivalTime": "23:00",
-          "duration": "13h 00m",
-          "price": 1080,
-          "stops": 0,
-          "class": "Economy",
-          "luggage": "1 checked bag",
-          "refundable": false
-        }
-      },
-      "searchCombinations": [
-        {
-          "departure": "EZE",
-          "destination": "MAD",
-          "departureDate": "2026-06-15",
-          "returnDate": "2026-06-22",
-          "outboundFlights": [
-            {
-              "id": "eze-mad-ib6841",
-              "airline": "Iberia",
-              "flightNumber": "IB6841",
-              "origin": "EZE",
-              "destination": "MAD",
-              "departureTime": "23:30",
-              "arrivalTime": "17:15+1",
-              "duration": "12h 45m",
-              "price": 1250,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "eze-mad-ar1133",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1133",
-              "origin": "EZE",
-              "destination": "MAD",
-              "departureTime": "21:45",
-              "arrivalTime": "15:30+1",
-              "duration": "12h 45m",
-              "price": 1180,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "eze-mad-ua849",
-              "airline": "United Airlines",
-              "flightNumber": "UA849",
-              "origin": "EZE",
-              "destination": "MAD",
-              "departureTime": "08:15",
-              "arrivalTime": "02:30+1",
-              "duration": "13h 15m",
-              "price": 1320,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "mad-eze-ib6842",
-              "airline": "Iberia",
-              "flightNumber": "IB6842",
-              "origin": "MAD",
-              "destination": "EZE",
-              "departureTime": "18:45",
-              "arrivalTime": "03:30+1",
-              "duration": "13h 45m",
-              "price": 1300,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "mad-eze-ar1134",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1134",
-              "origin": "MAD",
-              "destination": "EZE",
-              "departureTime": "16:30",
-              "arrivalTime": "01:15+1",
-              "duration": "13h 45m",
-              "price": 1220,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "mad-eze-lh495",
-              "airline": "Lufthansa",
-              "flightNumber": "LH495",
-              "origin": "MAD",
-              "destination": "EZE",
-              "departureTime": "10:20",
-              "arrivalTime": "19:45",
-              "duration": "14h 25m",
-              "price": 1390,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            }
-          ]
-        },
-        {
-          "departure": "AEP",
-          "destination": "MAD",
-          "departureDate": "2026-06-15",
-          "returnDate": "2026-06-22",
-          "outboundFlights": [
-            {
-              "id": "aep-mad-ar1131",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1131",
-              "origin": "AEP",
-              "destination": "MAD",
-              "departureTime": "20:30",
-              "arrivalTime": "14:15+1",
-              "duration": "12h 45m",
-              "price": 1150,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "aep-mad-la8095",
-              "airline": "LATAM",
-              "flightNumber": "LA8095",
-              "origin": "AEP",
-              "destination": "MAD",
-              "departureTime": "22:15",
-              "arrivalTime": "16:00+1",
-              "duration": "12h 45m",
-              "price": 1210,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            },
-            {
-              "id": "aep-mad-cm465",
-              "airline": "Copa Airlines",
-              "flightNumber": "CM465",
-              "origin": "AEP",
-              "destination": "MAD",
-              "departureTime": "07:45",
-              "arrivalTime": "01:50+1",
-              "duration": "13h 05m",
-              "price": 1280,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-06-15",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "mad-aep-ar1132",
-              "airline": "Aerolíneas Argentinas",
-              "flightNumber": "AR1132",
-              "origin": "MAD",
-              "destination": "AEP",
-              "departureTime": "15:20",
-              "arrivalTime": "00:05+1",
-              "duration": "13h 45m",
-              "price": 1190,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "mad-aep-la8096",
-              "airline": "LATAM",
-              "flightNumber": "LA8096",
-              "origin": "MAD",
-              "destination": "AEP",
-              "departureTime": "17:10",
-              "arrivalTime": "01:55+1",
-              "duration": "13h 45m",
-              "price": 1250,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            },
-            {
-              "id": "mad-aep-av27",
-              "airline": "Avianca",
-              "flightNumber": "AV27",
-              "origin": "MAD",
-              "destination": "AEP",
-              "departureTime": "09:40",
-              "arrivalTime": "19:30",
-              "duration": "14h 50m",
-              "price": 1350,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-06-22",
-              "type": "return"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "2",
-      "name": "São Paulo to Cinque Terre - Cheapest",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), or Rome Fiumicino (FCO) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
-      "solutionIteration": 2,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 2
-      },
-      "solutionFlight": {
-        "outbound": {
-          "id": "solution-out-2",
           "airline": "LATAM",
           "flightNumber": "LA8100",
           "departureTime": "21:00",
           "arrivalTime": "09:00+1",
-          "duration": "11h 00m",
+          "duration": "12h 00m",
           "price": 880,
           "stops": 0,
           "class": "Economy",
@@ -288,7 +21,7 @@
           "refundable": false
         },
         "return": {
-          "id": "solution-ret-2",
+          "id": "solution-ret-1",
           "airline": "LATAM",
           "flightNumber": "LA8101",
           "departureTime": "16:00",
@@ -302,375 +35,41 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-07-10",
-          "returnDate": "2026-07-17",
-          "outboundFlights": [
-            {
-              "id": "gru-fco-la8170",
-              "airline": "LATAM",
-              "flightNumber": "LA8170",
-              "origin": "GRU",
-              "destination": "FCO",
-              "departureTime": "22:15",
-              "arrivalTime": "14:45+1",
-              "duration": "11h 30m",
-              "price": 1150,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            },
-            {
-              "id": "gru-fco-az673",
-              "airline": "ITA Airways",
-              "flightNumber": "AZ673",
-              "origin": "GRU",
-              "destination": "FCO",
-              "departureTime": "23:00",
-              "arrivalTime": "15:45+1",
-              "duration": "11h 45m",
-              "price": 1250,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            },
-            {
-              "id": "gru-fco-tp189",
-              "airline": "TAP Portugal",
-              "flightNumber": "TP189",
-              "origin": "GRU",
-              "destination": "FCO",
-              "departureTime": "09:30",
-              "arrivalTime": "05:50+1",
-              "duration": "15h 20m",
-              "price": 980,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "fco-gru-la8171",
-              "airline": "LATAM",
-              "flightNumber": "LA8171",
-              "origin": "FCO",
-              "destination": "GRU",
-              "departureTime": "17:30",
-              "arrivalTime": "00:45+1",
-              "duration": "12h 15m",
-              "price": 1200,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            },
-            {
-              "id": "fco-gru-az674",
-              "airline": "ITA Airways",
-              "flightNumber": "AZ674",
-              "origin": "FCO",
-              "destination": "GRU",
-              "departureTime": "19:00",
-              "arrivalTime": "02:00+1",
-              "duration": "12h 00m",
-              "price": 1300,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            },
-            {
-              "id": "fco-gru-tp190",
-              "airline": "TAP Portugal",
-              "flightNumber": "TP190",
-              "origin": "FCO",
-              "destination": "GRU",
-              "departureTime": "10:15",
-              "arrivalTime": "21:15",
-              "duration": "16h 00m",
-              "price": 1020,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            }
-          ]
-        },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-07-10",
-          "returnDate": "2026-07-17",
-          "outboundFlights": [
-            {
-              "id": "gru-psa-ib6531",
-              "airline": "Iberia",
-              "flightNumber": "IB6531",
-              "origin": "GRU",
-              "destination": "PSA",
-              "departureTime": "21:30",
-              "arrivalTime": "17:10+1",
-              "duration": "14h 40m",
-              "price": 1080,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            },
-            {
-              "id": "gru-psa-af459",
-              "airline": "Air France",
-              "flightNumber": "AF459",
-              "origin": "GRU",
-              "destination": "PSA",
-              "departureTime": "22:45",
-              "arrivalTime": "19:00+1",
-              "duration": "15h 15m",
-              "price": 1190,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            },
-            {
-              "id": "gru-psa-kl792",
-              "airline": "KLM",
-              "flightNumber": "KL792",
-              "origin": "GRU",
-              "destination": "PSA",
-              "departureTime": "08:00",
-              "arrivalTime": "05:30+1",
-              "duration": "16h 30m",
-              "price": 960,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "psa-gru-ib6532",
-              "airline": "Iberia",
-              "flightNumber": "IB6532",
-              "origin": "PSA",
-              "destination": "GRU",
-              "departureTime": "16:30",
-              "arrivalTime": "02:20+1",
-              "duration": "14h 50m",
-              "price": 1100,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            },
-            {
-              "id": "psa-gru-af460",
-              "airline": "Air France",
-              "flightNumber": "AF460",
-              "origin": "PSA",
-              "destination": "GRU",
-              "departureTime": "14:00",
-              "arrivalTime": "00:45+1",
-              "duration": "15h 45m",
-              "price": 1220,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            },
-            {
-              "id": "psa-gru-kl793",
-              "airline": "KLM",
-              "flightNumber": "KL793",
-              "origin": "PSA",
-              "destination": "GRU",
-              "departureTime": "09:45",
-              "arrivalTime": "21:55",
-              "duration": "17h 10m",
-              "price": 980,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            }
-          ]
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-07-10",
-          "returnDate": "2026-07-17",
-          "outboundFlights": [
-            {
-              "id": "gru-flr-lh517",
-              "airline": "Lufthansa",
-              "flightNumber": "LH517",
-              "origin": "GRU",
-              "destination": "FLR",
-              "departureTime": "22:00",
-              "arrivalTime": "17:15+1",
-              "duration": "14h 15m",
-              "price": 1120,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            },
-            {
-              "id": "gru-flr-lx93",
-              "airline": "Swiss",
-              "flightNumber": "LX93",
-              "origin": "GRU",
-              "destination": "FLR",
-              "departureTime": "23:30",
-              "arrivalTime": "19:20+1",
-              "duration": "14h 50m",
-              "price": 1200,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            },
-            {
-              "id": "gru-flr-tk16",
-              "airline": "Turkish Airlines",
-              "flightNumber": "TK16",
-              "origin": "GRU",
-              "destination": "FLR",
-              "departureTime": "07:15",
-              "arrivalTime": "05:25+1",
-              "duration": "17h 10m",
-              "price": 990,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-07-10",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "flr-gru-lh518",
-              "airline": "Lufthansa",
-              "flightNumber": "LH518",
-              "origin": "FLR",
-              "destination": "GRU",
-              "departureTime": "15:00",
-              "arrivalTime": "00:50+1",
-              "duration": "14h 50m",
-              "price": 1160,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            },
-            {
-              "id": "flr-gru-lx94",
-              "airline": "Swiss",
-              "flightNumber": "LX94",
-              "origin": "FLR",
-              "destination": "GRU",
-              "departureTime": "16:45",
-              "arrivalTime": "02:55+1",
-              "duration": "15h 10m",
-              "price": 1250,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            },
-            {
-              "id": "flr-gru-tk17",
-              "airline": "Turkish Airlines",
-              "flightNumber": "TK17",
-              "origin": "FLR",
-              "destination": "GRU",
-              "departureTime": "08:30",
-              "arrivalTime": "21:10",
-              "duration": "17h 40m",
-              "price": 1030,
-              "stops": 1,
-              "class": "Economy",
-              "luggage": "Carry-on only",
-              "refundable": false,
-              "departureDate": "2026-07-17",
-              "type": "return"
-            }
-          ]
-        }
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-03", "returnDate": "2026-07-10" }
       ]
     },
     {
-      "id": "test",
-      "name": "Test Flight - NYC to LA",
-      "description": "Book the first outbound and return flight you find from New York (JFK) to Los Angeles (LAX) that each are direct and cost less than $320. Search for flights departing Mar 27, 2026 and returning Mar 28, 2026.",
+      "id": "2",
+      "name": "GRU to Cinque Terre — Iter 1B",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 3, 2026 and returning on July 10, 2026.",
       "solutionIteration": 1,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
+      "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
         "outbound": {
-          "id": "solution-out-test",
-          "airline": "American Airlines",
-          "flightNumber": "AA200",
-          "departureTime": "06:00",
-          "arrivalTime": "09:00",
-          "duration": "5h 00m",
-          "price": 300,
+          "id": "solution-out-2",
+          "airline": "ITA Airways",
+          "flightNumber": "AZ699",
+          "departureTime": "22:30",
+          "arrivalTime": "10:30+1",
+          "duration": "12h 00m",
+          "price": 895,
           "stops": 0,
           "class": "Economy",
           "luggage": "1 checked bag",
           "refundable": false
         },
         "return": {
-          "id": "solution-ret-test",
-          "airline": "American Airlines",
-          "flightNumber": "AA201",
-          "departureTime": "07:00",
-          "arrivalTime": "15:00",
-          "duration": "5h 00m",
-          "price": 310,
+          "id": "solution-ret-2",
+          "airline": "ITA Airways",
+          "flightNumber": "AZ700",
+          "departureTime": "17:00",
+          "arrivalTime": "04:30+1",
+          "duration": "11h 30m",
+          "price": 930,
           "stops": 0,
           "class": "Economy",
           "luggage": "1 checked bag",
@@ -678,84 +77,347 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "JFK",
-          "destination": "LAX",
-          "departureDate": "2026-03-27",
-          "returnDate": "2026-03-28",
-          "outboundFlights": [
-            {
-              "id": "test-jfk-lax-aa100",
-              "airline": "American Airlines",
-              "flightNumber": "AA100",
-              "origin": "JFK",
-              "destination": "LAX",
-              "departureTime": "08:00",
-              "arrivalTime": "11:30",
-              "duration": "5h 30m",
-              "price": 350,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-03-27",
-              "type": "outbound"
-            },
-            {
-              "id": "test-jfk-lax-dl200",
-              "airline": "Delta",
-              "flightNumber": "DL200",
-              "origin": "JFK",
-              "destination": "LAX",
-              "departureTime": "14:00",
-              "arrivalTime": "17:30",
-              "duration": "5h 30m",
-              "price": 380,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-03-27",
-              "type": "outbound"
-            }
-          ],
-          "returnFlights": [
-            {
-              "id": "test-lax-jfk-aa101",
-              "airline": "American Airlines",
-              "flightNumber": "AA101",
-              "origin": "LAX",
-              "destination": "JFK",
-              "departureTime": "09:00",
-              "arrivalTime": "17:30",
-              "duration": "5h 30m",
-              "price": 360,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": false,
-              "departureDate": "2026-03-28",
-              "type": "return"
-            },
-            {
-              "id": "test-lax-jfk-dl201",
-              "airline": "Delta",
-              "flightNumber": "DL201",
-              "origin": "LAX",
-              "destination": "JFK",
-              "departureTime": "15:00",
-              "arrivalTime": "23:30",
-              "duration": "5h 30m",
-              "price": 390,
-              "stops": 0,
-              "class": "Economy",
-              "luggage": "1 checked bag",
-              "refundable": true,
-              "departureDate": "2026-03-28",
-              "type": "return"
-            }
-          ]
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-03", "returnDate": "2026-07-10" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-03", "returnDate": "2026-07-10" }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "GRU to Cinque Terre — Iter 2A",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "solutionIteration": 2,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-3",
+          "airline": "Air France",
+          "flightNumber": "AF9501",
+          "departureTime": "20:45",
+          "arrivalTime": "08:45+1",
+          "duration": "12h 00m",
+          "price": 870,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-3",
+          "airline": "Air France",
+          "flightNumber": "AF9502",
+          "departureTime": "15:30",
+          "arrivalTime": "03:00+1",
+          "duration": "11h 30m",
+          "price": 910,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-10", "returnDate": "2026-07-17" }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "GRU to Cinque Terre — Iter 2B",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "solutionIteration": 2,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-4",
+          "airline": "Iberia",
+          "flightNumber": "IB7801",
+          "departureTime": "21:30",
+          "arrivalTime": "09:30+1",
+          "duration": "12h 00m",
+          "price": 890,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-4",
+          "airline": "Iberia",
+          "flightNumber": "IB7802",
+          "departureTime": "16:30",
+          "arrivalTime": "04:00+1",
+          "duration": "11h 30m",
+          "price": 925,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-10", "returnDate": "2026-07-17" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-10", "returnDate": "2026-07-17" }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "GRU to Cinque Terre — Iter 3A",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 17, 2026 and returning on July 24, 2026.",
+      "solutionIteration": 3,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-5",
+          "airline": "Lufthansa",
+          "flightNumber": "LH8201",
+          "departureTime": "22:00",
+          "arrivalTime": "10:00+1",
+          "duration": "12h 00m",
+          "price": 860,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-5",
+          "airline": "Lufthansa",
+          "flightNumber": "LH8202",
+          "departureTime": "15:00",
+          "arrivalTime": "02:30+1",
+          "duration": "11h 30m",
+          "price": 905,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-17", "returnDate": "2026-07-24" }
+      ]
+    },
+    {
+      "id": "6",
+      "name": "GRU to Cinque Terre — Iter 3B",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 17, 2026 and returning on July 24, 2026.",
+      "solutionIteration": 3,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-6",
+          "airline": "Turkish Airlines",
+          "flightNumber": "TK8501",
+          "departureTime": "20:30",
+          "arrivalTime": "08:30+1",
+          "duration": "12h 00m",
+          "price": 875,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-6",
+          "airline": "Turkish Airlines",
+          "flightNumber": "TK8502",
+          "departureTime": "17:30",
+          "arrivalTime": "05:00+1",
+          "duration": "11h 30m",
+          "price": 915,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-17", "returnDate": "2026-07-24" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-17", "returnDate": "2026-07-24" }
+      ]
+    },
+    {
+      "id": "7",
+      "name": "GRU to Cinque Terre — Iter 4A",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 24, 2026 and returning on July 31, 2026.",
+      "solutionIteration": 4,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-7",
+          "airline": "KLM",
+          "flightNumber": "KL9001",
+          "departureTime": "21:45",
+          "arrivalTime": "09:45+1",
+          "duration": "12h 00m",
+          "price": 850,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-7",
+          "airline": "KLM",
+          "flightNumber": "KL9002",
+          "departureTime": "16:15",
+          "arrivalTime": "03:45+1",
+          "duration": "11h 30m",
+          "price": 900,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-24", "returnDate": "2026-07-31" }
+      ]
+    },
+    {
+      "id": "8",
+      "name": "GRU to Cinque Terre — Iter 4B",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 24, 2026 and returning on July 31, 2026.",
+      "solutionIteration": 4,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-8",
+          "airline": "Swiss",
+          "flightNumber": "LX8801",
+          "departureTime": "23:00",
+          "arrivalTime": "11:00+1",
+          "duration": "12h 00m",
+          "price": 885,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-8",
+          "airline": "Swiss",
+          "flightNumber": "LX8802",
+          "departureTime": "18:00",
+          "arrivalTime": "05:30+1",
+          "duration": "11h 30m",
+          "price": 935,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-24", "returnDate": "2026-07-31" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-24", "returnDate": "2026-07-31" }
+      ]
+    },
+    {
+      "id": "9",
+      "name": "GRU to Cinque Terre — Iter 5A",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on August 7, 2026 and returning on August 14, 2026.",
+      "solutionIteration": 5,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-9",
+          "airline": "TAP Portugal",
+          "flightNumber": "TP8901",
+          "departureTime": "21:15",
+          "arrivalTime": "09:15+1",
+          "duration": "12h 00m",
+          "price": 840,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-9",
+          "airline": "TAP Portugal",
+          "flightNumber": "TP8902",
+          "departureTime": "15:45",
+          "arrivalTime": "03:15+1",
+          "duration": "11h 30m",
+          "price": 895,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-08-07", "returnDate": "2026-08-14" }
+      ]
+    },
+    {
+      "id": "10",
+      "name": "GRU to Cinque Terre — Iter 5B",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on August 7, 2026 and returning on August 14, 2026.",
+      "solutionIteration": 5,
+      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-10",
+          "airline": "Alitalia",
+          "flightNumber": "AZ8101",
+          "departureTime": "22:15",
+          "arrivalTime": "10:15+1",
+          "duration": "12h 00m",
+          "price": 865,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-10",
+          "airline": "Alitalia",
+          "flightNumber": "AZ8102",
+          "departureTime": "17:15",
+          "arrivalTime": "04:45+1",
+          "duration": "11h 30m",
+          "price": 910,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-08-07", "returnDate": "2026-08-14" }
       ]
     }
   ]
