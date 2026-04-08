@@ -285,24 +285,12 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   
   const downloadExperimentData = async (data: ExperimentData) => {
     const jsonData = JSON.stringify(data, null, 2);
-
-    // In debug mode, skip Vercel Blob upload and open locally
-    if (isDebugMode()) {
-      console.log("Debug mode: opening experiment data locally instead of uploading");
-      const blob = new Blob([jsonData], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
-      return;
-    }
+    const participant = data.participantId || "unknown";
+    const experiment = data.experimentId || "unknown";
+    const filename = `P${participant}-E${experiment}.json`;
 
     try {
       const blob = new Blob([jsonData], { type: "application/json" });
-
-      const participant = data.participantId || "unknown";
-      const experiment = data.experimentId || "unknown";
-      const filename = `P${participant}-E${experiment}.json`;
-
-      // Upload to Vercel Blob Storage via API route
       const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
         method: "POST",
         body: blob,
@@ -315,16 +303,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       const { url } = await response.json();
       console.log("Experiment data uploaded to Vercel Blob:", url);
     } catch (error) {
-      console.error("Error uploading experiment data, opening in new tab as fallback:", error);
-
-      // Fallback: open JSON in new tab
-      try {
-        const fallbackBlob = new Blob([jsonData], { type: "application/json" });
-        const fallbackUrl = URL.createObjectURL(fallbackBlob);
-        window.open(fallbackUrl, "_blank");
-      } catch (fallbackError) {
-        console.error("Fallback also failed:", fallbackError);
-      }
+      console.error("Error uploading experiment data:", error);
     }
   };
 
