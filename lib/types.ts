@@ -77,6 +77,7 @@ export interface ExperimentMetadata {
   id: string
   name: string
   description: string
+  priceConstraint?: string   // e.g. "$950"
 }
 
 export interface SearchCombination {

@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronDown, ChevronUp, Info, Move } from "lucide-react"
 import { getExperimentById } from "@/lib/experiments"
 import { useEventTracker, isDebugMode } from "@/context/EventTrackerProvider"
-import type { SolutionFlightTemplate } from "@/lib/types"
+import type { SolutionFlightTemplate, SearchCombination } from "@/lib/types"
+import { getAirportByCode } from "@/lib/airports"
 
 interface FloatingTaskCardProps {
   experimentId: string | null
@@ -21,7 +22,8 @@ const DEFAULT_WIDTH = 320
 
 export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
-  const [description, setDescription] = useState<string>("")
+  const [searchCombinations, setSearchCombinations] = useState<SearchCombination[]>([])
+  const [priceConstraint, setPriceConstraint] = useState<string>("")
   const [solutionIteration, setSolutionIteration] = useState<number>(0)
 
   const [solutionFlight, setSolutionFlight] = useState<{ outbound: SolutionFlightTemplate; return: SolutionFlightTemplate } | null>(null)
@@ -45,9 +47,9 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     if (experimentId) {
       const experiment = getExperimentById(experimentId)
       if (experiment) {
-        setDescription(experiment.description)
+        setSearchCombinations(experiment.searchCombinations)
+        setPriceConstraint(experiment.priceConstraint ?? "")
         setSolutionIteration(experiment.solutionIteration)
-
         setSolutionFlight(experiment.solutionFlight)
       }
     }
@@ -237,9 +239,16 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     })
   }
 
-  if (!experimentId || !description) {
+  if (!experimentId || !searchCombinations.length) {
     return null
   }
+
+  const departureCode = searchCombinations[0].departure
+  const departureCity = getAirportByCode(departureCode)?.city ?? departureCode
+  const destinations = [...new Set(searchCombinations.map(c => c.destination))]
+  const departureDate = new Date(searchCombinations[0].departureDate + "T12:00:00")
+  const returnDate = new Date(searchCombinations[0].returnDate + "T12:00:00")
+  const formatDate = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 
   return (
     <div
@@ -288,7 +297,39 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
             }}
             onWheel={(e) => e.stopPropagation()}
           >
-            <p className="text-sm text-gray-700 leading-relaxed">{description}</p>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li className="flex gap-2">
+                <span className="font-semibold text-gray-500 w-20 shrink-0">From</span>
+                <span>{departureCode} — {departureCity}</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-gray-500 w-20 shrink-0">To</span>
+                <span>
+                  {destinations.map((code, i) => {
+                    const city = getAirportByCode(code)?.city ?? code
+                    return (
+                      <span key={code}>
+                        {code} ({city}){i < destinations.length - 1 ? ", " : ""}
+                      </span>
+                    )
+                  })}
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-gray-500 w-20 shrink-0">Outbound</span>
+                <span>{formatDate(departureDate)}</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-gray-500 w-20 shrink-0">Return</span>
+                <span>{formatDate(returnDate)}</span>
+              </li>
+              {priceConstraint && (
+                <li className="flex gap-2">
+                  <span className="font-semibold text-gray-500 w-20 shrink-0">Budget</span>
+                  <span>Under {priceConstraint} per flight</span>
+                </li>
+              )}
+            </ul>
             {debugActive && (
               <div className="mt-3 pt-2 border-t border-amber-200">
                 <p className="text-xs font-mono font-semibold text-amber-700 mb-1">
