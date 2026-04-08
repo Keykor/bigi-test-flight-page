@@ -129,21 +129,21 @@ interface ExperimentData {
   experimentStartTime: string;
   experimentEndTime?: string;
   uuid: string;
-  sampleCounter?: number;
+  participantRunNumber?: number;
   searchCache: SearchCacheEntry[];
-  foundTargetFlight: boolean | null;
+  targetFlightSelected: { outbound: boolean; return: boolean } | null;
 }
 
 interface EventTrackerContextType {
   isTracking: boolean;
   experimentData: ExperimentData | null;
   startExperiment: (experimentId: string) => void;
-  stopExperiment: (foundTargetFlight?: boolean) => void;
+  stopExperiment: (targetFlightSelected?: { outbound: boolean; return: boolean }) => void;
   abandonExperiment: () => void;
   addToSelectionHistory: (entry: any) => void;
   updateExperimentState: (updates: any) => void;
   getFlightsWithCache: (experimentId: string, searchParams: SearchParameters) => { outbound: Flight[]; return: Flight[] } | null;
-  setFoundTarget: (found: boolean) => void;
+  setFoundTarget: (found: { outbound: boolean; return: boolean }) => void;
 }
 
 const EventTrackerContext = createContext<EventTrackerContextType | undefined>(undefined);
@@ -226,7 +226,7 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       experimentStartTime: new Date().toISOString(),
       uuid: uuid,
       searchCache: [],
-      foundTargetFlight: null,
+      targetFlightSelected: null,
     };
 
     setExperimentData(newExperiment);
@@ -234,14 +234,15 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     console.log(`Experiment started: ${experiment.name}, participant: ${participantId}`);
   }, [uuid]);
 
-  const stopExperiment = (foundTargetFlight?: boolean) => {
-    if (!experimentData) {
+  const stopExperiment = (targetFlightSelected?: { outbound: boolean; return: boolean }) => {
+    const currentData = experimentDataRef.current;
+    if (!currentData) {
       console.warn("No experiment in progress! Experiment may have already been stopped or page was reloaded.");
       return;
     }
 
     const experimentEndTime = new Date().toISOString();
-    const updatedPages = [...experimentData.pages];
+    const updatedPages = [...currentData.pages];
 
     if (updatedPages.length > 0) {
       const lastPageIndex = updatedPages.length - 1;
@@ -254,9 +255,9 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const newSampleCounter = incrementSampleCounter();
 
     const updatedExperimentData = {
-      ...experimentData,
-      ...(foundTargetFlight !== undefined ? { foundTargetFlight } : {}),
-      sampleCounter: newSampleCounter,
+      ...currentData,
+      ...(targetFlightSelected !== undefined ? { targetFlightSelected } : {}),
+      participantRunNumber: newSampleCounter,
       experimentEndTime,
       pages: updatedPages,
     };
@@ -268,12 +269,12 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setExperimentData(updatedExperimentData);
 
     // Mark experiment as completed in localStorage
-    if (experimentData.iterationId) {
-      markExperimentAsCompleted(experimentData.iterationId);
+    if (currentData.iterationId) {
+      markExperimentAsCompleted(currentData.iterationId);
       try {
-        sessionStorage.removeItem(`experiment_data_${experimentData.iterationId}`);
-        sessionStorage.removeItem(`search_form_${experimentData.iterationId}`);
-        console.log(`Cleaned up sessionStorage for experiment ${experimentData.iterationId}`);
+        sessionStorage.removeItem(`experiment_data_${currentData.iterationId}`);
+        sessionStorage.removeItem(`search_form_${currentData.iterationId}`);
+        console.log(`Cleaned up sessionStorage for experiment ${currentData.iterationId}`);
       } catch (e) {
         console.error("Error cleaning up sessionStorage:", e);
       }
@@ -284,7 +285,9 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
   
   const downloadExperimentData = async (data: ExperimentData) => {
-    const jsonData = JSON.stringify(data, null, 2);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { searchCache, iterationId, ...dataToExport } = data;
+    const jsonData = JSON.stringify(dataToExport, null, 2);
     const participant = data.participantId || "unknown";
     const experiment = data.experimentId || "unknown";
     const filename = `P${participant}-E${experiment}.json`;
@@ -373,29 +376,29 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }, 100, { leading: true, trailing: false });
 
     const handleClick = (event: MouseEvent) => {
-      setExperimentData((prev) => {
-        if (!prev) return null;
+      const latest = experimentDataRef.current;
+      if (!latest) return;
 
-        const updatedPages = [...prev.pages];
-        const lastPageIndex = updatedPages.length - 1;
+      const updatedPages = [...latest.pages];
+      const lastPageIndex = updatedPages.length - 1;
+      if (lastPageIndex < 0) return;
 
-        const target = event.target as HTMLElement;
-        const trackedElement = target.closest('[data-track-id]');
-        const trackId = trackedElement ? (trackedElement as HTMLElement).dataset.trackId || null : null;
-        console.log("Click on element with track ID:", trackId);
+      const target = event.target as HTMLElement;
+      const trackedElement = target.closest('[data-track-id]');
+      const trackId = trackedElement ? (trackedElement as HTMLElement).dataset.trackId || null : null;
+      console.log("Click on element with track ID:", trackId);
 
-        if (lastPageIndex >= 0) {
-          updatedPages[lastPageIndex].clicks.push({
-            x: event.clientX,
-            y: event.clientY,
-            element: target.tagName,
-            trackId: trackId,
-            time: Date.now(),
-          });
-        }
+      updatedPages[lastPageIndex] = {
+        ...updatedPages[lastPageIndex],
+        clicks: [
+          ...updatedPages[lastPageIndex].clicks,
+          { x: event.clientX, y: event.clientY, element: target.tagName, trackId, time: Date.now() }
+        ]
+      };
 
-        return { ...prev, pages: updatedPages };
-      });
+      const next = { ...latest, pages: updatedPages };
+      experimentDataRef.current = next;
+      setExperimentData(next);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -568,60 +571,53 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   
   // Add entry to selection history for current page
   const addToSelectionHistory = useCallback((entry: any) => {
-    setExperimentData((prev) => {
-      if (!prev) return null;
+    const latest = experimentDataRef.current;
+    if (!latest) return;
 
-      const updatedPages = [...prev.pages];
-      if (updatedPages.length === 0) return prev;
+    const updatedPages = [...latest.pages];
+    if (updatedPages.length === 0) return;
 
-      const lastPageIndex = updatedPages.length - 1;
+    const lastPageIndex = updatedPages.length - 1;
+    const currentPageData = updatedPages[lastPageIndex];
 
-      const currentPageData = updatedPages[lastPageIndex];
-      const enhancedEntry = {
-        timestamp: new Date().toISOString(),
-        ...entry
-      };
+    const enhancedEntry = {
+      timestamp: new Date().toISOString(),
+      ...entry
+    };
 
-      // Calculate isCorrection if this is a field_change
-      if (entry.type === "field_change") {
-        // Try to get the real previous value from experimentState
-        let realPreviousValue = entry.previousValue;
+    // Calculate isCorrection if this is a field_change
+    if (entry.type === "field_change") {
+      let realPreviousValue = entry.previousValue;
 
-        // If no previousValue was provided or it's empty, check experimentState
-        if (!realPreviousValue && currentPageData.experimentState?.searchParams) {
-          const fieldMapping: Record<string, string> = {
-            'departure_airport': 'departure',
-            'destination_airport': 'destination',
-            'departure_date': 'date',
-            'return_date': 'returnDate'
-          };
-
-          const stateKey = fieldMapping[entry.field] || entry.field;
-          realPreviousValue = currentPageData.experimentState.searchParams[stateKey] || "";
-        }
-
-        enhancedEntry.previousValue = realPreviousValue;
-        enhancedEntry.isCorrection =
-          realPreviousValue !== "" &&
-          realPreviousValue !== null &&
-          realPreviousValue !== undefined;
+      if (!realPreviousValue && currentPageData.experimentState?.searchParams) {
+        const fieldMapping: Record<string, string> = {
+          'departure_airport': 'departure',
+          'destination_airport': 'destination',
+          'departure_date': 'date',
+          'return_date': 'returnDate'
+        };
+        const stateKey = fieldMapping[entry.field] || entry.field;
+        realPreviousValue = currentPageData.experimentState.searchParams[stateKey] || "";
       }
 
-      console.log(`Adding to selection history for ${currentPageData.page}:`, enhancedEntry);
+      enhancedEntry.previousValue = realPreviousValue;
+      enhancedEntry.isCorrection =
+        realPreviousValue !== "" &&
+        realPreviousValue !== null &&
+        realPreviousValue !== undefined;
+    }
 
-      updatedPages[lastPageIndex] = {
-        ...currentPageData,
-        selectionHistory: [
-          ...currentPageData.selectionHistory,
-          enhancedEntry
-        ]
-      };
+    console.log(`Adding to selection history for ${currentPageData.page}:`, enhancedEntry);
 
-      return {
-        ...prev,
-        pages: updatedPages,
-      };
-    });
+    updatedPages[lastPageIndex] = {
+      ...currentPageData,
+      selectionHistory: [...currentPageData.selectionHistory, enhancedEntry]
+    };
+
+    const next = { ...latest, pages: updatedPages };
+    // Update ref synchronously so stopExperiment always reads latest data
+    experimentDataRef.current = next;
+    setExperimentData(next);
   }, []);
 
   // Get flights for a search, using and updating the per-combination cache.
@@ -703,35 +699,32 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   // Record whether the participant found and selected the target flight combination
-  const setFoundTarget = useCallback((found: boolean) => {
-    setExperimentData(prev => prev ? { ...prev, foundTargetFlight: found } : prev);
+  const setFoundTarget = useCallback((found: { outbound: boolean; return: boolean }) => {
+    setExperimentData(prev => prev ? { ...prev, targetFlightSelected: found } : prev);
   }, []);
 
   // Update experiment state for current page
   const updateExperimentState = useCallback((updates: any) => {
     console.log('Updating experiment state:', updates);
 
-    setExperimentData((prev) => {
-      if (!prev) return null;
+    const latest = experimentDataRef.current;
+    if (!latest) return;
 
-      const updatedPages = [...prev.pages];
-      if (updatedPages.length > 0) {
-        const lastPageIndex = updatedPages.length - 1;
+    const updatedPages = [...latest.pages];
+    if (updatedPages.length === 0) return;
 
-        updatedPages[lastPageIndex] = {
-          ...updatedPages[lastPageIndex],
-          experimentState: {
-            ...updatedPages[lastPageIndex].experimentState,
-            ...updates
-          }
-        };
+    const lastPageIndex = updatedPages.length - 1;
+    updatedPages[lastPageIndex] = {
+      ...updatedPages[lastPageIndex],
+      experimentState: {
+        ...updatedPages[lastPageIndex].experimentState,
+        ...updates
       }
+    };
 
-      return {
-        ...prev,
-        pages: updatedPages,
-      };
-    });
+    const next = { ...latest, pages: updatedPages };
+    experimentDataRef.current = next;
+    setExperimentData(next);
   }, []);
 
   return (

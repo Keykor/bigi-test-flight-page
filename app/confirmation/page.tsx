@@ -92,7 +92,10 @@ export default function ConfirmationPage() {
     });
 
     // Record whether the participant found and selected the target flight combination
-    const foundTarget = !!(outboundFlight?.isTarget && returnFlight?.isTarget);
+    const foundTarget = {
+      outbound: !!outboundFlight?.isTarget,
+      return: !!returnFlight?.isTarget,
+    };
 
     // Try to stop tracking the iteration (may fail if page was reloaded)
     try {

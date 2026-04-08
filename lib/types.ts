@@ -190,7 +190,7 @@ export interface ExperimentData {
   experimentStartTime: string
   experimentEndTime?: string
   uuid: string
-  sampleCounter?: number
+  participantRunNumber?: number
   searchCache: SearchCacheEntry[]
-  foundTargetFlight: boolean | null // null = not yet confirmed
+  targetFlightSelected: { outbound: boolean; return: boolean } | null // null = not yet confirmed
 }

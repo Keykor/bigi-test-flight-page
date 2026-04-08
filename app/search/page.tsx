@@ -470,16 +470,12 @@ export default function SearchPage() {
             <CardContent className="p-5">
               <div className="flex items-center">
                 <div className="w-1/4 hidden md:block">
-                  <img 
-                    src="/images/plane-sunset.jpg" 
-                    alt="Last minute offer" 
-                    className="w-full h-28 object-cover rounded-md shadow-sm"
-                    onError={e => {
-                      // Fallback if image not found
-                      const target = e.target as HTMLImageElement;
-                      target.src = "https://images.unsplash.com/photo-1496427011580-7f32943ee9d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80";
-                    }}
-                  />
+                  <div className="w-full h-28 rounded-md shadow-sm overflow-hidden relative" style={{background: "linear-gradient(to bottom, #f97316 0%, #fb923c 40%, #fde68a 70%, #bfdbfe 100%)"}}>
+                    {/* Sun */}
+                    <div className="absolute rounded-full" style={{width:36,height:36,background:"#fbbf24",bottom:10,left:"50%",transform:"translateX(-50%)",boxShadow:"0 0 16px 4px #fde68a"}} />
+                    {/* Horizon */}
+                    <div className="absolute bottom-0 left-0 right-0" style={{height:28,background:"#1e3a5f"}} />
+                  </div>
                 </div>
                 <div className="w-full md:w-3/4 pl-0 md:pl-6">
                   <h3 className="text-lg font-bold mb-2 text-gray-800">Last Minute Offers</h3>
