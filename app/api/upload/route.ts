@@ -16,7 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     // Upload to Vercel Blob
     const { url } = await put(filename, blob, {
-      access: "public",
+      access: "private",
       contentType: "application/json",
     })
 

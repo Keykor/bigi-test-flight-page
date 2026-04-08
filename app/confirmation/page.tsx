@@ -93,11 +93,10 @@ export default function ConfirmationPage() {
 
     // Record whether the participant found and selected the target flight combination
     const foundTarget = !!(outboundFlight?.isTarget && returnFlight?.isTarget);
-    setFoundTarget(foundTarget);
 
     // Try to stop tracking the iteration (may fail if page was reloaded)
     try {
-      stopExperiment();
+      stopExperiment(foundTarget);
     } catch (error) {
       console.warn("Could not stop experiment (may have been reloaded):", error);
     }

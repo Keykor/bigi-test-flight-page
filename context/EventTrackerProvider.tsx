@@ -138,7 +138,7 @@ interface EventTrackerContextType {
   isTracking: boolean;
   experimentData: ExperimentData | null;
   startExperiment: (experimentId: string) => void;
-  stopExperiment: () => void;
+  stopExperiment: (foundTargetFlight?: boolean) => void;
   abandonExperiment: () => void;
   addToSelectionHistory: (entry: any) => void;
   updateExperimentState: (updates: any) => void;
@@ -234,57 +234,50 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     console.log(`Experiment started: ${experiment.name}, participant: ${participantId}`);
   }, [uuid]);
 
-  const stopExperiment = () => {
+  const stopExperiment = (foundTargetFlight?: boolean) => {
     if (!experimentData) {
       console.warn("No experiment in progress! Experiment may have already been stopped or page was reloaded.");
       return;
     }
 
-    // Capture current time as experiment end time
     const experimentEndTime = new Date().toISOString();
+    const updatedPages = [...experimentData.pages];
 
-    // Update the last active page with visitEndTime
-    setExperimentData((prev) => {
-      if (!prev) return null;
-
-      const updatedPages = [...prev.pages];
-
-      // If there are registered pages, update the last one with its visitEndTime
-      if (updatedPages.length > 0) {
-        const lastPageIndex = updatedPages.length - 1;
-        updatedPages[lastPageIndex] = {
-          ...updatedPages[lastPageIndex],
-          visitEndTime: experimentEndTime,
-        };
-      }
-
-      const newSampleCounter = incrementSampleCounter();
-
-      const updatedExperimentData = {
-        ...prev,
-        sampleCounter: newSampleCounter,
-        experimentEndTime,
-        pages: updatedPages,
+    if (updatedPages.length > 0) {
+      const lastPageIndex = updatedPages.length - 1;
+      updatedPages[lastPageIndex] = {
+        ...updatedPages[lastPageIndex],
+        visitEndTime: experimentEndTime,
       };
+    }
 
-      downloadExperimentData(updatedExperimentData);
-      console.log("Experiment data:", updatedExperimentData);
+    const newSampleCounter = incrementSampleCounter();
 
-      // Mark experiment as completed in localStorage
-      if (prev.iterationId) {
-        markExperimentAsCompleted(prev.iterationId);
-        // Clean up sessionStorage for this experiment
-        try {
-          sessionStorage.removeItem(`experiment_data_${prev.iterationId}`);
-          sessionStorage.removeItem(`search_form_${prev.iterationId}`);
-          console.log(`Cleaned up sessionStorage for experiment ${prev.iterationId}`);
-        } catch (e) {
-          console.error("Error cleaning up sessionStorage:", e);
-        }
+    const updatedExperimentData = {
+      ...experimentData,
+      ...(foundTargetFlight !== undefined ? { foundTargetFlight } : {}),
+      sampleCounter: newSampleCounter,
+      experimentEndTime,
+      pages: updatedPages,
+    };
+
+    // Call download OUTSIDE the state updater to prevent React StrictMode double-invocation
+    downloadExperimentData(updatedExperimentData);
+    console.log("Experiment data:", updatedExperimentData);
+
+    setExperimentData(updatedExperimentData);
+
+    // Mark experiment as completed in localStorage
+    if (experimentData.iterationId) {
+      markExperimentAsCompleted(experimentData.iterationId);
+      try {
+        sessionStorage.removeItem(`experiment_data_${experimentData.iterationId}`);
+        sessionStorage.removeItem(`search_form_${experimentData.iterationId}`);
+        console.log(`Cleaned up sessionStorage for experiment ${experimentData.iterationId}`);
+      } catch (e) {
+        console.error("Error cleaning up sessionStorage:", e);
       }
-
-      return updatedExperimentData;
-    });
+    }
 
     console.log("Experiment completed.");
     resetExperiment();
@@ -305,11 +298,9 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     try {
       const blob = new Blob([jsonData], { type: "application/json" });
 
-      // Build a descriptive filename
-      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
       const participant = data.participantId || "unknown";
       const experiment = data.experimentId || "unknown";
-      const filename = `${participant}_${experiment}_${timestamp}.json`;
+      const filename = `P${participant}-E${experiment}.json`;
 
       // Upload to Vercel Blob Storage via API route
       const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
