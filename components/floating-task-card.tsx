@@ -304,13 +304,11 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-gray-500 w-20 shrink-0">To</span>
-                <span>
-                  {destinations.map((code, i) => {
+                <span className="flex flex-col gap-0.5">
+                  {destinations.map((code) => {
                     const city = getAirportByCode(code)?.city ?? code
                     return (
-                      <span key={code}>
-                        {code} ({city}){i < destinations.length - 1 ? ", " : ""}
-                      </span>
+                      <span key={code}>{code} — {city}</span>
                     )
                   })}
                 </span>
