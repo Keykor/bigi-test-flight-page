@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 import { throttle } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
-import { getExperimentById, getFlightsForSearch, getCombinationKey, findMatchingCombination, registerSolutionFlight } from "@/lib/experiments";
+import { getExperimentById, getFlightsForSearch, getCombinationKey, findMatchingCombination, registerSolutionFlight, registerGeneratedFlight } from "@/lib/experiments";
 import type { Flight, SearchParameters, SearchCacheEntry } from "@/lib/types";
 
 // Helper functions for localStorage
@@ -292,8 +292,20 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const experiment = data.experimentId || "unknown";
     const filename = `P${participant}-E${experiment}.json`;
 
+    const blob = new Blob([jsonData], { type: "application/json" });
+
+    if (isDebugMode()) {
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+    }
+
     try {
-      const blob = new Blob([jsonData], { type: "application/json" });
       const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
         method: "POST",
         body: blob,
@@ -644,8 +656,22 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const attemptNumber = cache.length + 1;
     const isSolutionIteration = attemptNumber === experiment.solutionIteration;
 
-    let outboundFlights = [...baseFlights.outbound];
-    let returnFlights = [...baseFlights.return];
+    const threshold = experiment.priceThreshold;
+    const SPREAD = 80;
+    const SAFETY = 50;
+
+    // Assign algorithmic prices to regular flights: each > threshold/2, so any pair > threshold
+    let outboundFlights = baseFlights.outbound.map((f, i) => {
+      const updated = { ...f, price: Math.round(threshold / 2 + (i + 1) * SPREAD) };
+      registerGeneratedFlight(updated.id, updated);
+      return updated;
+    });
+    let returnFlights = baseFlights.return.map((f, i) => {
+      const updated = { ...f, price: Math.round(threshold / 2 + (i + 1) * SPREAD) };
+      registerGeneratedFlight(updated.id, updated);
+      return updated;
+    });
+
     let resolvedPosition: { outbound: number; return: number } | undefined;
 
     if (isSolutionIteration && experiment.solutionFlight) {
@@ -674,10 +700,34 @@ export const EventTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         registerSolutionFlight(solutionOut.id, solutionOut);
         registerSolutionFlight(solutionRet.id, solutionRet);
 
-        // Always inject solution flight at position 1 (flights are price-sorted ASC)
+        // Inject solution at position 1 (replace first regular flight)
         outboundFlights[0] = solutionOut;
         returnFlights[0] = solutionRet;
         resolvedPosition = { outbound: 1, return: 1 };
+
+        // Correction: ensure no regular outbound + solution return sums to < threshold
+        outboundFlights = outboundFlights.map(f => {
+          if (!f.isTarget && f.price + solutionRet.price < threshold) {
+            return { ...f, price: threshold - solutionRet.price + SAFETY };
+          }
+          return f;
+        });
+
+        // Correction: ensure no solution outbound + regular return sums to < threshold
+        returnFlights = returnFlights.map(f => {
+          if (!f.isTarget && solutionOut.price + f.price < threshold) {
+            return { ...f, price: threshold - solutionOut.price + SAFETY };
+          }
+          return f;
+        });
+
+        // Re-sort by price ascending (solution stays first as cheapest)
+        outboundFlights.sort((a, b) => a.price - b.price);
+        returnFlights.sort((a, b) => a.price - b.price);
+
+        // Update registry with final corrected prices for regular flights
+        outboundFlights.forEach(f => { if (!f.isTarget) registerGeneratedFlight(f.id, f); });
+        returnFlights.forEach(f => { if (!f.isTarget) registerGeneratedFlight(f.id, f); });
       }
     }
 

@@ -23,7 +23,7 @@ const DEFAULT_WIDTH = 320
 export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [searchCombinations, setSearchCombinations] = useState<SearchCombination[]>([])
-  const [priceConstraint, setPriceConstraint] = useState<string>("")
+  const [priceThreshold, setPriceThreshold] = useState<number>(0)
   const [solutionIteration, setSolutionIteration] = useState<number>(0)
 
   const [solutionFlight, setSolutionFlight] = useState<{ outbound: SolutionFlightTemplate; return: SolutionFlightTemplate } | null>(null)
@@ -48,7 +48,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
       const experiment = getExperimentById(experimentId)
       if (experiment) {
         setSearchCombinations(experiment.searchCombinations)
-        setPriceConstraint(experiment.priceConstraint ?? "")
+        setPriceThreshold(experiment.priceThreshold ?? 0)
         setSolutionIteration(experiment.solutionIteration)
         setSolutionFlight(experiment.solutionFlight)
       }
@@ -321,10 +321,10 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
                 <span className="font-semibold text-gray-500 w-20 shrink-0">Return</span>
                 <span>{formatDate(returnDate)}</span>
               </li>
-              {priceConstraint && (
+              {priceThreshold > 0 && (
                 <li className="flex gap-2">
                   <span className="font-semibold text-gray-500 w-20 shrink-0">Budget</span>
-                  <span>Under {priceConstraint} per flight</span>
+                  <span>Outbound + return under ${priceThreshold.toLocaleString()} total</span>
                 </li>
               )}
             </ul>

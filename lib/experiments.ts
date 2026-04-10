@@ -16,64 +16,63 @@ interface FlightTemplate {
   stops: number
   luggage: string
   refundable: boolean
-  price: number
   departureTime: string
   arrivalTime: string
   duration: string
 }
 
-// Per-route flight templates ordered by price ASC.
+// Per-route flight templates. Prices are assigned algorithmically at runtime by getFlightsWithCache.
 // Times are local at origin/destination accounting for GRU (UTC-3) ↔ Italy (UTC+2) timezone diff.
 const ROUTE_TEMPLATES: Record<string, [FlightTemplate, FlightTemplate, FlightTemplate]> = {
   "GRU-FCO": [
-    { airline: "TAP Portugal",  flightNumber: "TP189",  stops: 1, luggage: "Carry-on only",  refundable: false, price: 980,  departureTime: "09:30", arrivalTime: "05:50+1", duration: "15h 20m" },
-    { airline: "LATAM",         flightNumber: "LA8170", stops: 0, luggage: "1 checked bag",  refundable: false, price: 1150, departureTime: "22:15", arrivalTime: "14:45+1", duration: "11h 30m" },
-    { airline: "ITA Airways",   flightNumber: "AZ673",  stops: 0, luggage: "1 checked bag",  refundable: true,  price: 1250, departureTime: "23:00", arrivalTime: "15:45+1", duration: "11h 45m" },
+    { airline: "TAP Portugal",  flightNumber: "TP189",  stops: 1, luggage: "Carry-on only",  refundable: false, departureTime: "09:30", arrivalTime: "05:50+1", duration: "15h 20m" },
+    { airline: "LATAM",         flightNumber: "LA8170", stops: 0, luggage: "1 checked bag",  refundable: false, departureTime: "22:15", arrivalTime: "14:45+1", duration: "11h 30m" },
+    { airline: "ITA Airways",   flightNumber: "AZ673",  stops: 0, luggage: "1 checked bag",  refundable: true,  departureTime: "23:00", arrivalTime: "15:45+1", duration: "11h 45m" },
   ],
   "FCO-GRU": [
-    { airline: "TAP Portugal",  flightNumber: "TP190",  stops: 1, luggage: "Carry-on only",  refundable: false, price: 1020, departureTime: "10:15", arrivalTime: "21:15",   duration: "16h 00m" },
-    { airline: "LATAM",         flightNumber: "LA8171", stops: 0, luggage: "1 checked bag",  refundable: false, price: 1200, departureTime: "17:30", arrivalTime: "00:45+1", duration: "12h 15m" },
-    { airline: "ITA Airways",   flightNumber: "AZ674",  stops: 0, luggage: "1 checked bag",  refundable: true,  price: 1300, departureTime: "19:00", arrivalTime: "02:00+1", duration: "12h 00m" },
+    { airline: "TAP Portugal",  flightNumber: "TP190",  stops: 1, luggage: "Carry-on only",  refundable: false, departureTime: "10:15", arrivalTime: "21:15",   duration: "16h 00m" },
+    { airline: "LATAM",         flightNumber: "LA8171", stops: 0, luggage: "1 checked bag",  refundable: false, departureTime: "17:30", arrivalTime: "00:45+1", duration: "12h 15m" },
+    { airline: "ITA Airways",   flightNumber: "AZ674",  stops: 0, luggage: "1 checked bag",  refundable: true,  departureTime: "19:00", arrivalTime: "02:00+1", duration: "12h 00m" },
   ],
   "GRU-PSA": [
-    { airline: "KLM",           flightNumber: "KL792",  stops: 1, luggage: "Carry-on only",  refundable: false, price: 960,  departureTime: "08:00", arrivalTime: "05:30+1", duration: "16h 30m" },
-    { airline: "Iberia",        flightNumber: "IB6531", stops: 1, luggage: "1 checked bag",  refundable: false, price: 1080, departureTime: "21:30", arrivalTime: "17:10+1", duration: "14h 40m" },
-    { airline: "Air France",    flightNumber: "AF459",  stops: 1, luggage: "1 checked bag",  refundable: true,  price: 1190, departureTime: "22:45", arrivalTime: "19:00+1", duration: "15h 15m" },
+    { airline: "KLM",           flightNumber: "KL792",  stops: 1, luggage: "Carry-on only",  refundable: false, departureTime: "08:00", arrivalTime: "05:30+1", duration: "16h 30m" },
+    { airline: "Iberia",        flightNumber: "IB6531", stops: 1, luggage: "1 checked bag",  refundable: false, departureTime: "21:30", arrivalTime: "17:10+1", duration: "14h 40m" },
+    { airline: "Air France",    flightNumber: "AF459",  stops: 1, luggage: "1 checked bag",  refundable: true,  departureTime: "22:45", arrivalTime: "19:00+1", duration: "15h 15m" },
   ],
   "PSA-GRU": [
-    { airline: "KLM",           flightNumber: "KL793",  stops: 1, luggage: "Carry-on only",  refundable: false, price: 980,  departureTime: "09:45", arrivalTime: "21:55",   duration: "17h 10m" },
-    { airline: "Iberia",        flightNumber: "IB6532", stops: 1, luggage: "1 checked bag",  refundable: false, price: 1100, departureTime: "16:30", arrivalTime: "02:20+1", duration: "14h 50m" },
-    { airline: "Air France",    flightNumber: "AF460",  stops: 1, luggage: "1 checked bag",  refundable: true,  price: 1220, departureTime: "14:00", arrivalTime: "00:45+1", duration: "15h 45m" },
+    { airline: "KLM",           flightNumber: "KL793",  stops: 1, luggage: "Carry-on only",  refundable: false, departureTime: "09:45", arrivalTime: "21:55",   duration: "17h 10m" },
+    { airline: "Iberia",        flightNumber: "IB6532", stops: 1, luggage: "1 checked bag",  refundable: false, departureTime: "16:30", arrivalTime: "02:20+1", duration: "14h 50m" },
+    { airline: "Air France",    flightNumber: "AF460",  stops: 1, luggage: "1 checked bag",  refundable: true,  departureTime: "14:00", arrivalTime: "00:45+1", duration: "15h 45m" },
   ],
   "GRU-FLR": [
-    { airline: "Turkish Airlines", flightNumber: "TK16", stops: 1, luggage: "Carry-on only", refundable: false, price: 990,  departureTime: "07:15", arrivalTime: "05:25+1", duration: "17h 10m" },
-    { airline: "Lufthansa",        flightNumber: "LH517", stops: 1, luggage: "1 checked bag", refundable: false, price: 1120, departureTime: "22:00", arrivalTime: "17:15+1", duration: "14h 15m" },
-    { airline: "Swiss",            flightNumber: "LX93",  stops: 1, luggage: "1 checked bag", refundable: true,  price: 1200, departureTime: "23:30", arrivalTime: "19:20+1", duration: "14h 50m" },
+    { airline: "Turkish Airlines", flightNumber: "TK16",  stops: 1, luggage: "Carry-on only", refundable: false, departureTime: "07:15", arrivalTime: "05:25+1", duration: "17h 10m" },
+    { airline: "Lufthansa",        flightNumber: "LH517", stops: 1, luggage: "1 checked bag", refundable: false, departureTime: "22:00", arrivalTime: "17:15+1", duration: "14h 15m" },
+    { airline: "Swiss",            flightNumber: "LX93",  stops: 1, luggage: "1 checked bag", refundable: true,  departureTime: "23:30", arrivalTime: "19:20+1", duration: "14h 50m" },
   ],
   "FLR-GRU": [
-    { airline: "Turkish Airlines", flightNumber: "TK17", stops: 1, luggage: "Carry-on only", refundable: false, price: 1030, departureTime: "08:30", arrivalTime: "21:10",   duration: "17h 40m" },
-    { airline: "Lufthansa",        flightNumber: "LH518", stops: 1, luggage: "1 checked bag", refundable: false, price: 1160, departureTime: "15:00", arrivalTime: "00:50+1", duration: "14h 50m" },
-    { airline: "Swiss",            flightNumber: "LX94",  stops: 1, luggage: "1 checked bag", refundable: true,  price: 1250, departureTime: "16:45", arrivalTime: "02:55+1", duration: "15h 10m" },
+    { airline: "Turkish Airlines", flightNumber: "TK17",  stops: 1, luggage: "Carry-on only", refundable: false, departureTime: "08:30", arrivalTime: "21:10",   duration: "17h 40m" },
+    { airline: "Lufthansa",        flightNumber: "LH518", stops: 1, luggage: "1 checked bag", refundable: false, departureTime: "15:00", arrivalTime: "00:50+1", duration: "14h 50m" },
+    { airline: "Swiss",            flightNumber: "LX94",  stops: 1, luggage: "1 checked bag", refundable: true,  departureTime: "16:45", arrivalTime: "02:55+1", duration: "15h 10m" },
   ],
   "GRU-NAP": [
-    { airline: "Turkish Airlines", flightNumber: "TK18",  stops: 1, luggage: "Carry-on only", refundable: false, price: 970,  departureTime: "07:00", arrivalTime: "05:00+1", duration: "17h 00m" },
-    { airline: "ITA Airways",      flightNumber: "AZ671", stops: 1, luggage: "1 checked bag",  refundable: false, price: 1080, departureTime: "22:30", arrivalTime: "18:00+1", duration: "14h 30m" },
-    { airline: "Air France",       flightNumber: "AF8521",stops: 1, luggage: "1 checked bag",  refundable: true,  price: 1190, departureTime: "21:00", arrivalTime: "17:45+1", duration: "15h 45m" },
+    { airline: "Turkish Airlines", flightNumber: "TK18",   stops: 1, luggage: "Carry-on only", refundable: false, departureTime: "07:00", arrivalTime: "05:00+1", duration: "17h 00m" },
+    { airline: "ITA Airways",      flightNumber: "AZ671",  stops: 1, luggage: "1 checked bag",  refundable: false, departureTime: "22:30", arrivalTime: "18:00+1", duration: "14h 30m" },
+    { airline: "Air France",       flightNumber: "AF8521", stops: 1, luggage: "1 checked bag",  refundable: true,  departureTime: "21:00", arrivalTime: "17:45+1", duration: "15h 45m" },
   ],
   "NAP-GRU": [
-    { airline: "Turkish Airlines", flightNumber: "TK19",  stops: 1, luggage: "Carry-on only", refundable: false, price: 1000, departureTime: "08:00", arrivalTime: "20:40",   duration: "17h 40m" },
-    { airline: "ITA Airways",      flightNumber: "AZ672", stops: 1, luggage: "1 checked bag",  refundable: false, price: 1100, departureTime: "15:00", arrivalTime: "00:00+1", duration: "14h 00m" },
-    { airline: "Air France",       flightNumber: "AF8522",stops: 1, luggage: "1 checked bag",  refundable: true,  price: 1230, departureTime: "13:00", arrivalTime: "00:15+1", duration: "16h 15m" },
+    { airline: "Turkish Airlines", flightNumber: "TK19",   stops: 1, luggage: "Carry-on only", refundable: false, departureTime: "08:00", arrivalTime: "20:40",   duration: "17h 40m" },
+    { airline: "ITA Airways",      flightNumber: "AZ672",  stops: 1, luggage: "1 checked bag",  refundable: false, departureTime: "15:00", arrivalTime: "00:00+1", duration: "14h 00m" },
+    { airline: "Air France",       flightNumber: "AF8522", stops: 1, luggage: "1 checked bag",  refundable: true,  departureTime: "13:00", arrivalTime: "00:15+1", duration: "16h 15m" },
   ],
   "GRU-BLQ": [
-    { airline: "KLM",       flightNumber: "KL794", stops: 1, luggage: "Carry-on only", refundable: false, price: 950,  departureTime: "08:30", arrivalTime: "06:15+1", duration: "16h 45m" },
-    { airline: "Lufthansa", flightNumber: "LH519", stops: 1, luggage: "1 checked bag", refundable: false, price: 1100, departureTime: "22:45", arrivalTime: "18:30+1", duration: "14h 45m" },
-    { airline: "Swiss",     flightNumber: "LX95",  stops: 1, luggage: "1 checked bag", refundable: true,  price: 1180, departureTime: "23:00", arrivalTime: "19:20+1", duration: "15h 20m" },
+    { airline: "KLM",       flightNumber: "KL794", stops: 1, luggage: "Carry-on only", refundable: false, departureTime: "08:30", arrivalTime: "06:15+1", duration: "16h 45m" },
+    { airline: "Lufthansa", flightNumber: "LH519", stops: 1, luggage: "1 checked bag", refundable: false, departureTime: "22:45", arrivalTime: "18:30+1", duration: "14h 45m" },
+    { airline: "Swiss",     flightNumber: "LX95",  stops: 1, luggage: "1 checked bag", refundable: true,  departureTime: "23:00", arrivalTime: "19:20+1", duration: "15h 20m" },
   ],
   "BLQ-GRU": [
-    { airline: "KLM",       flightNumber: "KL795", stops: 1, luggage: "Carry-on only", refundable: false, price: 975,  departureTime: "09:00", arrivalTime: "21:20",   duration: "17h 20m" },
-    { airline: "Lufthansa", flightNumber: "LH520", stops: 1, luggage: "1 checked bag", refundable: false, price: 1140, departureTime: "14:30", arrivalTime: "00:40+1", duration: "15h 10m" },
-    { airline: "Swiss",     flightNumber: "LX96",  stops: 1, luggage: "1 checked bag", refundable: true,  price: 1220, departureTime: "15:45", arrivalTime: "02:35+1", duration: "15h 50m" },
+    { airline: "KLM",       flightNumber: "KL795", stops: 1, luggage: "Carry-on only", refundable: false, departureTime: "09:00", arrivalTime: "21:20",   duration: "17h 20m" },
+    { airline: "Lufthansa", flightNumber: "LH520", stops: 1, luggage: "1 checked bag", refundable: false, departureTime: "14:30", arrivalTime: "00:40+1", duration: "15h 10m" },
+    { airline: "Swiss",     flightNumber: "LX96",  stops: 1, luggage: "1 checked bag", refundable: true,  departureTime: "15:45", arrivalTime: "02:35+1", duration: "15h 50m" },
   ],
 }
 
@@ -99,7 +98,7 @@ function generateFlightsForRoute(
       departureTime: tpl.departureTime,
       arrivalTime: tpl.arrivalTime,
       duration: tpl.duration,
-      price: tpl.price,
+      price: 0, // assigned algorithmically by getFlightsWithCache
       stops: tpl.stops,
       class: "Economy",
       luggage: tpl.luggage,
@@ -114,6 +113,10 @@ function generateFlightsForRoute(
 
 export function registerSolutionFlight(id: string, flight: Flight): void {
   solutionFlightRegistry.set(id, flight)
+}
+
+export function registerGeneratedFlight(id: string, flight: Flight): void {
+  generatedFlightRegistry.set(id, flight)
 }
 
 /**

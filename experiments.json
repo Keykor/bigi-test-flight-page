@@ -3,8 +3,8 @@
     {
       "id": "1",
       "name": "GRU to Cinque Terre — Iter 1A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 3, 2026 and returning on July 10, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 3, 2026 and returning on July 10, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 1,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -46,8 +46,8 @@
     {
       "id": "2",
       "name": "GRU to Cinque Terre — Iter 1B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 3, 2026 and returning on July 10, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 3, 2026 and returning on July 10, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 1,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -89,8 +89,8 @@
     {
       "id": "3",
       "name": "GRU to Cinque Terre — Iter 2A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 2,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -132,8 +132,8 @@
     {
       "id": "4",
       "name": "GRU to Cinque Terre — Iter 2B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 10, 2026 and returning on July 17, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 2,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -175,8 +175,8 @@
     {
       "id": "5",
       "name": "GRU to Cinque Terre — Iter 3A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 17, 2026 and returning on July 24, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 17, 2026 and returning on July 24, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 3,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -218,8 +218,8 @@
     {
       "id": "6",
       "name": "GRU to Cinque Terre — Iter 3B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 17, 2026 and returning on July 24, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 17, 2026 and returning on July 24, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 3,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -261,8 +261,8 @@
     {
       "id": "7",
       "name": "GRU to Cinque Terre — Iter 4A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 24, 2026 and returning on July 31, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 24, 2026 and returning on July 31, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 4,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -304,8 +304,8 @@
     {
       "id": "8",
       "name": "GRU to Cinque Terre — Iter 4B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on July 24, 2026 and returning on July 31, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on July 24, 2026 and returning on July 31, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 4,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -347,8 +347,8 @@
     {
       "id": "9",
       "name": "GRU to Cinque Terre — Iter 5A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on August 7, 2026 and returning on August 14, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on August 7, 2026 and returning on August 14, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 5,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
@@ -390,8 +390,8 @@
     {
       "id": "10",
       "name": "GRU to Cinque Terre — Iter 5B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find that each cost less than $950. Search for flights departing on August 7, 2026 and returning on August 14, 2026.",
-      "priceConstraint": "$950",
+      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first outbound and return flight you find with a combined price under $2,000. Search for flights departing on August 7, 2026 and returning on August 14, 2026.",
+      "priceThreshold": 2000,
       "solutionIteration": 5,
       "solutionPosition": { "outbound": 1, "return": 1 },
       "solutionFlight": {
