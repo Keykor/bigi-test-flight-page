@@ -324,7 +324,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
               {priceThreshold > 0 && (
                 <li className="flex gap-2">
                   <span className="font-semibold text-gray-500 w-20 shrink-0">Budget</span>
-                  <span>Outbound + return under ${priceThreshold.toLocaleString()} total</span>
+                  <span>Find the first pair under ${priceThreshold.toLocaleString()} total</span>
                 </li>
               )}
             </ul>
