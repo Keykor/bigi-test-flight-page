@@ -16,22 +16,24 @@ interface AirportAutocompleteProps {
   "data-track-id"?: string
 }
 
+const normalize = (s: string) =>
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+
 export function AirportAutocomplete({ value, onChange, placeholder, id, "data-track-id": trackId }: AirportAutocompleteProps) {
   const [open, setOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // This function filters airports by code, name, city, and country
   const filteredAirports = airports
     .filter((airport) => {
       if (!searchQuery) return true
 
-      const query = searchQuery.toLowerCase()
+      const query = normalize(searchQuery)
       return (
-        airport.code.toLowerCase().includes(query) ||
-        airport.name.toLowerCase().includes(query) ||
-        airport.city.toLowerCase().includes(query) ||
-        airport.country.toLowerCase().includes(query)
+        normalize(airport.code).includes(query) ||
+        normalize(airport.name).includes(query) ||
+        normalize(airport.city).includes(query) ||
+        normalize(airport.country).includes(query)
       )
     })
     .sort((a, b) => a.city.localeCompare(b.city))
