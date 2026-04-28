@@ -300,7 +300,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex gap-2">
                 <span className="font-semibold text-gray-500 w-20 shrink-0">From</span>
-                <span>{departureCode} — {departureCity}</span>
+                <span>{departureCity} ({departureCode})</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-gray-500 w-20 shrink-0">To</span>
@@ -308,7 +308,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
                   {destinations.map((code) => {
                     const city = getAirportByCode(code)?.city ?? code
                     return (
-                      <span key={code}>{code} — {city}</span>
+                      <span key={code}>{city} ({code})</span>
                     )
                   })}
                 </span>
