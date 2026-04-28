@@ -22,17 +22,19 @@ export function AirportAutocomplete({ value, onChange, placeholder, id, "data-tr
   const inputRef = useRef<HTMLInputElement>(null)
 
   // This function filters airports by code, name, city, and country
-  const filteredAirports = airports.filter((airport) => {
-    if (!searchQuery) return true
+  const filteredAirports = airports
+    .filter((airport) => {
+      if (!searchQuery) return true
 
-    const query = searchQuery.toLowerCase()
-    return (
-      airport.code.toLowerCase().includes(query) ||
-      airport.name.toLowerCase().includes(query) ||
-      airport.city.toLowerCase().includes(query) ||
-      airport.country.toLowerCase().includes(query)
-    )
-  })
+      const query = searchQuery.toLowerCase()
+      return (
+        airport.code.toLowerCase().includes(query) ||
+        airport.name.toLowerCase().includes(query) ||
+        airport.city.toLowerCase().includes(query) ||
+        airport.country.toLowerCase().includes(query)
+      )
+    })
+    .sort((a, b) => a.city.localeCompare(b.city))
 
   const selectedAirport = airports.find((airport) => airport.code === value)
 
