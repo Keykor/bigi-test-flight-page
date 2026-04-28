@@ -331,7 +331,7 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
             {debugActive && (
               <div className="mt-3 pt-2 border-t border-amber-200">
                 <p className="text-xs font-mono font-semibold text-amber-700 mb-1">
-                  Debug — Iterations
+                  Debug - Iterations
                 </p>
                 <p className="text-xs font-mono text-amber-600">
                   Solution at attempt: <strong>{solutionIteration}</strong> · out pos: <strong>{searchCache.find(e => e.attemptNumber === solutionIteration)?.resolvedSolutionPosition?.outbound ?? "?"}</strong> · ret pos: <strong>{searchCache.find(e => e.attemptNumber === solutionIteration)?.resolvedSolutionPosition?.return ?? "?"}</strong>

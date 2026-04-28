@@ -76,7 +76,6 @@ export interface IterationConfig {
 export interface ExperimentMetadata {
   id: string
   name: string
-  description: string
   priceThreshold: number   // e.g. 2000 (combined outbound + return)
 }
 

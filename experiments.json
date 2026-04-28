@@ -2,11 +2,13 @@
   "experiments": [
     {
       "id": "1",
-      "name": "GRU to Cinque Terre — Iter 1A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on May 3, 2026 and returning on May 10, 2026.",
+      "name": "GRU to Cinque Terre - Iter 1A",
       "priceThreshold": 2000,
       "solutionIteration": 1,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-1",
@@ -36,20 +38,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-03", "returnDate": "2026-05-10" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-05-03",
+          "returnDate": "2026-05-10"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-05-03",
+          "returnDate": "2026-05-10"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-05-03",
+          "returnDate": "2026-05-10"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-05-03",
+          "returnDate": "2026-05-10"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-05-03",
+          "returnDate": "2026-05-10"
+        }
       ]
     },
     {
       "id": "2",
-      "name": "GRU to Cinque Terre — Iter 1B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on June 6, 2026 and returning on June 13, 2026.",
+      "name": "GRU to Cinque Terre - Iter 1B",
       "priceThreshold": 2000,
       "solutionIteration": 1,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-2",
@@ -79,20 +108,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-06-06", "returnDate": "2026-06-13" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-06-06",
+          "returnDate": "2026-06-13"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-06-06",
+          "returnDate": "2026-06-13"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-06-06",
+          "returnDate": "2026-06-13"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-06-06",
+          "returnDate": "2026-06-13"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-06-06",
+          "returnDate": "2026-06-13"
+        }
       ]
     },
     {
       "id": "3",
-      "name": "GRU to Cinque Terre — Iter 2A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on May 7, 2026 and returning on May 14, 2026.",
+      "name": "GRU to Cinque Terre - Iter 2A",
       "priceThreshold": 2000,
       "solutionIteration": 2,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-3",
@@ -122,20 +178,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-07", "returnDate": "2026-05-14" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-05-07",
+          "returnDate": "2026-05-14"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-05-07",
+          "returnDate": "2026-05-14"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-05-07",
+          "returnDate": "2026-05-14"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-05-07",
+          "returnDate": "2026-05-14"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-05-07",
+          "returnDate": "2026-05-14"
+        }
       ]
     },
     {
       "id": "4",
-      "name": "GRU to Cinque Terre — Iter 2B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on July 4, 2026 and returning on July 11, 2026.",
+      "name": "GRU to Cinque Terre - Iter 2B",
       "priceThreshold": 2000,
       "solutionIteration": 2,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-4",
@@ -165,20 +248,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-04", "returnDate": "2026-07-11" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-07-04",
+          "returnDate": "2026-07-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-07-04",
+          "returnDate": "2026-07-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-07-04",
+          "returnDate": "2026-07-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-07-04",
+          "returnDate": "2026-07-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-07-04",
+          "returnDate": "2026-07-11"
+        }
       ]
     },
     {
       "id": "5",
-      "name": "GRU to Cinque Terre — Iter 3A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on June 2, 2026 and returning on June 9, 2026.",
+      "name": "GRU to Cinque Terre - Iter 3A",
       "priceThreshold": 2000,
       "solutionIteration": 3,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-5",
@@ -208,20 +318,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-06-02", "returnDate": "2026-06-09" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-06-02",
+          "returnDate": "2026-06-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-06-02",
+          "returnDate": "2026-06-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-06-02",
+          "returnDate": "2026-06-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-06-02",
+          "returnDate": "2026-06-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-06-02",
+          "returnDate": "2026-06-09"
+        }
       ]
     },
     {
       "id": "6",
-      "name": "GRU to Cinque Terre — Iter 3B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on May 9, 2026 and returning on May 16, 2026.",
+      "name": "GRU to Cinque Terre - Iter 3B",
       "priceThreshold": 2000,
       "solutionIteration": 3,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-6",
@@ -251,20 +388,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-09", "returnDate": "2026-05-16" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-05-09",
+          "returnDate": "2026-05-16"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-05-09",
+          "returnDate": "2026-05-16"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-05-09",
+          "returnDate": "2026-05-16"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-05-09",
+          "returnDate": "2026-05-16"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-05-09",
+          "returnDate": "2026-05-16"
+        }
       ]
     },
     {
       "id": "7",
-      "name": "GRU to Cinque Terre — Iter 4A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on July 8, 2026 and returning on July 15, 2026.",
+      "name": "GRU to Cinque Terre - Iter 4A",
       "priceThreshold": 2000,
       "solutionIteration": 4,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-7",
@@ -294,20 +458,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-08", "returnDate": "2026-07-15" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-07-08",
+          "returnDate": "2026-07-15"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-07-08",
+          "returnDate": "2026-07-15"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-07-08",
+          "returnDate": "2026-07-15"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-07-08",
+          "returnDate": "2026-07-15"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-07-08",
+          "returnDate": "2026-07-15"
+        }
       ]
     },
     {
       "id": "8",
-      "name": "GRU to Cinque Terre — Iter 4B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on June 4, 2026 and returning on June 11, 2026.",
+      "name": "GRU to Cinque Terre - Iter 4B",
       "priceThreshold": 2000,
       "solutionIteration": 4,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-8",
@@ -337,20 +528,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-06-04", "returnDate": "2026-06-11" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-06-04",
+          "returnDate": "2026-06-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-06-04",
+          "returnDate": "2026-06-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-06-04",
+          "returnDate": "2026-06-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-06-04",
+          "returnDate": "2026-06-11"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-06-04",
+          "returnDate": "2026-06-11"
+        }
       ]
     },
     {
       "id": "9",
-      "name": "GRU to Cinque Terre — Iter 5A",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on May 5, 2026 and returning on May 12, 2026.",
+      "name": "GRU to Cinque Terre - Iter 5A",
       "priceThreshold": 2000,
       "solutionIteration": 5,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-9",
@@ -380,20 +598,47 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-05", "returnDate": "2026-05-12" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-05-05",
+          "returnDate": "2026-05-12"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-05-05",
+          "returnDate": "2026-05-12"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-05-05",
+          "returnDate": "2026-05-12"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-05-05",
+          "returnDate": "2026-05-12"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-05-05",
+          "returnDate": "2026-05-12"
+        }
       ]
     },
     {
       "id": "10",
-      "name": "GRU to Cinque Terre — Iter 5B",
-      "description": "You want to visit Cinque Terre, Italy, but it doesn't have an airport. You depart from São Paulo (GRU) and can fly into Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — you'll travel overland from the airport. Book the first combination of outbound and return flights you find whose total price is under $2,000. Search for flights departing on July 2, 2026 and returning on July 9, 2026.",
+      "name": "GRU to Cinque Terre - Iter 5B",
       "priceThreshold": 2000,
       "solutionIteration": 5,
-      "solutionPosition": { "outbound": 1, "return": 1 },
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-10",
@@ -423,11 +668,36 @@
         }
       },
       "searchCombinations": [
-        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
-        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
-        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
-        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
-        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-02", "returnDate": "2026-07-09" }
+        {
+          "departure": "GRU",
+          "destination": "FCO",
+          "departureDate": "2026-07-02",
+          "returnDate": "2026-07-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "PSA",
+          "departureDate": "2026-07-02",
+          "returnDate": "2026-07-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "FLR",
+          "departureDate": "2026-07-02",
+          "returnDate": "2026-07-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "NAP",
+          "departureDate": "2026-07-02",
+          "returnDate": "2026-07-09"
+        },
+        {
+          "departure": "GRU",
+          "destination": "BLQ",
+          "departureDate": "2026-07-02",
+          "returnDate": "2026-07-09"
+        }
       ]
     }
   ]

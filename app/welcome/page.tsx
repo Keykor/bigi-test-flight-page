@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DebugButton } from "@/components/debug-button"
 import { loadExperiments } from "@/lib/experiments"
 import { useEffect, useState } from "react"
@@ -12,6 +12,15 @@ import type { ExperimentConfig } from "@/lib/types"
 import { CheckCircle2 } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { getAirportByCode } from "@/lib/airports"
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
 
 export default function WelcomePage() {
   const [availableExperiments, setAvailableExperiments] = useState<ExperimentConfig[]>([])
@@ -22,30 +31,24 @@ export default function WelcomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check if participant ID exists, redirect to home if not
-    if (typeof window !== 'undefined') {
-      const participantId = localStorage.getItem('participant_id')
+    if (typeof window !== "undefined") {
+      const participantId = localStorage.getItem("participant_id")
       if (!participantId) {
-        console.log('No participant ID found, redirecting to home')
-        router.push('/')
+        router.push("/")
         return
       }
     }
 
-    // If there's an active experiment when returning to welcome, abandon it
     if (isTracking) {
-      console.log('Abandoning active experiment on return to welcome page')
       abandonExperiment()
     }
 
     setDebugEnabled(isDebugMode())
 
-    // Get available experiments when the component mounts
     const experiments = loadExperiments()
     setAvailableExperiments(experiments)
 
-    // Load completed experiments from localStorage
-    const completed = experiments.filter(exp => isExperimentCompleted(exp.id)).map(exp => exp.id)
+    const completed = experiments.filter((exp) => isExperimentCompleted(exp.id)).map((exp) => exp.id)
     setCompletedExperiments(completed)
   }, [router])
 
@@ -54,131 +57,132 @@ export default function WelcomePage() {
     setDebugEnabled(checked)
   }
 
-  // Handle starting an iteration with tracking
   const handleStartIteration = (iterationId: string) => {
-    // Prevent multiple clicks/executions
-    if (isNavigating) return;
+    if (isNavigating) return
+    if (completedExperiments.includes(iterationId)) return
 
-    // Prevent starting completed experiments
-    if (completedExperiments.includes(iterationId)) {
-      return;
-    }
-
-    // Set navigating state to prevent multiple executions
-    setIsNavigating(true);
+    setIsNavigating(true)
 
     try {
-      // Start tracking this iteration
       startExperiment(iterationId)
-
-      // Navigate to the search page (use a timeout to ensure state updates complete)
       setTimeout(() => {
         router.push(`/search?iteration=${iterationId}`)
-      }, 0);
+      }, 0)
     } catch (error) {
-      console.error("Error starting iteration:", error);
-      setIsNavigating(false);
+      console.error("Error starting iteration:", error)
+      setIsNavigating(false)
     }
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
       <Card className="mb-8">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl">
-                Flight Booking Research Study
-              </CardTitle>
-              <CardDescription>Help us improve the flight booking experience</CardDescription>
+              <CardTitle className="text-2xl">Thanks for joining!</CardTitle>
+              <p className="text-sm text-gray-600 mt-1">Please read carefully.</p>
             </div>
             {debugEnabled && <DebugButton />}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="prose max-w-none">
-            <p>
-              Thank you for participating in this user experience study. Your interaction with our flight booking interface
-              will help us understand how people search for and select flights, enabling us to create better booking experiences.
-            </p>
-
-            <h3 className="text-lg font-semibold mt-4 mb-2">What to expect:</h3>
-            <ol className="space-y-2">
-              <li><strong>Search for flights</strong> — Enter travel details based on the task description</li>
-              <li><strong>Choose your flights</strong> — Select flights that best meet the specified criteria</li>
-              <li><strong>Confirm your booking</strong> — Review your selection and complete the task</li>
-            </ol>
-
-            <p className="mt-4">
-              <strong>To begin:</strong> Select an experiment below. Each has specific requirements—read the task description carefully before starting.
-            </p>
-          </div>
+        <CardContent className="text-sm text-gray-900 space-y-3">
+          <p>
+            For this study we want you to book flights using this interface. For each task, you should find and select <strong>one outbound flight and one return flight</strong> that meet the specified criteria: route, dates, and budget.
+          </p>
+          <p>
+            Each task has <strong>different travel conditions</strong>. Some tasks specify a <strong>maximum total budget</strong> for the outbound and return flights combined. In those cases, find the first pair of flights that fits within that budget.
+          </p>
+          <p>
+            <strong>Important:</strong> The instructions for each task (route, dates, budget) will always be <strong>visible on the right-hand side of the screen</strong> once you start.
+          </p>
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {availableExperiments.map((experiment) => {
-          const isCompleted = completedExperiments.includes(experiment.id);
+          const isCompleted = completedExperiments.includes(experiment.id)
+
+          const departureCode = experiment.searchCombinations[0]?.departure ?? ""
+          const departureCity = getAirportByCode(departureCode)?.city ?? departureCode
+
+          const destinations = [...new Set(experiment.searchCombinations.map((c) => c.destination))]
+          const departureDate = experiment.searchCombinations[0]?.departureDate ?? ""
+          const returnDate = experiment.searchCombinations[0]?.returnDate ?? ""
 
           return (
             <Card
               key={experiment.id}
-              className={`transition-all ${isCompleted ? 'bg-gray-50 border-green-200' : 'hover:shadow-md'}`}
+              className={`transition-all ${isCompleted ? "bg-gray-50 border-green-200" : "hover:shadow-md"}`}
             >
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <CardTitle className="text-xl">{experiment.name}</CardTitle>
-                      {isCompleted && (
-                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 gap-1">
-                          <CheckCircle2 className="h-3 w-3" />
-                          Completed
-                        </Badge>
-                      )}
-                    </div>
-                    <CardDescription className="text-sm leading-relaxed">
-                      {experiment.description}
-                    </CardDescription>
-                    {debugEnabled && (
-                      <p className="text-xs font-mono text-amber-600 mt-2">
-                        Solution at iteration: {experiment.solutionIteration}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex-shrink-0 md:ml-6">
-                    {isCompleted ? (
-                      <Button
-                        disabled
-                        className="w-full md:w-auto bg-gray-300 cursor-not-allowed"
-                        data-track-id={`start-experiment-${experiment.id}`}
-                      >
-                        Completed
-                      </Button>
-                    ) : (
-                      <Button
-                        className="w-full md:w-auto bg-green-600 hover:bg-green-700"
-                        onClick={() => handleStartIteration(experiment.id)}
-                        data-track-id={`start-experiment-${experiment.id}`}
-                      >
-                        Start Experiment
-                      </Button>
-                    )}
-                  </div>
+              <CardContent className="p-5 flex flex-col gap-4 h-full">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-base">{experiment.name}</span>
+                  {isCompleted && (
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 gap-1">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Completed
+                    </Badge>
+                  )}
                 </div>
+
+                <ul className="space-y-1.5 text-sm text-gray-700 flex-1">
+                  <li className="flex gap-2">
+                    <span className="font-semibold text-gray-500 w-20 shrink-0">From</span>
+                    <span>{departureCity} ({departureCode})</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="font-semibold text-gray-500 w-20 shrink-0">To</span>
+                    <span className="flex flex-col gap-0.5">
+                      {destinations.map((code) => {
+                        const city = getAirportByCode(code)?.city ?? code
+                        return <span key={code}>{city} ({code})</span>
+                      })}
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="font-semibold text-gray-500 w-20 shrink-0">Outbound</span>
+                    <span>{formatDate(departureDate)}</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="font-semibold text-gray-500 w-20 shrink-0">Return</span>
+                    <span>{formatDate(returnDate)}</span>
+                  </li>
+                  {experiment.priceThreshold > 0 && (
+                    <li className="flex gap-2">
+                      <span className="font-semibold text-gray-500 w-20 shrink-0">Budget</span>
+                      <span>Under ${experiment.priceThreshold.toLocaleString()} total</span>
+                    </li>
+                  )}
+                </ul>
+
+                {debugEnabled && (
+                  <p className="text-xs font-mono text-amber-600">
+                    Solution at iteration: {experiment.solutionIteration}
+                  </p>
+                )}
+
+                {isCompleted ? (
+                  <Button disabled className="w-full bg-gray-300 cursor-not-allowed" data-track-id={`start-experiment-${experiment.id}`}>
+                    Completed
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    onClick={() => handleStartIteration(experiment.id)}
+                    data-track-id={`start-experiment-${experiment.id}`}
+                  >
+                    Start
+                  </Button>
+                )}
               </CardContent>
             </Card>
-          );
+          )
         })}
       </div>
 
       <div className="flex items-center gap-2 mt-6 justify-end">
-        <Switch
-          id="debug-mode"
-          checked={debugEnabled}
-          onCheckedChange={handleDebugToggle}
-        />
+        <Switch id="debug-mode" checked={debugEnabled} onCheckedChange={handleDebugToggle} />
         <Label htmlFor="debug-mode" className="text-sm text-muted-foreground cursor-pointer">
           Debug Mode
         </Label>
