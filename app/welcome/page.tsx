@@ -94,7 +94,7 @@ export default function WelcomePage() {
             Each task has <strong>different travel conditions</strong>. Some tasks specify a <strong>maximum total budget</strong> for the outbound and return flights combined. In those cases, find the first pair of flights that fits within that budget.
           </p>
           <p>
-            <strong>Important:</strong> The instructions for each task (route, dates, budget) will always be <strong>visible on the right-hand side of the screen</strong> once you start.
+            <strong>Important:</strong> The instructions for each task (route, dates, budget) will always be <strong>visible on the right-hand side of the screen</strong> once you start. You can <strong>drag it by its header</strong> to reposition it if it gets in the way.
           </p>
         </CardContent>
       </Card>

@@ -313,11 +313,7 @@ export default function SearchPage() {
   return (
     <AirlineLayout activeTab="flights">
       <FloatingTaskCard experimentId={iterationId} />
-      <div className="container mx-auto px-4 py-8 bg-gray-50 min-h-screen">
-        {/* Add space between navbar and form */}
-        <div className="mt-4 md:mt-6"></div>
-
-        {/* Use container to match width of cards below */}
+      <div className="container mx-auto px-4 pt-4 pb-8 bg-gray-50 min-h-screen">
         <div className="max-w-4xl mx-auto">
           <Card className="mb-8 shadow-md border-t-4 border-t-green-500 overflow-hidden">
             <CardHeader className="bg-gray-100 border-b py-6">

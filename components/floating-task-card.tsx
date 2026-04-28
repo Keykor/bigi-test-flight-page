@@ -16,9 +16,13 @@ const POSITION_KEY = "floating_task_card_position"
 const IS_OPEN_KEY = "floating_task_card_is_open"
 const SIZE_KEY = "floating_task_card_size"
 
-const MIN_WIDTH = 240
+const MIN_WIDTH = 180
 const MIN_HEIGHT = 100
-const DEFAULT_WIDTH = 320
+const DEFAULT_WIDTH = 280
+
+function defaultLayout() {
+  return { x: window.innerWidth - DEFAULT_WIDTH - 8, y: 8, width: DEFAULT_WIDTH }
+}
 
 export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
   const [isOpen, setIsOpen] = useState(true)
@@ -87,7 +91,9 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
           const constrained = constrainPosition(parsed.x, parsed.y)
           setPosition(constrained)
         } else {
-          setPosition({ x: window.innerWidth - 336, y: 80 })
+          const layout = defaultLayout()
+          setPosition({ x: layout.x, y: layout.y })
+          if (!savedSize) setSize({ width: layout.width, height: 0 })
         }
 
         if (savedIsOpen !== null) {
@@ -95,7 +101,9 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
         }
       } catch (e) {
         console.error("Error loading floating card state:", e)
-        setPosition({ x: window.innerWidth - 336, y: 80 })
+        const layout = defaultLayout()
+        setPosition({ x: layout.x, y: layout.y })
+        setSize({ width: layout.width, height: 0 })
       }
     }
   }, [])
@@ -263,47 +271,45 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
     >
       <Card className="shadow-2xl border-2 border-blue-500 bg-white relative">
         <CardHeader
-          className="bg-blue-50 border-b py-3 cursor-move hover:bg-blue-100 transition-colors"
+          className="bg-blue-50 border-b py-1 px-3 cursor-move hover:bg-blue-100 transition-colors"
           onMouseDown={handleMouseDown}
           data-track-id="floating-task-description-header"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="bg-blue-100 p-1.5 rounded-full">
-                <Info className="h-4 w-4 text-blue-600" />
-              </div>
-              <CardTitle className="text-sm text-blue-700">Task Instructions</CardTitle>
+            <div className="flex items-center gap-1.5">
+              <Info className="h-3 w-3 text-blue-600 shrink-0" />
+              <CardTitle className="text-xs text-blue-700">Task Instructions</CardTitle>
               <Move className="h-3 w-3 text-blue-400 opacity-60" />
             </div>
             <button
               onClick={handleToggle}
-              className="p-1 hover:bg-blue-200 rounded transition-colors"
+              className="p-0.5 hover:bg-blue-200 rounded transition-colors"
               data-track-id="floating-task-toggle-button"
             >
               {isOpen ? (
-                <ChevronUp className="h-4 w-4 text-blue-600" />
+                <ChevronUp className="h-3 w-3 text-blue-600" />
               ) : (
-                <ChevronDown className="h-4 w-4 text-blue-600" />
+                <ChevronDown className="h-3 w-3 text-blue-600" />
               )}
             </button>
           </div>
         </CardHeader>
         {isOpen && (
           <CardContent
-            className="pt-3 pb-3 bg-white overflow-auto"
+            className="pt-2 pb-2 bg-white overflow-auto"
             style={{
               overscrollBehavior: 'contain',
               ...(size.height > 0 ? { maxHeight: `${size.height - (cardRef.current?.querySelector('[class*="CardHeader"]')?.clientHeight || 48)}px` } : {}),
             }}
             onWheel={(e) => e.stopPropagation()}
           >
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-1 text-xs text-gray-700">
               <li className="flex gap-2">
-                <span className="font-semibold text-gray-500 w-20 shrink-0">From</span>
+                <span className="font-semibold text-gray-500 w-16 shrink-0">From</span>
                 <span>{departureCity} ({departureCode})</span>
               </li>
               <li className="flex gap-2">
-                <span className="font-semibold text-gray-500 w-20 shrink-0">To</span>
+                <span className="font-semibold text-gray-500 w-16 shrink-0">To</span>
                 <span className="flex flex-col gap-0.5">
                   {destinations.map((code) => {
                     const city = getAirportByCode(code)?.city ?? code
@@ -314,16 +320,16 @@ export function FloatingTaskCard({ experimentId }: FloatingTaskCardProps) {
                 </span>
               </li>
               <li className="flex gap-2">
-                <span className="font-semibold text-gray-500 w-20 shrink-0">Outbound</span>
+                <span className="font-semibold text-gray-500 w-16 shrink-0">Outbound</span>
                 <span>{formatDate(departureDate)}</span>
               </li>
               <li className="flex gap-2">
-                <span className="font-semibold text-gray-500 w-20 shrink-0">Return</span>
+                <span className="font-semibold text-gray-500 w-16 shrink-0">Return</span>
                 <span>{formatDate(returnDate)}</span>
               </li>
               {priceThreshold > 0 && (
                 <li className="flex gap-2">
-                  <span className="font-semibold text-gray-500 w-20 shrink-0">Budget</span>
+                  <span className="font-semibold text-gray-500 w-16 shrink-0">Budget</span>
                   <span>Find the first pair under ${priceThreshold.toLocaleString()} total</span>
                 </li>
               )}
