@@ -38,36 +38,11 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-05-03",
-          "returnDate": "2026-05-10"
-        },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-05-03",
-          "returnDate": "2026-05-10"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-05-03",
-          "returnDate": "2026-05-10"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-05-03",
-          "returnDate": "2026-05-10"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-05-03",
-          "returnDate": "2026-05-10"
-        }
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-03", "returnDate": "2026-05-10" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-03", "returnDate": "2026-05-10" }
       ]
     },
     {
@@ -108,36 +83,101 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-06-06",
-          "returnDate": "2026-06-13"
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-06-06", "returnDate": "2026-06-13" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-06-06", "returnDate": "2026-06-13" }
+      ]
+    },
+    {
+      "id": "11",
+      "name": "GRU to Cinque Terre - Iter 1C",
+      "priceThreshold": 2000,
+      "solutionIteration": 1,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-11",
+          "airline": "LATAM",
+          "flightNumber": "LA8100",
+          "departureTime": "21:00",
+          "arrivalTime": "09:00+1",
+          "duration": "12h 00m",
+          "price": 880,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-06-06",
-          "returnDate": "2026-06-13"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-06-06",
-          "returnDate": "2026-06-13"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-06-06",
-          "returnDate": "2026-06-13"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-06-06",
-          "returnDate": "2026-06-13"
+        "return": {
+          "id": "solution-ret-11",
+          "airline": "LATAM",
+          "flightNumber": "LA8101",
+          "departureTime": "16:00",
+          "arrivalTime": "03:30+1",
+          "duration": "11h 30m",
+          "price": 920,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-08-03", "returnDate": "2026-08-10" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-08-03", "returnDate": "2026-08-10" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-08-03", "returnDate": "2026-08-10" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-08-03", "returnDate": "2026-08-10" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-08-03", "returnDate": "2026-08-10" }
+      ]
+    },
+    {
+      "id": "12",
+      "name": "GRU to Cinque Terre - Iter 1D",
+      "priceThreshold": 2000,
+      "solutionIteration": 1,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-12",
+          "airline": "ITA Airways",
+          "flightNumber": "AZ699",
+          "departureTime": "22:30",
+          "arrivalTime": "10:30+1",
+          "duration": "12h 00m",
+          "price": 895,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-12",
+          "airline": "ITA Airways",
+          "flightNumber": "AZ700",
+          "departureTime": "17:00",
+          "arrivalTime": "04:30+1",
+          "duration": "11h 30m",
+          "price": 930,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-09-06", "returnDate": "2026-09-13" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-09-06", "returnDate": "2026-09-13" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-09-06", "returnDate": "2026-09-13" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-09-06", "returnDate": "2026-09-13" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-09-06", "returnDate": "2026-09-13" }
       ]
     },
     {
@@ -178,36 +218,11 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-05-07",
-          "returnDate": "2026-05-14"
-        },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-05-07",
-          "returnDate": "2026-05-14"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-05-07",
-          "returnDate": "2026-05-14"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-05-07",
-          "returnDate": "2026-05-14"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-05-07",
-          "returnDate": "2026-05-14"
-        }
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-07", "returnDate": "2026-05-14" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-07", "returnDate": "2026-05-14" }
       ]
     },
     {
@@ -248,36 +263,101 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-07-04",
-          "returnDate": "2026-07-11"
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-04", "returnDate": "2026-07-11" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-04", "returnDate": "2026-07-11" }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "GRU to Cinque Terre - Iter 2C",
+      "priceThreshold": 2000,
+      "solutionIteration": 2,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-13",
+          "airline": "Air France",
+          "flightNumber": "AF9501",
+          "departureTime": "20:45",
+          "arrivalTime": "08:45+1",
+          "duration": "12h 00m",
+          "price": 870,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-07-04",
-          "returnDate": "2026-07-11"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-07-04",
-          "returnDate": "2026-07-11"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-07-04",
-          "returnDate": "2026-07-11"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-07-04",
-          "returnDate": "2026-07-11"
+        "return": {
+          "id": "solution-ret-13",
+          "airline": "Air France",
+          "flightNumber": "AF9502",
+          "departureTime": "15:30",
+          "arrivalTime": "03:00+1",
+          "duration": "11h 30m",
+          "price": 910,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-08-07", "returnDate": "2026-08-14" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-08-07", "returnDate": "2026-08-14" }
+      ]
+    },
+    {
+      "id": "14",
+      "name": "GRU to Cinque Terre - Iter 2D",
+      "priceThreshold": 2000,
+      "solutionIteration": 2,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-14",
+          "airline": "Iberia",
+          "flightNumber": "IB7801",
+          "departureTime": "21:30",
+          "arrivalTime": "09:30+1",
+          "duration": "12h 00m",
+          "price": 890,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-14",
+          "airline": "Iberia",
+          "flightNumber": "IB7802",
+          "departureTime": "16:30",
+          "arrivalTime": "04:00+1",
+          "duration": "11h 30m",
+          "price": 925,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-10-04", "returnDate": "2026-10-11" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-10-04", "returnDate": "2026-10-11" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-10-04", "returnDate": "2026-10-11" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-10-04", "returnDate": "2026-10-11" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-10-04", "returnDate": "2026-10-11" }
       ]
     },
     {
@@ -318,36 +398,11 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-06-02",
-          "returnDate": "2026-06-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-06-02",
-          "returnDate": "2026-06-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-06-02",
-          "returnDate": "2026-06-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-06-02",
-          "returnDate": "2026-06-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-06-02",
-          "returnDate": "2026-06-09"
-        }
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-06-02", "returnDate": "2026-06-09" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-06-02", "returnDate": "2026-06-09" }
       ]
     },
     {
@@ -388,36 +443,101 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-05-09",
-          "returnDate": "2026-05-16"
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-09", "returnDate": "2026-05-16" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-09", "returnDate": "2026-05-16" }
+      ]
+    },
+    {
+      "id": "15",
+      "name": "GRU to Cinque Terre - Iter 3C",
+      "priceThreshold": 2000,
+      "solutionIteration": 3,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-15",
+          "airline": "Lufthansa",
+          "flightNumber": "LH8201",
+          "departureTime": "22:00",
+          "arrivalTime": "10:00+1",
+          "duration": "12h 00m",
+          "price": 860,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-05-09",
-          "returnDate": "2026-05-16"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-05-09",
-          "returnDate": "2026-05-16"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-05-09",
-          "returnDate": "2026-05-16"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-05-09",
-          "returnDate": "2026-05-16"
+        "return": {
+          "id": "solution-ret-15",
+          "airline": "Lufthansa",
+          "flightNumber": "LH8202",
+          "departureTime": "15:00",
+          "arrivalTime": "02:30+1",
+          "duration": "11h 30m",
+          "price": 905,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-09-02", "returnDate": "2026-09-09" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-09-02", "returnDate": "2026-09-09" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-09-02", "returnDate": "2026-09-09" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-09-02", "returnDate": "2026-09-09" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-09-02", "returnDate": "2026-09-09" }
+      ]
+    },
+    {
+      "id": "16",
+      "name": "GRU to Cinque Terre - Iter 3D",
+      "priceThreshold": 2000,
+      "solutionIteration": 3,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-16",
+          "airline": "Turkish Airlines",
+          "flightNumber": "TK8501",
+          "departureTime": "20:30",
+          "arrivalTime": "08:30+1",
+          "duration": "12h 00m",
+          "price": 875,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-16",
+          "airline": "Turkish Airlines",
+          "flightNumber": "TK8502",
+          "departureTime": "17:30",
+          "arrivalTime": "05:00+1",
+          "duration": "11h 30m",
+          "price": 915,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-08-09", "returnDate": "2026-08-16" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-08-09", "returnDate": "2026-08-16" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-08-09", "returnDate": "2026-08-16" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-08-09", "returnDate": "2026-08-16" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-08-09", "returnDate": "2026-08-16" }
       ]
     },
     {
@@ -458,36 +578,11 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-07-08",
-          "returnDate": "2026-07-15"
-        },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-07-08",
-          "returnDate": "2026-07-15"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-07-08",
-          "returnDate": "2026-07-15"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-07-08",
-          "returnDate": "2026-07-15"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-07-08",
-          "returnDate": "2026-07-15"
-        }
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-08", "returnDate": "2026-07-15" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-08", "returnDate": "2026-07-15" }
       ]
     },
     {
@@ -528,36 +623,101 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-06-04",
-          "returnDate": "2026-06-11"
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-06-04", "returnDate": "2026-06-11" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-06-04", "returnDate": "2026-06-11" }
+      ]
+    },
+    {
+      "id": "17",
+      "name": "GRU to Cinque Terre - Iter 4C",
+      "priceThreshold": 2000,
+      "solutionIteration": 4,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-17",
+          "airline": "KLM",
+          "flightNumber": "KL9001",
+          "departureTime": "21:45",
+          "arrivalTime": "09:45+1",
+          "duration": "12h 00m",
+          "price": 850,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-06-04",
-          "returnDate": "2026-06-11"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-06-04",
-          "returnDate": "2026-06-11"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-06-04",
-          "returnDate": "2026-06-11"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-06-04",
-          "returnDate": "2026-06-11"
+        "return": {
+          "id": "solution-ret-17",
+          "airline": "KLM",
+          "flightNumber": "KL9002",
+          "departureTime": "16:15",
+          "arrivalTime": "03:45+1",
+          "duration": "11h 30m",
+          "price": 900,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-10-08", "returnDate": "2026-10-15" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-10-08", "returnDate": "2026-10-15" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-10-08", "returnDate": "2026-10-15" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-10-08", "returnDate": "2026-10-15" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-10-08", "returnDate": "2026-10-15" }
+      ]
+    },
+    {
+      "id": "18",
+      "name": "GRU to Cinque Terre - Iter 4D",
+      "priceThreshold": 2000,
+      "solutionIteration": 4,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-18",
+          "airline": "Swiss",
+          "flightNumber": "LX8801",
+          "departureTime": "23:00",
+          "arrivalTime": "11:00+1",
+          "duration": "12h 00m",
+          "price": 885,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-18",
+          "airline": "Swiss",
+          "flightNumber": "LX8802",
+          "departureTime": "18:00",
+          "arrivalTime": "05:30+1",
+          "duration": "11h 30m",
+          "price": 935,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-09-04", "returnDate": "2026-09-11" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-09-04", "returnDate": "2026-09-11" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-09-04", "returnDate": "2026-09-11" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-09-04", "returnDate": "2026-09-11" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-09-04", "returnDate": "2026-09-11" }
       ]
     },
     {
@@ -598,36 +758,11 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-05-05",
-          "returnDate": "2026-05-12"
-        },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-05-05",
-          "returnDate": "2026-05-12"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-05-05",
-          "returnDate": "2026-05-12"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-05-05",
-          "returnDate": "2026-05-12"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-05-05",
-          "returnDate": "2026-05-12"
-        }
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-05-05", "returnDate": "2026-05-12" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-05-05", "returnDate": "2026-05-12" }
       ]
     },
     {
@@ -668,36 +803,101 @@
         }
       },
       "searchCombinations": [
-        {
-          "departure": "GRU",
-          "destination": "FCO",
-          "departureDate": "2026-07-02",
-          "returnDate": "2026-07-09"
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-07-02", "returnDate": "2026-07-09" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-07-02", "returnDate": "2026-07-09" }
+      ]
+    },
+    {
+      "id": "19",
+      "name": "GRU to Cinque Terre - Iter 5C",
+      "priceThreshold": 2000,
+      "solutionIteration": 5,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-19",
+          "airline": "TAP Portugal",
+          "flightNumber": "TP8901",
+          "departureTime": "21:15",
+          "arrivalTime": "09:15+1",
+          "duration": "12h 00m",
+          "price": 840,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         },
-        {
-          "departure": "GRU",
-          "destination": "PSA",
-          "departureDate": "2026-07-02",
-          "returnDate": "2026-07-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "FLR",
-          "departureDate": "2026-07-02",
-          "returnDate": "2026-07-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "NAP",
-          "departureDate": "2026-07-02",
-          "returnDate": "2026-07-09"
-        },
-        {
-          "departure": "GRU",
-          "destination": "BLQ",
-          "departureDate": "2026-07-02",
-          "returnDate": "2026-07-09"
+        "return": {
+          "id": "solution-ret-19",
+          "airline": "TAP Portugal",
+          "flightNumber": "TP8902",
+          "departureTime": "15:45",
+          "arrivalTime": "03:15+1",
+          "duration": "11h 30m",
+          "price": 895,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
         }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-08-05", "returnDate": "2026-08-12" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-08-05", "returnDate": "2026-08-12" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-08-05", "returnDate": "2026-08-12" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-08-05", "returnDate": "2026-08-12" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-08-05", "returnDate": "2026-08-12" }
+      ]
+    },
+    {
+      "id": "20",
+      "name": "GRU to Cinque Terre - Iter 5D",
+      "priceThreshold": 2000,
+      "solutionIteration": 5,
+      "solutionPosition": {
+        "outbound": 1,
+        "return": 1
+      },
+      "solutionFlight": {
+        "outbound": {
+          "id": "solution-out-20",
+          "airline": "Alitalia",
+          "flightNumber": "AZ8101",
+          "departureTime": "22:15",
+          "arrivalTime": "10:15+1",
+          "duration": "12h 00m",
+          "price": 865,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        },
+        "return": {
+          "id": "solution-ret-20",
+          "airline": "Alitalia",
+          "flightNumber": "AZ8102",
+          "departureTime": "17:15",
+          "arrivalTime": "04:45+1",
+          "duration": "11h 30m",
+          "price": 910,
+          "stops": 0,
+          "class": "Economy",
+          "luggage": "1 checked bag",
+          "refundable": false
+        }
+      },
+      "searchCombinations": [
+        { "departure": "GRU", "destination": "FCO", "departureDate": "2026-10-02", "returnDate": "2026-10-09" },
+        { "departure": "GRU", "destination": "PSA", "departureDate": "2026-10-02", "returnDate": "2026-10-09" },
+        { "departure": "GRU", "destination": "FLR", "departureDate": "2026-10-02", "returnDate": "2026-10-09" },
+        { "departure": "GRU", "destination": "NAP", "departureDate": "2026-10-02", "returnDate": "2026-10-09" },
+        { "departure": "GRU", "destination": "BLQ", "departureDate": "2026-10-02", "returnDate": "2026-10-09" }
       ]
     }
   ]
