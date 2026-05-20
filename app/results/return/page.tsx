@@ -69,17 +69,6 @@ export default function ReturnResultsPage() {
       const params = extractSearchParams()
       setCurrentSearchParams(params)
 
-      // Obtener el vuelo de ida seleccionado
-      const selectedOutboundFlight = getFlightById(outboundFlightId)
-      if (!selectedOutboundFlight) {
-        console.error(`Outbound flight not found: ${outboundFlightId}`)
-        router.push(`/results/outbound?${searchParams.toString()}`)
-        return
-      }
-
-      console.log("Found outbound flight:", selectedOutboundFlight)
-      setOutboundFlight(selectedOutboundFlight)
-
       // Obtener vuelos basados en el experimento y los parámetros de búsqueda (con caché)
       const flightsResult = getFlightsWithCache(iterationId, params)
 
@@ -101,6 +90,20 @@ export default function ReturnResultsPage() {
         router.push(`/no-flights?${searchParamsObj.toString()}`)
         return
       }
+
+      // Derive the selected outbound flight from the cached list (same source as the outbound page),
+      // falling back to the registry lookup for solution flights not in the regular list.
+      const selectedOutboundFlight =
+        flightsResult.outbound.find(f => f.id === outboundFlightId) ??
+        getFlightById(outboundFlightId)
+      if (!selectedOutboundFlight) {
+        console.error(`Outbound flight not found: ${outboundFlightId}`)
+        router.push(`/results/outbound?${searchParams.toString()}`)
+        return
+      }
+
+      console.log("Found outbound flight:", selectedOutboundFlight)
+      setOutboundFlight(selectedOutboundFlight)
 
       // Set return flights
       setFlights(flightsResult.return)

@@ -257,11 +257,11 @@ export function getFlightById(flightId: string): Flight | undefined {
   for (const experiment of experiments) {
     for (const combo of experiment.searchCombinations) {
       // Search in outbound flights
-      const outboundFlight = combo.outboundFlights.find((f) => f.id === flightId)
+      const outboundFlight = combo.outboundFlights?.find((f) => f.id === flightId)
       if (outboundFlight) return outboundFlight
 
       // Search in return flights
-      const returnFlight = combo.returnFlights.find((f) => f.id === flightId)
+      const returnFlight = combo.returnFlights?.find((f) => f.id === flightId)
       if (returnFlight) return returnFlight
     }
   }
