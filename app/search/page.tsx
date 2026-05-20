@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format, parse } from "date-fns"
+import { format, parse, startOfDay, isBefore } from "date-fns"
 import { CalendarIcon, ArrowLeft, Calendar, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AirportAutocomplete } from "@/components/airport-autocomplete"
@@ -66,6 +66,10 @@ export default function SearchPage() {
     }
     
     setDate(selectedDate);
+    // If the current return date is now before the new departure date, clear it
+    if (selectedDate && returnDate && isBefore(startOfDay(returnDate), startOfDay(selectedDate))) {
+      setReturnDate(undefined);
+    }
     // Clear any error for this field
     setErrors(prev => ({ ...prev, date: undefined }));
     // Explicitly close the departure date popover
@@ -392,6 +396,7 @@ export default function SearchPage() {
                         onSelect={handleDateSelect}
                         trackingIdPrefix="departure-calendar"
                         className="rounded-md border-0"
+                        disabled={(d) => isBefore(startOfDay(d), startOfDay(new Date()))}
                       />
                     </PopoverContent>
                   </Popover>
@@ -429,6 +434,7 @@ export default function SearchPage() {
                         onSelect={handleReturnDateSelect}
                         trackingIdPrefix="return-calendar"
                         className="rounded-md border-0"
+                        disabled={date ? (d) => isBefore(startOfDay(d), startOfDay(date)) : undefined}
                       />
                     </PopoverContent>
                   </Popover>

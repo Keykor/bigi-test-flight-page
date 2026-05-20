@@ -14,16 +14,17 @@ export type CalendarWrapperProps = {
   onClose?: () => void // Add onClose prop
   trackingIdPrefix?: string
   initialFocus?: boolean
+  disabled?: (date: Date) => boolean
 }
 
 export function CalendarWrapper({
   className,
   selected,
   onSelect,
-  onClose, // Add the onClose parameter
+  onClose,
   trackingIdPrefix = "calendar-day",
-  initialFocus,
-  ...props
+  initialFocus: _initialFocus,
+  disabled,
 }: CalendarWrapperProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   
@@ -47,10 +48,12 @@ export function CalendarWrapper({
   
   // Handle day selection
   const handleDayClick = (day: Date) => {
+    if (disabled?.(day)) return
+
     if (onSelect) {
       onSelect(day)
     }
-    
+
     // Close the popover after selection
     if (onClose) {
       onClose()
@@ -69,16 +72,19 @@ export function CalendarWrapper({
   // Add cells for each day of the month
   for (const day of monthDays) {
     const isSelected = selected ? isSameDay(day, selected) : false
-    
+    const isDisabled = disabled?.(day) ?? false
+
     days.push(
       <td key={day.toString()} className="calendar-cell">
         <Button
           variant="ghost"
           className={cn(
             "calendar-day h-9 w-9 p-0 font-normal rounded-full",
-            isSelected && "bg-primary text-primary-foreground"
+            isSelected && "bg-primary text-primary-foreground",
+            isDisabled && "opacity-30 cursor-not-allowed pointer-events-none"
           )}
           onClick={() => handleDayClick(day)}
+          disabled={isDisabled}
           data-track-id={`${trackingIdPrefix}-${format(day, "dd")}`}
         >
           {format(day, "d")}
