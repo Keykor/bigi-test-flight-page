@@ -5,11 +5,20 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Check, Clock, Luggage, Plane, Calendar, MapPin, Timer, Ban, DollarSign } from "lucide-react"
+import { format, parseISO } from "date-fns"
 import { getFlightById } from "@/lib/experiments"
 import { useEventTracker } from "@/context/EventTrackerProvider"
 import type { Flight, SearchParameters } from "@/lib/types"
 import AirlineLayout from "@/components/airline-layout"
 import { FloatingTaskCard } from "@/components/floating-task-card"
+
+const formatFlightDate = (dateString: string) => {
+  try {
+    return format(parseISO(dateString), "MMM d, yyyy")
+  } catch {
+    return dateString
+  }
+}
 
 export default function ConfirmationPage() {
   const router = useRouter()
@@ -195,7 +204,7 @@ export default function ConfirmationPage() {
                         <div className="text-green-500 mt-1 bg-green-50"><Calendar className="h-4 w-4" /></div>
                         <div>
                           <div className="text-sm text-muted-foreground">Date</div>
-                          <div className="font-medium">{outboundFlight.departureDate}</div>
+                          <div className="font-medium">{formatFlightDate(outboundFlight.departureDate || "")}</div>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
@@ -263,7 +272,7 @@ export default function ConfirmationPage() {
                         <div className="text-green-500 mt-1 bg-green-50"><Calendar className="h-4 w-4" /></div>
                         <div>
                           <div className="text-sm text-muted-foreground">Date</div>
-                          <div className="font-medium">{returnFlight.departureDate}</div>
+                          <div className="font-medium">{formatFlightDate(returnFlight.departureDate || "")}</div>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">

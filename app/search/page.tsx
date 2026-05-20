@@ -387,7 +387,7 @@ export default function SearchPage() {
                         data-track-id="departure-date-trigger"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "dd/MM/yyyy") : <span>Select date</span>}
+                        {date ? format(date, "MMM d, yyyy") : <span>Select date</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0 bg-white min-w-[320px] shadow-lg" align="start">
@@ -425,7 +425,7 @@ export default function SearchPage() {
                         data-track-id="return-date-trigger"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {returnDate ? format(returnDate, "dd/MM/yyyy") : <span>Select date</span>}
+                        {returnDate ? format(returnDate, "MMM d, yyyy") : <span>Select date</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0 bg-white min-w-[320px] shadow-lg" align="start">
