@@ -94,6 +94,9 @@ export default function WelcomePage() {
             Each task has <strong>different travel conditions</strong>. Some tasks specify a <strong>maximum total budget</strong> for the outbound and return flights combined. In those cases, find the first pair of flights that fits within that budget.
           </p>
           <p>
+            Because you want to visit <strong>Cinque Terre, Italy</strong>, which does not have an airport, you will depart from <strong>São Paulo (GRU)</strong> and can fly into <strong>any</strong> of five nearby airports — Pisa (PSA), Florence (FLR), Rome Fiumicino (FCO), Naples (NAP), or Bologna (BLQ) — as you will travel overland to Cinque Terre from whichever airport you land at.
+          </p>
+          <p>
             <strong>Important:</strong> The instructions for each task (route, dates, budget) will always be <strong>visible on the right-hand side of the screen</strong> once you start. You can <strong>drag it by its header</strong> to reposition it if it gets in the way.
           </p>
         </CardContent>
