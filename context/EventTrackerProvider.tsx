@@ -97,7 +97,6 @@ interface ExperimentData {
     page: string;
     visitStartTime: string;
     visitEndTime: string | null;
-    pageTransitionDuration?: number;
     mouseMovements: Array<{
       x: number;
       y: number;

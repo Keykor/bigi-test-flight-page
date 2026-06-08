@@ -75,7 +75,6 @@ export default function OutboundResultsPage() {
           type: "no_flights_found_redirect",
           reason: "no_matching_combination",
           searchParams: params,
-          iterationId: iterationId,
         })
 
         // Redirect to no-flights page with iteration and search params

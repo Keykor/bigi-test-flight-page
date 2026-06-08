@@ -188,7 +188,6 @@ export default function SearchPage() {
         type: "validation_error",
         fields: Object.keys(newErrors),
         errors: newErrors,
-        iterationId: iterationId,
       });
 
       return;
@@ -223,7 +222,6 @@ export default function SearchPage() {
         type: "no_flights_found_redirect",
         reason: "no_matching_combination",
         searchParams: params,
-        iterationId: iterationId,
       })
 
       // Record navigation to no-flights
@@ -232,7 +230,6 @@ export default function SearchPage() {
         button: "search_submit",
         destination: "no-flights",
         ...params,
-        iterationId: iterationId,
       });
 
       // Redirect to no-flights page with search params
@@ -251,7 +248,6 @@ export default function SearchPage() {
       button: "search_submit",
       destination: "results",
       ...params,
-      iterationId: iterationId,
     });
 
     const searchParamsString = new URLSearchParams({

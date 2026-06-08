@@ -81,7 +81,6 @@ export default function ReturnResultsPage() {
           type: "no_flights_found_redirect",
           reason: "no_matching_combination",
           searchParams: params,
-          iterationId: iterationId,
           page: "return",
         })
 
@@ -114,7 +113,6 @@ export default function ReturnResultsPage() {
           type: "no_return_flights",
           reason: "empty_return_flights",
           searchParams: params,
-          iterationId: iterationId,
           outboundFlightId: outboundFlightId,
         })
       }

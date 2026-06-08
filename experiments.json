@@ -5,10 +5,6 @@
       "name": "GRU to Cinque Terre - Iter 1A",
       "priceThreshold": 2000,
       "solutionIteration": 1,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-1",
@@ -75,10 +71,6 @@
       "name": "GRU to Cinque Terre - Iter 1B",
       "priceThreshold": 2000,
       "solutionIteration": 1,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-2",
@@ -145,10 +137,6 @@
       "name": "GRU to Cinque Terre - Iter 1C",
       "priceThreshold": 2000,
       "solutionIteration": 1,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-11",
@@ -215,10 +203,6 @@
       "name": "GRU to Cinque Terre - Iter 1D",
       "priceThreshold": 2000,
       "solutionIteration": 1,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-12",
@@ -285,10 +269,6 @@
       "name": "GRU to Cinque Terre - Iter 2A",
       "priceThreshold": 2000,
       "solutionIteration": 2,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-3",
@@ -355,10 +335,6 @@
       "name": "GRU to Cinque Terre - Iter 2B",
       "priceThreshold": 2000,
       "solutionIteration": 2,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-4",
@@ -425,10 +401,6 @@
       "name": "GRU to Cinque Terre - Iter 2C",
       "priceThreshold": 2000,
       "solutionIteration": 2,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-13",
@@ -495,10 +467,6 @@
       "name": "GRU to Cinque Terre - Iter 2D",
       "priceThreshold": 2000,
       "solutionIteration": 2,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-14",
@@ -565,10 +533,6 @@
       "name": "GRU to Cinque Terre - Iter 3A",
       "priceThreshold": 2000,
       "solutionIteration": 3,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-5",
@@ -635,10 +599,6 @@
       "name": "GRU to Cinque Terre - Iter 3B",
       "priceThreshold": 2000,
       "solutionIteration": 3,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-6",
@@ -705,10 +665,6 @@
       "name": "GRU to Cinque Terre - Iter 3C",
       "priceThreshold": 2000,
       "solutionIteration": 3,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-15",
@@ -775,10 +731,6 @@
       "name": "GRU to Cinque Terre - Iter 3D",
       "priceThreshold": 2000,
       "solutionIteration": 3,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-16",
@@ -845,10 +797,6 @@
       "name": "GRU to Cinque Terre - Iter 4A",
       "priceThreshold": 2000,
       "solutionIteration": 4,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-7",
@@ -915,10 +863,6 @@
       "name": "GRU to Cinque Terre - Iter 4B",
       "priceThreshold": 2000,
       "solutionIteration": 4,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-8",
@@ -985,10 +929,6 @@
       "name": "GRU to Cinque Terre - Iter 4C",
       "priceThreshold": 2000,
       "solutionIteration": 4,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-17",
@@ -1055,10 +995,6 @@
       "name": "GRU to Cinque Terre - Iter 4D",
       "priceThreshold": 2000,
       "solutionIteration": 4,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-18",
@@ -1125,10 +1061,6 @@
       "name": "GRU to Cinque Terre - Iter 5A",
       "priceThreshold": 2000,
       "solutionIteration": 5,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-9",
@@ -1195,10 +1127,6 @@
       "name": "GRU to Cinque Terre - Iter 5B",
       "priceThreshold": 2000,
       "solutionIteration": 5,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-10",
@@ -1265,10 +1193,6 @@
       "name": "GRU to Cinque Terre - Iter 5C",
       "priceThreshold": 2000,
       "solutionIteration": 5,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-19",
@@ -1335,10 +1259,6 @@
       "name": "GRU to Cinque Terre - Iter 5D",
       "priceThreshold": 2000,
       "solutionIteration": 5,
-      "solutionPosition": {
-        "outbound": 1,
-        "return": 1
-      },
       "solutionFlight": {
         "outbound": {
           "id": "solution-out-20",

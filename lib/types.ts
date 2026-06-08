@@ -105,10 +105,6 @@ export interface SolutionFlightTemplate {
 
 export interface ExperimentConfig extends ExperimentMetadata {
   solutionIteration: number // Which unique search attempt reveals the target flight(s)
-  solutionPosition: {
-    outbound: number // 1-indexed position in the outbound list where the target replaces a flight
-    return: number  // 1-indexed position in the return list where the target replaces a flight
-  }
   solutionFlight: {
     outbound: SolutionFlightTemplate
     return: SolutionFlightTemplate
@@ -150,7 +146,6 @@ export interface PageVisit {
   page: string
   visitStartTime: string
   visitEndTime: string | null
-  pageTransitionDuration?: number
   mouseMovements: MouseMovement[]
   scrollPositions: ScrollPosition[]
   clicks: ClickEvent[]
