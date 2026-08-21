@@ -14,6 +14,23 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { getAirportByCode } from "@/lib/airports"
 
+// ponytail: FNV-1a seed + xorshift Fisher-Yates; deterministic per participant so the
+// presentation order is reproducible from the participant ID alone (no need to log it)
+function seededShuffle<T>(arr: T[], seed: string): T[] {
+  let h = 2166136261
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    h ^= h << 13; h ^= h >>> 17; h ^= h << 5
+    const j = (h >>> 0) % (i + 1)
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 function formatDate(dateStr: string) {
   return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
     year: "numeric",
@@ -31,8 +48,9 @@ export default function WelcomePage() {
   const router = useRouter()
 
   useEffect(() => {
+    let participantId = ""
     if (typeof window !== "undefined") {
-      const participantId = localStorage.getItem("participant_id")
+      participantId = localStorage.getItem("participant_id") ?? ""
       if (!participantId) {
         router.push("/")
         return
@@ -45,7 +63,7 @@ export default function WelcomePage() {
 
     setDebugEnabled(isDebugMode())
 
-    const experiments = loadExperiments()
+    const experiments = seededShuffle(loadExperiments(), participantId)
     setAvailableExperiments(experiments)
 
     const completed = experiments.filter((exp) => isExperimentCompleted(exp.id)).map((exp) => exp.id)

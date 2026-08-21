@@ -2,7 +2,7 @@
   "experiments": [
     {
       "id": "1",
-      "name": "GRU to Cinque Terre - Iter 1A",
+      "name": "Task 1",
       "priceThreshold": 2000,
       "solutionIteration": 1,
       "solutionFlight": {
@@ -68,7 +68,7 @@
     },
     {
       "id": "2",
-      "name": "GRU to Cinque Terre - Iter 1B",
+      "name": "Task 2",
       "priceThreshold": 2000,
       "solutionIteration": 1,
       "solutionFlight": {
@@ -134,7 +134,7 @@
     },
     {
       "id": "11",
-      "name": "GRU to Cinque Terre - Iter 1C",
+      "name": "Task 11",
       "priceThreshold": 2000,
       "solutionIteration": 1,
       "solutionFlight": {
@@ -200,7 +200,7 @@
     },
     {
       "id": "12",
-      "name": "GRU to Cinque Terre - Iter 1D",
+      "name": "Task 12",
       "priceThreshold": 2000,
       "solutionIteration": 1,
       "solutionFlight": {
@@ -266,7 +266,7 @@
     },
     {
       "id": "3",
-      "name": "GRU to Cinque Terre - Iter 2A",
+      "name": "Task 3",
       "priceThreshold": 2000,
       "solutionIteration": 2,
       "solutionFlight": {
@@ -332,7 +332,7 @@
     },
     {
       "id": "4",
-      "name": "GRU to Cinque Terre - Iter 2B",
+      "name": "Task 4",
       "priceThreshold": 2000,
       "solutionIteration": 2,
       "solutionFlight": {
@@ -398,7 +398,7 @@
     },
     {
       "id": "13",
-      "name": "GRU to Cinque Terre - Iter 2C",
+      "name": "Task 13",
       "priceThreshold": 2000,
       "solutionIteration": 2,
       "solutionFlight": {
@@ -464,7 +464,7 @@
     },
     {
       "id": "14",
-      "name": "GRU to Cinque Terre - Iter 2D",
+      "name": "Task 14",
       "priceThreshold": 2000,
       "solutionIteration": 2,
       "solutionFlight": {
@@ -530,7 +530,7 @@
     },
     {
       "id": "5",
-      "name": "GRU to Cinque Terre - Iter 3A",
+      "name": "Task 5",
       "priceThreshold": 2000,
       "solutionIteration": 3,
       "solutionFlight": {
@@ -596,7 +596,7 @@
     },
     {
       "id": "6",
-      "name": "GRU to Cinque Terre - Iter 3B",
+      "name": "Task 6",
       "priceThreshold": 2000,
       "solutionIteration": 3,
       "solutionFlight": {
@@ -662,7 +662,7 @@
     },
     {
       "id": "15",
-      "name": "GRU to Cinque Terre - Iter 3C",
+      "name": "Task 15",
       "priceThreshold": 2000,
       "solutionIteration": 3,
       "solutionFlight": {
@@ -728,7 +728,7 @@
     },
     {
       "id": "16",
-      "name": "GRU to Cinque Terre - Iter 3D",
+      "name": "Task 16",
       "priceThreshold": 2000,
       "solutionIteration": 3,
       "solutionFlight": {
@@ -794,7 +794,7 @@
     },
     {
       "id": "7",
-      "name": "GRU to Cinque Terre - Iter 4A",
+      "name": "Task 7",
       "priceThreshold": 2000,
       "solutionIteration": 4,
       "solutionFlight": {
@@ -860,7 +860,7 @@
     },
     {
       "id": "8",
-      "name": "GRU to Cinque Terre - Iter 4B",
+      "name": "Task 8",
       "priceThreshold": 2000,
       "solutionIteration": 4,
       "solutionFlight": {
@@ -926,7 +926,7 @@
     },
     {
       "id": "17",
-      "name": "GRU to Cinque Terre - Iter 4C",
+      "name": "Task 17",
       "priceThreshold": 2000,
       "solutionIteration": 4,
       "solutionFlight": {
@@ -992,7 +992,7 @@
     },
     {
       "id": "18",
-      "name": "GRU to Cinque Terre - Iter 4D",
+      "name": "Task 18",
       "priceThreshold": 2000,
       "solutionIteration": 4,
       "solutionFlight": {
@@ -1058,7 +1058,7 @@
     },
     {
       "id": "9",
-      "name": "GRU to Cinque Terre - Iter 5A",
+      "name": "Task 9",
       "priceThreshold": 2000,
       "solutionIteration": 5,
       "solutionFlight": {
@@ -1124,7 +1124,7 @@
     },
     {
       "id": "10",
-      "name": "GRU to Cinque Terre - Iter 5B",
+      "name": "Task 10",
       "priceThreshold": 2000,
       "solutionIteration": 5,
       "solutionFlight": {
@@ -1190,7 +1190,7 @@
     },
     {
       "id": "19",
-      "name": "GRU to Cinque Terre - Iter 5C",
+      "name": "Task 19",
       "priceThreshold": 2000,
       "solutionIteration": 5,
       "solutionFlight": {
@@ -1256,7 +1256,7 @@
     },
     {
       "id": "20",
-      "name": "GRU to Cinque Terre - Iter 5D",
+      "name": "Task 20",
       "priceThreshold": 2000,
       "solutionIteration": 5,
       "solutionFlight": {
