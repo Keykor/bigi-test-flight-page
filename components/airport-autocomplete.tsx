@@ -1,10 +1,8 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Check, ChevronsUpDown, Plane } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Command as CommandPrimitive } from "cmdk"
+import { CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 import { airports } from "@/lib/airports"
 
@@ -13,108 +11,96 @@ interface AirportAutocompleteProps {
   onChange: (value: string) => void
   placeholder: string
   id: string
+  className?: string
   "data-track-id"?: string
 }
 
 const normalize = (s: string) =>
   s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
 
-export function AirportAutocomplete({ value, onChange, placeholder, id, "data-track-id": trackId }: AirportAutocompleteProps) {
+const labelFor = (code: string) => {
+  if (!code) return ""
+  const airport = airports.find((a) => a.code === code)
+  return airport ? `${airport.city} (${airport.code})` : `${code.toUpperCase()} - Unknown Airport`
+}
+
+export function AirportAutocomplete({
+  value,
+  onChange,
+  placeholder,
+  id,
+  className,
+  "data-track-id": trackId,
+}: AirportAutocompleteProps) {
+  const [query, setQuery] = useState(() => labelFor(value))
   const [open, setOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const inputRef = useRef<HTMLInputElement>(null)
 
-  const filteredAirports = airports
-    .filter((airport) => {
-      if (!searchQuery) return true
-
-      const query = normalize(searchQuery)
-      return (
-        normalize(airport.code).includes(query) ||
-        normalize(airport.name).includes(query) ||
-        normalize(airport.city).includes(query) ||
-        normalize(airport.country).includes(query)
-      )
-    })
-    .sort((a, b) => a.city.localeCompare(b.city))
-
-  const selectedAirport = airports.find((airport) => airport.code === value)
-
+  // Sync the text when a selection arrives from outside (sessionStorage restore, item select).
+  // Skipped when value is cleared so the text the user is typing survives.
   useEffect(() => {
-    if (open && inputRef.current) {
-      inputRef.current.focus()
-    }
-  }, [open])
+    if (value) setQuery(labelFor(value))
+  }, [value])
 
+  // Focusing a field that already shows its selection should not pop a list.
+  const q = query === labelFor(value) ? "" : normalize(query.trim())
+  const matches = q
+    ? airports
+        .filter((a) => [a.code, a.name, a.city, a.country].some((f) => normalize(f).includes(q)))
+        .sort((a, b) => a.city.localeCompare(b.city))
+    : []
+
+  // cmdk owns the input's id, so the caller's id goes on the field wrapper.
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-          id={id}
-          data-track-id={trackId}
+    <CommandPrimitive id={id} shouldFilter={false} className="relative">
+      <CommandPrimitive.Input
+        data-track-id={trackId}
+        placeholder={placeholder}
+        value={query}
+        onValueChange={(text) => {
+          setQuery(text)
+          setOpen(true)
+          if (value) onChange("")
+        }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setOpen(false)
+        }}
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          className
+        )}
+      />
+      {open && q && (
+        <CommandList
+          // Keep focus on the input so the click on an item lands before onBlur closes the list.
+          onMouseDown={(e) => e.preventDefault()}
+          className="absolute left-0 top-full z-50 mt-1 max-h-64 w-full rounded-md border bg-popover text-popover-foreground shadow-md"
         >
-          {value ? (
-            <div className="flex items-center">
-              <Plane className="mr-2 h-4 w-4" />
-              <span>
-                {selectedAirport
-                  ? `${selectedAirport.city} (${selectedAirport.code})`
-                  : `${value.toUpperCase()} - Unknown Airport`}
-              </span>
-            </div>
-          ) : (
-            <span className="text-muted-foreground">{placeholder}</span>
-          )}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="p-0"
-        align="start"
-        sideOffset={5}
-        style={{ width: "var(--radix-popover-trigger-width)" }}
-      >
-        <Command>
-          <CommandInput
-            placeholder="Search airports..."
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-            ref={inputRef}
-            className="h-9"
-            data-track-id={`${trackId}-search`}
-          />
-          <CommandList>
-            <CommandEmpty>No airport found.</CommandEmpty>
-            <CommandGroup className="max-h-64 overflow-auto">
-              {filteredAirports.map((airport) => (
-                <CommandItem
-                  key={airport.code}
-                  value={`${airport.code} ${airport.name} ${airport.city} ${airport.country}`}
-                  onSelect={() => {
-                    onChange(airport.code)
-                    setOpen(false)
-                    setSearchQuery("")
-                  }}
-                  className="flex items-center"
-                  data-track-id={`${trackId}-select-${airport.code}`}
-                >
-                  <Check className={cn("mr-2 h-4 w-4", value === airport.code ? "opacity-100" : "opacity-0")} />
-                  <div className="flex flex-col">
-                    <span>
-                      {airport.city} ({airport.code})
-                    </span>
-                    <span className="text-xs text-muted-foreground truncate">{airport.name}</span>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+          <CommandEmpty>No airport found.</CommandEmpty>
+          <CommandGroup>
+            {matches.map((airport) => (
+              <CommandItem
+                key={airport.code}
+                value={airport.code}
+                onSelect={() => {
+                  onChange(airport.code)
+                  setQuery(labelFor(airport.code))
+                  setOpen(false)
+                }}
+                data-track-id={`${trackId}-select-${airport.code}`}
+              >
+                <div className="flex flex-col">
+                  <span>
+                    {airport.city} ({airport.code})
+                  </span>
+                  <span className="text-xs text-muted-foreground truncate">{airport.name}</span>
+                </div>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      )}
+    </CommandPrimitive>
   )
 }
