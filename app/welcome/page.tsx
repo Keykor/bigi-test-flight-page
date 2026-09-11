@@ -121,8 +121,11 @@ export default function WelcomePage() {
       </Card>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {availableExperiments.map((experiment) => {
+        {availableExperiments.map((experiment, index) => {
           const isCompleted = completedExperiments.includes(experiment.id)
+          // Label by position in this participant's shuffled order, not by id: the id
+          // would reveal the design and suggest a "real" order to follow.
+          const label = `Task ${index + 1}`
 
           const departureCode = experiment.searchCombinations[0]?.departure ?? ""
           const departureCity = getAirportByCode(departureCode)?.city ?? departureCode
@@ -138,7 +141,7 @@ export default function WelcomePage() {
             >
               <CardContent className="p-5 flex flex-col gap-4 h-full">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-base">{experiment.name}</span>
+                  <span className="font-semibold text-base">{label}</span>
                   {isCompleted && (
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 gap-1">
                       <CheckCircle2 className="h-3 w-3" />
